@@ -26,7 +26,7 @@
         
         .card { background: #f9f9f9; border-left: 5px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: white; background: #ccc; font-weight: bold; }
-        .status-funded { background: #2ecc71; } .status-completed { background: #3498db; } .status-disputed { background: #e74c3c; } .status-pending_payment { background: #f39c12; }
+        .status-funded { background: #2ecc71; } .status-completed { background: #3498db; } .status-disputed { background: #e74c3c; } .status-pending_payment { background: #f39c12; } .status-delivered { background: #9b59b6; }
         
         .admin-panel { border: 2px dashed var(--primary-blue); padding: 10px; margin-top: 20px; background: #f0f4ff; }
         .hidden { display: none; }
@@ -35,7 +35,6 @@
         .error-msg { color: red; text-align: center; font-size: 0.85rem; margin-top: 10px; background: #ffe6e6; padding: 10px; border-radius: 5px; border: 1px solid red; word-wrap: break-word; }
         .debug-info { font-size: 0.7rem; color: #555; text-align: center; margin-top: 5px; font-family: monospace; }
         
-        /* NEW STYLE FOR PHONE NUMBER */
         .momo-number {
             font-size: 1.4rem;
             font-weight: 900;
@@ -47,6 +46,17 @@
             display: block;
             margin: 10px 0;
             letter-spacing: 1px;
+        }
+        
+        .success-box {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #c3e6cb;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -340,9 +350,25 @@
             const card = document.createElement('div');
             card.className = 'card';
             let actions = '';
-            if(tx.status === 'funded') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
-            if(tx.status === 'pending_payment') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
-            if(tx.status === 'funded' || tx.status === 'delivered') actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">Open Dispute</button>`;
+            
+            // Logic for buttons based on status
+            if(tx.status === 'funded') {
+                actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
+            }
+            if(tx.status === 'pending_payment') {
+                actions += `<button style="padding:8px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
+            }
+            if(tx.status === 'funded' || tx.status === 'delivered') {
+                actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">Open Dispute</button>`;
+            }
+            if(tx.status === 'completed') {
+                actions += `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.</div>`;
+            }
+            if(tx.status === 'delivered') {
+                actions += `<div class="success-box" style="background:#fff3cd; color:#856404; border-color:#ffeeba;">
+                    ⏳ Delivery Confirmed!<br>Admin is releasing funds to seller now.
+                    </div>`;
+            }
 
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -365,11 +391,17 @@
     }
 
     async function actionConfirm(id) {
-        if(confirm("Have you received the goods?")) {
+        if(confirm("Have you received the goods? Once confirmed, funds will be released to the seller.")) {
             try {
                 await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
+                
+                // Show success message immediately
+                alert("✅ Delivery Confirmed!\n\nThe seller has been notified. The Admin will now release the funds to complete the trade.");
+                
                 loadTransactions();
-            } catch(e) { alert("Error: " + e.message); }
+            } catch(e) { 
+                alert("Error: " + e.message); 
+            }
         }
     }
 
@@ -379,6 +411,7 @@
             try {
                 await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
                 loadTransactions();
+                alert("Dispute opened. Admin will review shortly.");
             } catch(e) { alert("Error: " + e.message); }
         }
     }
@@ -424,22 +457,24 @@
     async function adminVerify(txId) {
         try {
             await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-            loadAdminData(); alert("Payment Verified.");
+            loadAdminData(); alert("Payment Verified. Seller notified.");
         } catch(e) { alert("Error: " + e.message); }
     }
 
     async function adminRelease(txId) {
-        try {
-            await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-            loadAdminData(); alert("Funds Released.");
-        } catch(e) { alert("Error: " + e.message); }
+        if(confirm("Have you manually sent the funds to the seller? Click OK to mark as Released.")) {
+            try {
+                await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+                loadAdminData(); alert("✅ Funds Released! Commission recorded.");
+            } catch(e) { alert("Error: " + e.message); }
+        }
     }
 
     async function adminRefund(txId) {
-        if(confirm("Refund buyer?")) {
+        if(confirm("Refund buyer? This cannot be undone.")) {
             try {
                 await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-                loadAdminData(); alert("Funds Refunded.");
+                loadAdminData(); alert("Funds Refunded to Buyer.");
             } catch(e) { alert("Error: " + e.message); }
         }
     }
