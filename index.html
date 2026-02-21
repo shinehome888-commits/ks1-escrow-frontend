@@ -106,8 +106,8 @@
 </div>
 
 <script>
-    // --- CONNECTED TO LIVE BACKEND ---
-    const API_URL = 'https://ks1-escrow-backend.onrender.com/api'; 
+    // --- CONNECTED TO LIVE BACKEND (NO SPACES!) ---
+    const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     console.log("🚀 KS1 Frontend Starting. Target API:", API_URL);
 
     let currentUser = null;
@@ -160,7 +160,6 @@
             
             console.log("📥 Response Status:", res.status, res.statusText);
             
-            // Check if response is OK (200-299)
             if (!res.ok) {
                 const errText = await res.text();
                 throw new Error(`Server responded with ${res.status}: ${errText}`);
