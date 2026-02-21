@@ -5,101 +5,230 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KS1 Escrow Pay | Alkebulan</title>
     <style>
-        :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; }
+        :root { 
+            --primary-blue: #002366; 
+            --accent-gold: #FFD700; 
+            --gold-dark: #b39700;
+            --alert-red: #c92a2a; 
+            --red-dark: #9b1c1c;
+            --success-green: #2b8a3e;
+            --green-dark: #1e6b2e;
+        }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; }
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); position: relative; }
         
         header { 
             background: linear-gradient(135deg, var(--primary-blue), #001540); 
             color: white; 
-            padding: 25px 20px; 
+            padding: 30px 20px; 
             text-align: center; 
-            border-bottom: 4px solid var(--accent-gold); 
+            border-bottom: 5px solid var(--accent-gold); 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
         }
 
+        /* 3D Title */
         h1 { 
             margin: 0; 
             color: var(--accent-gold); 
-            font-size: 2rem; 
+            font-size: 2.2rem; 
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            text-shadow: 1px 1px 0 #b39700, 2px 2px 0 #b39700, 3px 3px 0 #b39700, 4px 4px 0 #b39700, 5px 5px 10px rgba(0,0,0,0.5);
-            transform: perspective(500px) rotateX(5deg);
+            letter-spacing: 2px;
+            text-shadow: 
+                1px 1px 0 #8a7600,
+                2px 2px 0 #8a7600,
+                3px 3px 0 #8a7600,
+                4px 4px 0 #8a7600,
+                5px 5px 15px rgba(0,0,0,0.6);
+            transform: perspective(500px) rotateX(2deg);
             display: inline-block;
+            margin-bottom: 10px;
         }
 
-        .tagline { font-size: 0.9rem; color: #ddd; margin-top: 10px; }
-        .brand-sub { font-size: 0.75rem; color: var(--accent-gold); font-weight: bold; margin-top: 5px; }
+        .tagline { font-size: 1rem; color: #e0e0e0; margin-top: 10px; font-weight: 500; }
+        .brand-sub { font-size: 0.8rem; color: var(--accent-gold); font-weight: bold; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
         
-        .section { display: none; padding: 20px; animation: fadeIn 0.4s; }
+        .section { display: none; padding: 25px; animation: fadeIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.3s; }
-        input:focus { border-color: var(--accent-gold); outline: none; box-shadow: 0 0 8px var(--gold-glow); }
-        
-        button { width: 100%; padding: 15px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 8px; color: var(--primary-blue); font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 0 #b39700, 0 5px 10px rgba(0,0,0,0.3); transition: transform 0.1s; }
-        button:active { transform: translateY(4px); box-shadow: 0 0 0 #b39700; }
-        
-        button.secondary { background: white; color: var(--primary-blue); border: 2px solid var(--primary-blue); box-shadow: none; }
-        button.danger { background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; box-shadow: 0 4px 0 #a61e1e; }
-        button.resolve-btn { background: linear-gradient(to bottom, #28a745, #218838); color: white; box-shadow: 0 4px 0 #1e7e34; }
-        
-        .card { background: #f9f9f9; border-left: 5px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        
-        /* Dispute Card Style */
-        .dispute-card {
-            background: #fff5f5;
-            border-left: 5px solid var(--alert-red);
-            border: 2px solid var(--alert-red);
-            animation: pulse 2s infinite;
+        input, textarea { 
+            width: 100%; 
+            padding: 16px; 
+            margin: 12px 0; 
+            border: 2px solid #ddd; 
+            border-radius: 12px; 
+            box-sizing: border-box; 
+            font-size: 1rem; 
+            transition: all 0.3s; 
+            background: #f9f9f9;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
         }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
+        input:focus, textarea:focus { 
+            border-color: var(--accent-gold); 
+            outline: none; 
+            background: #fff;
+            box-shadow: 0 0 15px var(--gold-glow); 
+            transform: translateY(-2px);
+        }
+        
+        /* --- UNIVERSAL 3D BUTTON STYLE --- */
+        button { 
+            width: 100%; 
+            padding: 16px; 
+            background: linear-gradient(to bottom, #ffe033, #e6c200); 
+            border: none; 
+            border-radius: 12px; 
+            color: var(--primary-blue); 
+            font-weight: 900; 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            margin-top: 15px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            /* The 3D Effect */
+            box-shadow: 0 6px 0 var(--gold-dark), 0 10px 10px rgba(0,0,0,0.2); 
+            transition: all 0.1s; 
+            position: relative;
+            top: 0;
+        }
+        button:active { 
+            transform: translateY(6px); 
+            box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 5px rgba(0,0,0,0.2); 
+            top: 0;
         }
 
-        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: white; background: #ccc; font-weight: bold; }
-        .status-funded { background: #2ecc71; } .status-completed { background: #3498db; } .status-disputed { background: #dc3545; } .status-pending_payment { background: #f39c12; } .status-delivered { background: #9b59b6; }
+        /* Secondary Button (White/Blue) */
+        button.secondary { 
+            background: linear-gradient(to bottom, #ffffff, #f0f0f0); 
+            color: var(--primary-blue); 
+            box-shadow: 0 6px 0 #ccc, 0 10px 10px rgba(0,0,0,0.1); 
+            border: 1px solid #ddd;
+        }
+        button.secondary:active { box-shadow: 0 0 0 #ccc; }
+
+        /* Danger Button (Red 3D) */
+        button.danger { 
+            background: linear-gradient(to bottom, #ff6b6b, #c92a2a); 
+            color: white; 
+            box-shadow: 0 6px 0 var(--red-dark), 0 10px 10px rgba(0,0,0,0.2); 
+        }
+        button.danger:active { box-shadow: 0 0 0 var(--red-dark); }
+
+        /* Success Button (Green 3D) */
+        button.success {
+            background: linear-gradient(to bottom, #51cf66, #2b8a3e);
+            color: white;
+            box-shadow: 0 6px 0 var(--green-dark), 0 10px 10px rgba(0,0,0,0.2);
+        }
+        button.success:active { box-shadow: 0 0 0 var(--green-dark); }
+
+        .card { 
+            background: #fff; 
+            border-left: 6px solid var(--accent-gold); 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
+            border: 1px solid #eee;
+        }
         
-        .admin-panel { border: 2px dashed var(--primary-blue); padding: 10px; margin-top: 20px; background: #f0f4ff; }
+        .status-badge { 
+            display: inline-block; 
+            padding: 6px 12px; 
+            border-radius: 20px; 
+            font-size: 0.75rem; 
+            color: white; 
+            font-weight: 900; 
+            text-transform: uppercase;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .status-funded { background: #2b8a3e; } 
+        .status-completed { background: #1864ab; } 
+        .status-disputed { background: #c92a2a; } 
+        .status-pending_payment { background: #e67700; } 
+        .status-delivered { background: #be4bdb; }
+        .status-cancelled { background: #868e96; }
+        
+        .admin-panel { 
+            border: 2px dashed var(--primary-blue); 
+            padding: 20px; 
+            margin-top: 30px; 
+            background: #f8f9fa; 
+            border-radius: 15px;
+        }
         .hidden { display: none; }
         .center-text { text-align: center; }
-        #loading-msg { text-align: center; color: #666; margin-top: 10px; display: none; font-weight: bold; }
-        .error-msg { color: red; text-align: center; font-size: 0.85rem; margin-top: 10px; background: transparent; padding: 5px; border: none; word-wrap: break-word; min-height: 20px; }
-        .debug-info { font-size: 0.7rem; color: #555; text-align: center; margin-top: 5px; font-family: monospace; }
         
-        .momo-number { font-size: 1.4rem; font-weight: 900; color: var(--primary-blue); background: #fff3cd; padding: 10px; border-radius: 8px; border: 2px dashed var(--accent-gold); display: block; margin: 10px 0; letter-spacing: 1px; }
+        .error-msg { color: var(--alert-red); text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: bold; min-height: 20px; }
+        
+        .momo-number {
+            font-size: 1.6rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            background: #fff9db;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px dashed var(--accent-gold);
+            display: block;
+            margin: 15px 0;
+            letter-spacing: 2px;
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+        }
 
-        .success-box { background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; border: 1px solid #c3e6cb; margin-top: 10px; text-align: center; font-weight: bold; font-size: 0.95rem; animation: popIn 0.5s ease; }
-        .logout-btn-small { background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); border: none; padding: 10px 20px; border-radius: 5px; font-weight: bold; font-size: 0.9rem; margin-top: 10px; box-shadow: 0 3px 0 #b39700; cursor: pointer; width: auto; display: inline-block; }
-        .logout-btn-small:active { transform: translateY(3px); box-shadow: none; }
+        /* Professional Status Boxes */
+        .status-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1rem;
+            line-height: 1.5;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: popIn 0.5s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        .success-box { background: #d3f9d8; color: #2b8a3e; border-color: #b2f2bb; }
+        .waiting-box { background: #fff9db; color: #e67700; border-color: #ffe066; }
+        .dispute-box { background: #ffe3e3; color: #c92a2a; border-color: #ffa8a8; }
+        .cancelled-box { 
+            background: #f8f9fa; 
+            color: #495057; 
+            border: 2px solid #dee2e6;
+        }
 
-        .waiting-box { background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 10px; text-align: center; font-weight: bold; font-size: 0.95rem; animation: popIn 0.5s ease; }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
-        .title-3d { color: var(--primary-blue); font-size: 1.8rem; font-weight: 900; text-shadow: 1px 1px 0 #ccc, 2px 2px 0 #ccc, 3px 3px 0 #ccc, 4px 4px 0 #999, 5px 5px 5px rgba(0,0,0,0.4); margin-bottom: 20px; display: block; }
-        
-        /* Admin Dispute Alert Section */
-        .dispute-alert-section {
-            background: #ffe6e6;
-            border: 2px solid #dc3545;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
+        .title-3d { 
+            color: var(--primary-blue); 
+            font-size: 2rem; 
+            font-weight: 900; 
+            text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); 
+            margin-bottom: 25px; 
+            display: block; 
+            text-align: center;
         }
-        .dispute-alert-header {
-            color: #dc3545;
+
+        /* Admin Dispute Card - Professional & Clean */
+        .dispute-card {
+            background: #fff;
+            border: 2px solid #ffc9c9;
+            border-left: 8px solid var(--alert-red);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(201, 42, 42, 0.15);
+        }
+        .dispute-header {
+            color: var(--alert-red);
             font-weight: 900;
             font-size: 1.1rem;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
             gap: 10px;
         }
-        .blink { animation: blinker 1s linear infinite; }
-        @keyframes blinker { 50% { opacity: 0; } }
     </style>
 </head>
 <body>
@@ -113,64 +242,62 @@
 
     <!-- AUTH SECTION -->
     <div id="auth-section" class="section active">
-        <span class="title-3d center-text">Secure Access</span>
+        <span class="title-3d">Secure Access</span>
         <input type="tel" id="auth-phone" placeholder="Phone Number (e.g., 055...)" />
         <input type="password" id="auth-pass" placeholder="Password" />
         <button onclick="handleLogin()" id="login-btn">Login</button>
-        <button class="secondary" style="background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; color: var(--primary-blue); box-shadow: 0 4px 0 #b39700;" onclick="handleRegister()" id="reg-btn">Create Account</button>
-        <p id="loading-msg">Processing...</p>
+        <button class="secondary" onclick="handleRegister()" id="reg-btn">Create Account</button>
+        <p id="loading-msg" style="text-align:center; color:#666; margin-top:15px; font-weight:bold;">Processing...</p>
         <p id="auth-msg" class="error-msg"></p>
-        <p id="auth-debug" class="debug-info"></p>
     </div>
 
     <!-- DASHBOARD SECTION -->
     <div id="dashboard-section" class="section">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <h3 style="color:var(--primary-blue); margin:0;">My Transactions</h3>
-            <button onclick="logout()" style="width:auto; padding:8px; font-size:0.8rem; margin:0;" class="secondary">Exit</button>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+            <h3 style="color:var(--primary-blue); margin:0; font-size:1.4rem;">My Transactions</h3>
+            <button onclick="logout()" style="width:auto; padding:10px 20px; font-size:0.8rem; margin:0;" class="secondary">Exit</button>
         </div>
         
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
         
-        <div id="global-status-msg" style="margin-top:15px;"></div>
-        <div id="tx-list" style="margin-top:20px;"></div>
+        <div id="global-status-msg" style="margin-top:20px;"></div>
+        <div id="tx-list" style="margin-top:25px;"></div>
 
         <div class="admin-panel hidden" id="admin-controls">
-            <h4 style="color:var(--primary-blue); margin-top:0;">👑 Admin Command Center</h4>
+            <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.3rem; text-align:center;">👑 Admin Command Center</h4>
             
-            <!-- NEW: Dispute Alert Section -->
+            <!-- Dispute Alert Section (Clean & Professional) -->
             <div id="dispute-alert-container" class="hidden"></div>
 
-            <button onclick="loadAdminData()">🔄 Refresh All Data</button>
-            <div id="admin-data" style="margin-top:15px;"></div>
+            <button onclick="loadAdminData()">🔄 Refresh Data</button>
+            <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
     </div>
 
     <!-- CREATE TRANSACTION SECTION -->
     <div id="create-section" class="section">
-        <h3 style="color:var(--primary-blue)">New Escrow</h3>
+        <h3 style="color:var(--primary-blue); text-align:center;">New Escrow</h3>
         <input type="tel" id="seller-phone" placeholder="Seller Phone Number" />
         <input type="number" id="tx-amount" placeholder="Amount (GHS)" />
         <textarea id="tx-desc" rows="3" placeholder="Description of goods/service"></textarea>
         <button onclick="submitTransaction()">Generate Invite Code</button>
         <button class="secondary" onclick="showSection('dashboard-section')">Cancel</button>
         <p id="create-msg" class="error-msg"></p>
-        <p id="create-debug" class="debug-info"></p>
     </div>
 
     <!-- PAYMENT INSTRUCTION SECTION -->
     <div id="payment-section" class="section">
         <h3 class="center-text" style="color:var(--primary-blue)">Payment Instructions</h3>
         <div class="card" style="text-align:center;">
-            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.2rem; font-weight:bold;"></span></p>
-            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <p style="margin:5px 0; font-weight:bold;">Pay To: KS1 Escrow System Wallet</p>
+            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.4rem; font-weight:900;"></span></p>
+            <hr style="border: 0; border-top: 2px solid #eee; margin: 20px 0;">
+            <p style="margin:10px 0; font-weight:bold; color:#555;">Pay To: KS1 Escrow System Wallet</p>
             <span class="momo-number">0240254680</span>
-            <p><strong>Reference:</strong> <span id="pay-ref"></span></p>
-            <p style="font-size:0.9rem; color:#666; margin-top:10px;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
+            <p><strong>Reference:</strong> <span id="pay-ref" style="font-weight:bold; color:var(--primary-blue);"></span></p>
+            <p style="font-size:0.9rem; color:#777; margin-top:15px;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
         </div>
-        <label style="font-weight:bold; color:var(--primary-blue)">Confirm Payment:</label>
+        <label style="font-weight:bold; color:var(--primary-blue); display:block; margin-top:15px;">Confirm Payment:</label>
         <input type="text" id="momo-ref" placeholder="Enter MoMo Reference ID" />
         <button onclick="confirmPayment()">I Have Paid</button>
         <button class="secondary" onclick="showSection('dashboard-section')">Back</button>
@@ -179,8 +306,6 @@
 
 <script>
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
-    console.log("🚀 KS1 Frontend Starting. Target API:", API_URL);
-
     let currentUser = null;
     let currentTx = null;
 
@@ -192,9 +317,7 @@
 
     function clearErrors() {
         document.getElementById('auth-msg').innerText = '';
-        document.getElementById('auth-debug').innerText = '';
         document.getElementById('create-msg').innerText = '';
-        document.getElementById('create-debug').innerText = '';
         document.getElementById('admin-error').innerText = '';
         document.getElementById('global-status-msg').innerHTML = '';
     }
@@ -208,44 +331,38 @@
     async function handleRegister() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
-        const msgEl = document.getElementById('auth-msg');
-        if(!phone || !pass) { msgEl.innerText = "Please fill all fields"; return; }
+        if(!phone || !pass) { document.getElementById('auth-msg').innerText = "Please fill all fields"; return; }
         toggleLoading(true);
         try {
             const res = await fetch(`${API_URL}/register`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
-            if (!res.ok) throw new Error(`Server responded with ${res.status}`);
             const data = await res.json();
-            if(data.success) { alert("Account created! Please login."); msgEl.innerText = ""; } 
-            else { msgEl.innerText = data.error; }
-        } catch (e) { msgEl.innerText = "Connection Failed: " + e.message; } 
+            if(data.success) { alert("Account created! Please login."); showSection('auth-section'); } 
+            else { document.getElementById('auth-msg').innerText = data.error; }
+        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } 
         finally { toggleLoading(false); }
     }
 
     async function handleLogin() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
-        const msgEl = document.getElementById('auth-msg');
-        
         if(phone === "admin" && pass === "admin123") {
-            currentUser = { id: 'admin', phone_number: 'Admin', isAdmin: true };
+            currentUser = { id: 'admin', isAdmin: true };
             document.getElementById('admin-controls').classList.remove('hidden');
             showSection('dashboard-section');
             loadAdminData();
             return;
         }
-
         toggleLoading(true);
         try {
             const res = await fetch(`${API_URL}/login`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
-            if (!res.ok) throw new Error(`Login failed: ${res.status}`);
             const data = await res.json();
             if(data.success) {
                 currentUser = data.user;
                 document.getElementById('admin-controls').classList.add('hidden');
                 showSection('dashboard-section');
                 loadTransactions();
-            } else { msgEl.innerText = data.error; }
-        } catch (e) { msgEl.innerText = "Connection Error: " + e.message; } 
+            } else { document.getElementById('auth-msg').innerText = data.error; }
+        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
         finally { toggleLoading(false); }
     }
 
@@ -258,7 +375,6 @@
         if(!seller || !amount) { document.getElementById('create-msg').innerText = "Please fill all fields"; return; }
         try {
             const res = await fetch(`${API_URL}/transactions`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc }) });
-            if (!res.ok) throw new Error("Failed");
             const data = await res.json();
             if(data.success) {
                 currentTx = data.transaction;
@@ -266,7 +382,7 @@
                 document.getElementById('pay-ref').innerText = currentTx.transaction_id;
                 showSection('payment-section');
             }
-        } catch (e) { document.getElementById('create-msg').innerText = "Error: " + e.message; }
+        } catch (e) { document.getElementById('create-msg').innerText = "Error"; }
     }
 
     async function confirmPayment() {
@@ -276,7 +392,7 @@
             await fetch(`${API_URL}/payments/confirm`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref }) });
             alert("Payment submitted! Waiting for Admin verification.");
             showSection('dashboard-section');
-        } catch (e) { alert("Error: " + e.message); }
+        } catch (e) { alert("Error"); }
     }
 
     async function loadTransactions() {
@@ -284,46 +400,58 @@
         showSection('dashboard-section'); 
         try {
             const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' });
-            if(!res.ok) throw new Error("Failed");
             const txs = await res.json();
             renderTxList(txs);
-        } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error: " + e.message + "</p>"; }
+        } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; }
     }
 
     function renderTxList(txs) {
         const list = document.getElementById('tx-list');
         list.innerHTML = '';
-        if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#666;">No transactions yet.</p>'; return; }
+        if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888;">No transactions yet.</p>'; return; }
         
         txs.forEach(tx => {
             const card = document.createElement('div');
             card.className = 'card';
             let actions = '';
             
-            if(tx.status === 'funded') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
-            if(tx.status === 'pending_payment') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
+            if(tx.status === 'funded') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
+            if(tx.status === 'pending_payment') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
             
-            // Dispute Button always visible if not completed/cancelled
             if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
-                actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
+                actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             }
             
             if(tx.status === 'completed') {
-                actions += `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><button class="logout-btn-small" onclick="logout()">Logout</button></div>`;
+                actions += `
+                    <div class="status-box success-box">
+                        ✅ Trade Completed Successfully!<br>Funds released to seller.
+                        <br><br>
+                        <button class="secondary" style="width:auto; padding:10px 20px; font-size:0.9rem;" onclick="logout()">Logout</button>
+                    </div>`;
             } else if (tx.status === 'delivered') {
-                actions += `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
+                actions += `<div class="status-box waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
             } else if (tx.status === 'disputed') {
-                actions += `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified. Please wait for contact.</div>`;
+                actions += `<div class="status-box dispute-box">🚨 Dispute Opened<br>Admin has been notified. Funds are safe.</div>`;
+            } else if (tx.status === 'cancelled') {
+                actions += `
+                    <div class="status-box cancelled-box">
+                        ❌ Cancelled.<br>Funds are safe in Escrow.<br><br>
+                        <strong>Do you want to make another trade?</strong>
+                        <br><br>
+                        <button class="secondary" style="width:auto; padding:10px 20px; font-size:0.9rem;" onclick="showSection('create-section')">Create New Trade</button>
+                        <button class="secondary" style="width:auto; padding:10px 20px; font-size:0.9rem; margin-left:5px;" onclick="logout()">Logout</button>
+                    </div>`;
             }
 
             card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong>${tx.transaction_id}</strong>
-                    <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ').toUpperCase()}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <strong style="font-size:1.1rem; color:var(--primary-blue);">${tx.transaction_id}</strong>
+                    <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
                 </div>
-                <p style="margin:5px 0;">Seller: ${tx.seller_phone} | Amount: GHS ${tx.amount}</p>
-                <p style="font-size:0.9rem; color:#555; margin:5px 0;">${tx.description}</p>
-                <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">${actions}</div>
+                <p style="margin:5px 0; color:#555;">Seller: ${tx.seller_phone} | <strong>GHS ${tx.amount}</strong></p>
+                <p style="font-size:0.9rem; color:#777; margin:8px 0; font-style:italic;">"${tx.description}"</p>
+                <div style="margin-top:15px; display:flex; gap:8px; flex-wrap:wrap;">${actions}</div>
             `;
             list.appendChild(card);
         });
@@ -342,81 +470,76 @@
                 await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
                 alert("✅ Delivery Confirmed! Admin will release funds shortly.");
                 loadTransactions();
-            } catch(e) { alert("Error: " + e.message); }
+            } catch(e) { alert("Error"); }
         }
     }
 
     async function actionDispute(id) {
-        const reason = prompt("⚠️ DISPUTE NOTICE:\n\nPlease describe the problem clearly. The Admin will be notified immediately and will contact you to resolve this.\n\nReason:");
+        const reason = prompt("⚠️ DISPUTE NOTICE:\n\nPlease describe the problem. The Admin will be notified immediately to protect your funds.\n\nReason:");
         if(reason) {
             try {
                 await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
-                alert("🚨 DISPUTE OPENED!\n\nThe Admin has been alerted. They will review your case and contact you shortly. Do not worry, your funds are safe.");
+                alert("🛡️ DISPUTE OPENED!\n\nAdmin alerted. Your funds are 100% safe in Escrow. We will resolve this shortly.");
                 loadTransactions();
-            } catch(e) { alert("Error: " + e.message); }
+            } catch(e) { alert("Error"); }
         }
     }
 
-    // --- ADMIN FUNCTIONS WITH DISPUTE ALERTS ---
+    // --- ADMIN FUNCTIONS ---
     async function loadAdminData() {
         const container = document.getElementById('admin-data');
         const disputeContainer = document.getElementById('dispute-alert-container');
-        const errorEl = document.getElementById('admin-error');
-        
-        container.innerHTML = "Loading secure data...";
+        container.innerHTML = "Loading...";
         disputeContainer.innerHTML = "";
-        errorEl.innerText = "";
         
         try {
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
-            if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json();
             
-            // 1. CHECK FOR DISPUTES FIRST (High Priority)
+            // 1. Disputes (Professional Card)
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
             if(disputedTx.length > 0) {
                 disputeContainer.classList.remove('hidden');
-                let alertsHtml = `<div class="dispute-alert-header"><span class="blink">🔴</span> URGENT: ${disputedTx.length} Dispute(s) Need Attention!</div>`;
+                let alertsHtml = `<div class="dispute-header">🔴 ${disputedTx.length} Dispute(s) Require Attention</div>`;
                 
                 disputedTx.forEach(t => {
                     alertsHtml += `
-                        <div class="card dispute-card">
+                        <div class="dispute-card">
                             <p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p>
                             <p><strong>Buyer:</strong> ${t.buyer_id} | <strong>Seller:</strong> ${t.seller_phone}</p>
-                            <p style="color:#dc3545; font-weight:bold;">⚠️ Issue Reported: Needs Resolution</p>
-                            <div style="display:flex; gap:5px; margin-top:10px;">
-                                <button class="resolve-btn" style="padding:8px; font-size:0.8rem;" onclick="adminRelease('${t.transaction_id}')">✅ Resolve: Release to Seller</button>
-                                <button class="danger" style="padding:8px; font-size:0.8rem;" onclick="adminRefund('${t.transaction_id}')">💰 Resolve: Refund Buyer</button>
+                            <p style="color:#666; font-size:0.9rem; margin:10px 0; background:#f8f9fa; padding:10px; border-radius:8px;">⚠️ Issue Reported: Needs Resolution</p>
+                            <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
+                                <button class="success" style="flex:1; padding:12px; font-size:0.9rem;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
+                                <button class="danger" style="flex:1; padding:12px; font-size:0.9rem;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
                             </div>
                         </div>
                     `;
                 });
-                disputeContainer.innerHTML = `<div class="dispute-alert-section">${alertsHtml}</div>`;
+                disputeContainer.innerHTML = alertsHtml;
             } else {
                 disputeContainer.classList.add('hidden');
             }
 
-            // 2. Standard Admin Data
-            container.innerHTML = '<h4>Pending Verifications</h4>';
+            // 2. Standard Data
+            container.innerHTML = '<h4 style="margin-bottom:15px; color:#555;">Pending Verifications</h4>';
             const pendingPayments = data.payments.filter(p => !p.verified);
-            if(pendingPayments.length === 0) container.innerHTML += '<p>No pending payments.</p>';
+            if(pendingPayments.length === 0) container.innerHTML += '<p style="color:#888;">No pending payments.</p>';
             pendingPayments.forEach(p => {
                 container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button></div>`;
             });
 
-            container.innerHTML += '<h4>Ready to Release (Delivered)</h4>';
+            container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; margin-top:25px;">Ready to Release</h4>';
             const readyToRelease = data.transactions.filter(t => t.status === 'delivered');
-            if(readyToRelease.length === 0) container.innerHTML += '<p>No transactions ready.</p>';
+            if(readyToRelease.length === 0) container.innerHTML += '<p style="color:#888;">No transactions ready.</p>';
             readyToRelease.forEach(t => {
-                container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button onclick="adminRelease('${t.transaction_id}')">Release Funds</button></div>`;
+                container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button class="success" onclick="adminRelease('${t.transaction_id}')">Release Funds</button></div>`;
             });
             
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
-            container.innerHTML += `<div class="card" style="background:#fff3cd; margin-top:15px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
+            container.innerHTML += `<div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
             
         } catch (e) {
-            container.innerHTML = "";
-            errorEl.innerText = "Error: " + e.message;
+            container.innerHTML = "Error loading data.";
         }
     }
 
@@ -424,24 +547,24 @@
         try {
             await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
             loadAdminData(); alert("Payment Verified.");
-        } catch(e) { alert("Error: " + e.message); }
+        } catch(e) { alert("Error"); }
     }
 
     async function adminRelease(txId) {
-        if(confirm("Confirm: Release funds to SELLER? This closes the dispute.")) {
+        if(confirm("Confirm: Release funds to SELLER? This closes the dispute/trade.")) {
             try {
                 await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-                loadAdminData(); alert("✅ Funds Released to Seller. Dispute Closed.");
-            } catch(e) { alert("Error: " + e.message); }
+                loadAdminData(); alert("✅ Funds Released. Case Closed.");
+            } catch(e) { alert("Error"); }
         }
     }
 
     async function adminRefund(txId) {
-        if(confirm("Confirm: Refund FULL amount to BUYER? This closes the dispute.")) {
+        if(confirm("Confirm: Refund FULL amount to BUYER? This cancels the trade.")) {
             try {
                 await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-                loadAdminData(); alert("💰 Funds Refunded to Buyer. Dispute Closed.");
-            } catch(e) { alert("Error: " + e.message); }
+                loadAdminData(); alert("💰 Funds Refunded. Trade Cancelled.");
+            } catch(e) { alert("Error"); }
         }
     }
 </script>
