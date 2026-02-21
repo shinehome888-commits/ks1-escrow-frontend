@@ -13,24 +13,27 @@
             --red-dark: #9b1c1c;
             --success-green: #2b8a3e;
             --green-dark: #1e6b2e;
+            --bg-gradient: linear-gradient(135deg, #001540 0%, #002366 100%);
         }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 30px rgba(255, 215, 0, 0.3); position: relative; }
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; position: relative; padding-bottom: 80px; box-sizing: border-box; }
         
-        header { 
-            background: linear-gradient(135deg, var(--primary-blue), #001540); 
+        /* --- LANDING PAGE HEADER (Only visible on Auth) --- */
+        .landing-header { 
+            background: var(--bg-gradient); 
             color: white; 
-            padding: 30px 20px; 
+            padding: 40px 20px 30px; 
             text-align: center; 
-            border-bottom: 5px solid var(--accent-gold); 
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            border-bottom: 6px solid var(--accent-gold); 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 20px;
         }
 
-        /* 3D Title */
-        h1 { 
+        .brand-title { 
             margin: 0; 
             color: var(--accent-gold); 
-            font-size: 2.2rem; 
+            font-size: 2.4rem; 
             font-weight: 900;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -39,46 +42,74 @@
                 2px 2px 0 #8a7600,
                 3px 3px 0 #8a7600,
                 4px 4px 0 #8a7600,
-                5px 5px 15px rgba(0,0,0,0.6);
+                6px 6px 15px rgba(0,0,0,0.6);
             transform: perspective(500px) rotateX(2deg);
             display: inline-block;
             margin-bottom: 10px;
         }
 
         .tagline { font-size: 1rem; color: #e0e0e0; margin-top: 10px; font-weight: 500; }
-        .brand-sub { font-size: 0.8rem; color: var(--accent-gold); font-weight: bold; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
+        .brand-sub { font-size: 0.75rem; color: var(--accent-gold); font-weight: bold; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.9; }
         
+        /* --- DASHBOARD HEADER (Simple & Bold) --- */
+        .dash-header {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #f0f0f0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+        }
+        .dash-title {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                1px 1px 0 #ccc,
+                2px 2px 0 #bbb,
+                3px 3px 0 #aaa,
+                4px 4px 5px rgba(0,0,0,0.2);
+            margin: 0;
+            display: inline-block;
+        }
+
         .section { display: none; padding: 25px; animation: fadeIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
         input, textarea { 
             width: 100%; 
-            padding: 16px; 
+            padding: 18px; 
             margin: 12px 0; 
-            border: 2px solid #ddd; 
-            border-radius: 12px; 
+            border: 2px solid #eee; 
+            border-radius: 15px; 
             box-sizing: border-box; 
             font-size: 1rem; 
             transition: all 0.3s; 
             background: #f9f9f9;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.03);
+            font-weight: 500;
         }
         input:focus, textarea:focus { 
             border-color: var(--accent-gold); 
             outline: none; 
             background: #fff;
-            box-shadow: 0 0 15px var(--gold-glow); 
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3); 
             transform: translateY(-2px);
         }
         
-        /* --- UNIVERSAL 3D BUTTON STYLE --- */
+        /* --- UNIVERSAL 3D BUTTON STYLE (Flexible & Amazing) --- */
         button { 
             width: 100%; 
-            padding: 16px; 
+            padding: 18px; 
             background: linear-gradient(to bottom, #ffe033, #e6c200); 
             border: none; 
-            border-radius: 12px; 
+            border-radius: 15px; 
             color: var(--primary-blue); 
             font-weight: 900; 
             font-size: 1.1rem; 
@@ -86,62 +117,60 @@
             margin-top: 15px; 
             text-transform: uppercase;
             letter-spacing: 1px;
-            /* The 3D Effect */
-            box-shadow: 0 6px 0 var(--gold-dark), 0 10px 10px rgba(0,0,0,0.2); 
-            transition: all 0.1s; 
+            box-shadow: 0 8px 0 var(--gold-dark), 0 15px 20px rgba(0,0,0,0.2); 
+            transition: all 0.15s; 
             position: relative;
             top: 0;
         }
         button:active { 
-            transform: translateY(6px); 
-            box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 5px rgba(0,0,0,0.2); 
-            top: 0;
+            transform: translateY(8px); 
+            box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 10px rgba(0,0,0,0.2); 
         }
 
-        /* Secondary Button (White/Blue) */
         button.secondary { 
             background: linear-gradient(to bottom, #ffffff, #f0f0f0); 
             color: var(--primary-blue); 
-            box-shadow: 0 6px 0 #ccc, 0 10px 10px rgba(0,0,0,0.1); 
+            box-shadow: 0 8px 0 #ccc, 0 15px 20px rgba(0,0,0,0.1); 
             border: 1px solid #ddd;
         }
         button.secondary:active { box-shadow: 0 0 0 #ccc; }
 
-        /* Danger Button (Red 3D) */
         button.danger { 
             background: linear-gradient(to bottom, #ff6b6b, #c92a2a); 
             color: white; 
-            box-shadow: 0 6px 0 var(--red-dark), 0 10px 10px rgba(0,0,0,0.2); 
+            box-shadow: 0 8px 0 var(--red-dark), 0 15px 20px rgba(0,0,0,0.2); 
         }
         button.danger:active { box-shadow: 0 0 0 var(--red-dark); }
 
-        /* Success Button (Green 3D) */
         button.success {
             background: linear-gradient(to bottom, #51cf66, #2b8a3e);
             color: white;
-            box-shadow: 0 6px 0 var(--green-dark), 0 10px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 8px 0 var(--green-dark), 0 15px 20px rgba(0,0,0,0.2);
         }
         button.success:active { box-shadow: 0 0 0 var(--green-dark); }
 
         .card { 
             background: #fff; 
-            border-left: 6px solid var(--accent-gold); 
+            border-left: 8px solid var(--accent-gold); 
             padding: 20px; 
             margin-bottom: 20px; 
-            border-radius: 12px; 
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08); 
-            border: 1px solid #eee;
+            border-radius: 15px; 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08); 
+            border: 1px solid #f0f0f0;
+            transition: transform 0.2s;
         }
+        .card:hover { transform: translateY(-3px); }
         
         .status-badge { 
             display: inline-block; 
-            padding: 6px 12px; 
+            padding: 8px 14px; 
             border-radius: 20px; 
             font-size: 0.75rem; 
             color: white; 
             font-weight: 900; 
             text-transform: uppercase;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            letter-spacing: 1px;
         }
         .status-funded { background: #2b8a3e; } 
         .status-completed { background: #1864ab; } 
@@ -151,11 +180,12 @@
         .status-cancelled { background: #868e96; }
         
         .admin-panel { 
-            border: 2px dashed var(--primary-blue); 
-            padding: 20px; 
+            border: 3px dashed var(--primary-blue); 
+            padding: 25px; 
             margin-top: 30px; 
             background: #f8f9fa; 
-            border-radius: 15px;
+            border-radius: 20px;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.05);
         }
         .hidden { display: none; }
         .center-text { text-align: center; }
@@ -163,100 +193,145 @@
         .error-msg { color: var(--alert-red); text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: bold; min-height: 20px; }
         
         .momo-number {
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             font-weight: 900;
             color: var(--primary-blue);
             background: #fff9db;
-            padding: 15px;
-            border-radius: 12px;
-            border: 2px dashed var(--accent-gold);
+            padding: 20px;
+            border-radius: 15px;
+            border: 3px dashed var(--accent-gold);
             display: block;
-            margin: 15px 0;
+            margin: 20px 0;
             letter-spacing: 2px;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.05);
         }
 
-        /* Professional Status Boxes */
         .status-box {
-            padding: 20px;
-            border-radius: 12px;
-            margin-top: 15px;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
             text-align: center;
             font-weight: bold;
-            font-size: 1rem;
-            line-height: 1.5;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             animation: popIn 0.5s ease;
-            border: 1px solid rgba(0,0,0,0.05);
+            border: 2px solid rgba(0,0,0,0.05);
         }
         .success-box { background: #d3f9d8; color: #2b8a3e; border-color: #b2f2bb; }
         .waiting-box { background: #fff9db; color: #e67700; border-color: #ffe066; }
         .dispute-box { background: #ffe3e3; color: #c92a2a; border-color: #ffa8a8; }
-        .cancelled-box { 
-            background: #f8f9fa; 
-            color: #495057; 
-            border: 2px solid #dee2e6;
-        }
+        .cancelled-box { background: #f8f9fa; color: #495057; border: 2px solid #dee2e6; }
 
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
 
         .title-3d { 
             color: var(--primary-blue); 
-            font-size: 2rem; 
+            font-size: 2.2rem; 
             font-weight: 900; 
             text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); 
-            margin-bottom: 25px; 
+            margin-bottom: 30px; 
             display: block; 
             text-align: center;
         }
 
-        /* Admin Dispute Card - Professional & Clean */
         .dispute-card {
             background: #fff;
             border: 2px solid #ffc9c9;
-            border-left: 8px solid var(--alert-red);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(201, 42, 42, 0.15);
+            border-left: 10px solid var(--alert-red);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(201, 42, 42, 0.15);
         }
         .dispute-header {
             color: var(--alert-red);
             font-weight: 900;
-            font-size: 1.1rem;
-            margin-bottom: 10px;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
+            text-transform: uppercase;
+        }
+
+        /* --- FIXED BOTTOM LOGOUT BUTTON --- */
+        .fixed-logout-container {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 440px;
+            z-index: 1000;
+        }
+        .fixed-logout-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(to bottom, #ff6b6b, #c92a2a);
+            color: white;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            border-radius: 50px;
+            box-shadow: 0 10px 25px rgba(201, 42, 42, 0.4);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .fixed-logout-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 5px 15px rgba(201, 42, 42, 0.3);
+        }
+
+        /* --- TRADEMARK FOOTER --- */
+        .trademark-footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #888;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border-top: 1px solid #eee;
+            margin-top: 40px;
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <h1>KS1 Escrow Pay</h1>
+    
+    <!-- LANDING PAGE HEADER (Only for Login/Register) -->
+    <div id="landing-header" class="landing-header">
+        <h1 class="brand-title">KS1 Escrow Pay</h1>
         <div class="tagline">Pay Securely. Trade Confidently.</div>
         <div class="brand-sub">Non-custodial • Alkebulan (AFRICA)-first • Nonprofit-powered</div>
-    </header>
+    </div>
+
+    <!-- DASHBOARD HEADER (Only for Inside App) -->
+    <div id="dash-header" class="dash-header hidden">
+        <h2 class="dash-title">DASHBOARD</h2>
+    </div>
 
     <!-- AUTH SECTION -->
     <div id="auth-section" class="section active">
         <span class="title-3d">Secure Access</span>
         <input type="tel" id="auth-phone" placeholder="Phone Number (e.g., 055...)" />
         <input type="password" id="auth-pass" placeholder="Password" />
+        <!-- Both buttons now Yellow Gold with 3D -->
         <button onclick="handleLogin()" id="login-btn">Login</button>
-        <button class="secondary" onclick="handleRegister()" id="reg-btn">Create Account</button>
-        <p id="loading-msg" style="text-align:center; color:#666; margin-top:15px; font-weight:bold;">Processing...</p>
-        <p id="auth-msg" class="error-msg"></p>
+        <button onclick="handleRegister()" id="reg-btn">Create Account</button>
+        
+        <div class="trademark-footer">
+            &copy; 2026 KS1 Escrow Pay
+        </div>
     </div>
 
     <!-- DASHBOARD SECTION -->
     <div id="dashboard-section" class="section">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-            <h3 style="color:var(--primary-blue); margin:0; font-size:1.4rem;">My Transactions</h3>
-            <button onclick="logout()" style="width:auto; padding:10px 20px; font-size:0.8rem; margin:0;" class="secondary">Exit</button>
-        </div>
+        <!-- Centered Title handled by CSS .center-text on h3 if needed, but header handles main title -->
+        <h3 class="center-text" style="color:var(--primary-blue); margin: 20px 0; font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">My Transactions</h3>
         
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
         
@@ -264,20 +339,27 @@
         <div id="tx-list" style="margin-top:25px;"></div>
 
         <div class="admin-panel hidden" id="admin-controls">
-            <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.3rem; text-align:center;">👑 Admin Command Center</h4>
+            <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.4rem; text-align:center; font-weight:900; text-transform:uppercase;">👑 Admin Command</h4>
             
-            <!-- Dispute Alert Section (Clean & Professional) -->
             <div id="dispute-alert-container" class="hidden"></div>
 
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
+
+        <!-- Fixed Logout Button at Bottom -->
+        <div class="fixed-logout-container">
+            <button class="fixed-logout-btn" onclick="logout()">Logout</button>
+        </div>
+        
+        <!-- Spacer for fixed button -->
+        <div style="height: 100px;"></div>
     </div>
 
     <!-- CREATE TRANSACTION SECTION -->
     <div id="create-section" class="section">
-        <h3 style="color:var(--primary-blue); text-align:center;">New Escrow</h3>
+        <h3 class="center-text" style="color:var(--primary-blue); font-weight:800;">New Escrow</h3>
         <input type="tel" id="seller-phone" placeholder="Seller Phone Number" />
         <input type="number" id="tx-amount" placeholder="Amount (GHS)" />
         <textarea id="tx-desc" rows="3" placeholder="Description of goods/service"></textarea>
@@ -288,16 +370,16 @@
 
     <!-- PAYMENT INSTRUCTION SECTION -->
     <div id="payment-section" class="section">
-        <h3 class="center-text" style="color:var(--primary-blue)">Payment Instructions</h3>
+        <h3 class="center-text" style="color:var(--primary-blue); font-weight:800;">Payment Instructions</h3>
         <div class="card" style="text-align:center;">
-            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.4rem; font-weight:900;"></span></p>
+            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.5rem; font-weight:900;"></span></p>
             <hr style="border: 0; border-top: 2px solid #eee; margin: 20px 0;">
             <p style="margin:10px 0; font-weight:bold; color:#555;">Pay To: KS1 Escrow System Wallet</p>
             <span class="momo-number">0240254680</span>
             <p><strong>Reference:</strong> <span id="pay-ref" style="font-weight:bold; color:var(--primary-blue);"></span></p>
             <p style="font-size:0.9rem; color:#777; margin-top:15px;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
         </div>
-        <label style="font-weight:bold; color:var(--primary-blue); display:block; margin-top:15px;">Confirm Payment:</label>
+        <label style="font-weight:bold; color:var(--primary-blue); display:block; margin-top:15px; font-size:1.1rem;">Confirm Payment:</label>
         <input type="text" id="momo-ref" placeholder="Enter MoMo Reference ID" />
         <button onclick="confirmPayment()">I Have Paid</button>
         <button class="secondary" onclick="showSection('dashboard-section')">Back</button>
@@ -312,6 +394,19 @@
     function showSection(id) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        // Toggle Headers based on section
+        const landingHeader = document.getElementById('landing-header');
+        const dashHeader = document.getElementById('dash-header');
+        
+        if (id === 'auth-section') {
+            landingHeader.classList.remove('hidden');
+            dashHeader.classList.add('hidden');
+        } else {
+            landingHeader.classList.add('hidden');
+            dashHeader.classList.remove('hidden');
+        }
+        
         clearErrors();
     }
 
@@ -322,48 +417,57 @@
         document.getElementById('global-status-msg').innerHTML = '';
     }
 
-    function toggleLoading(isLoading) {
-        document.getElementById('loading-msg').style.display = isLoading ? 'block' : 'none';
-        document.getElementById('login-btn').disabled = isLoading;
-        document.getElementById('reg-btn').disabled = isLoading;
-    }
-
     async function handleRegister() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
         if(!phone || !pass) { document.getElementById('auth-msg').innerText = "Please fill all fields"; return; }
-        toggleLoading(true);
+        
+        const btn = document.getElementById('reg-btn');
+        const originalText = btn.innerText;
+        btn.innerText = "Creating...";
+        btn.disabled = true;
+
         try {
             const res = await fetch(`${API_URL}/register`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
             const data = await res.json();
             if(data.success) { alert("Account created! Please login."); showSection('auth-section'); } 
             else { document.getElementById('auth-msg').innerText = data.error; }
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } 
-        finally { toggleLoading(false); }
+        finally { 
+            btn.innerText = originalText; 
+            btn.disabled = false; 
+        }
     }
 
     async function handleLogin() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
+        
         if(phone === "admin" && pass === "admin123") {
             currentUser = { id: 'admin', isAdmin: true };
-            document.getElementById('admin-controls').classList.remove('hidden');
             showSection('dashboard-section');
             loadAdminData();
             return;
         }
-        toggleLoading(true);
+        
+        const btn = document.getElementById('login-btn');
+        const originalText = btn.innerText;
+        btn.innerText = "Logging in...";
+        btn.disabled = true;
+
         try {
             const res = await fetch(`${API_URL}/login`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
             const data = await res.json();
             if(data.success) {
                 currentUser = data.user;
-                document.getElementById('admin-controls').classList.add('hidden');
                 showSection('dashboard-section');
                 loadTransactions();
             } else { document.getElementById('auth-msg').innerText = data.error; }
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
-        finally { toggleLoading(false); }
+        finally { 
+            btn.innerText = originalText; 
+            btn.disabled = false; 
+        }
     }
 
     function logout() { currentUser = null; location.reload(); }
@@ -408,26 +512,24 @@
     function renderTxList(txs) {
         const list = document.getElementById('tx-list');
         list.innerHTML = '';
-        if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888;">No transactions yet.</p>'; return; }
+        if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; margin-top:30px;">No transactions yet.</p>'; return; }
         
         txs.forEach(tx => {
             const card = document.createElement('div');
             card.className = 'card';
             let actions = '';
             
-            if(tx.status === 'funded') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
-            if(tx.status === 'pending_payment') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
+            if(tx.status === 'funded') actions += `<button style="padding:14px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
+            if(tx.status === 'pending_payment') actions += `<button style="padding:14px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
             
             if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
-                actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
+                actions += `<button class="danger" style="padding:14px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             }
             
             if(tx.status === 'completed') {
                 actions += `
                     <div class="status-box success-box">
                         ✅ Trade Completed Successfully!<br>Funds released to seller.
-                        <br><br>
-                        <button class="secondary" style="width:auto; padding:10px 20px; font-size:0.9rem;" onclick="logout()">Logout</button>
                     </div>`;
             } else if (tx.status === 'delivered') {
                 actions += `<div class="status-box waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
@@ -438,9 +540,6 @@
                     <div class="status-box cancelled-box">
                         ❌ Cancelled.<br>Funds are safe in Escrow.<br><br>
                         <strong>Do you want to make another trade?</strong>
-                        <br><br>
-                        <button class="secondary" style="width:auto; padding:10px 20px; font-size:0.9rem;" onclick="showSection('create-section')">Create New Trade</button>
-                        <button class="secondary" style="width:auto; padding:10px 20px; font-size:0.9rem; margin-left:5px;" onclick="logout()">Logout</button>
                     </div>`;
             }
 
@@ -496,7 +595,7 @@
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
             const data = await res.json();
             
-            // 1. Disputes (Professional Card)
+            // 1. Disputes
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
             if(disputedTx.length > 0) {
                 disputeContainer.classList.remove('hidden');
@@ -507,10 +606,10 @@
                         <div class="dispute-card">
                             <p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p>
                             <p><strong>Buyer:</strong> ${t.buyer_id} | <strong>Seller:</strong> ${t.seller_phone}</p>
-                            <p style="color:#666; font-size:0.9rem; margin:10px 0; background:#f8f9fa; padding:10px; border-radius:8px;">⚠️ Issue Reported: Needs Resolution</p>
+                            <p style="color:#666; font-size:0.9rem; margin:15px 0; background:#f8f9fa; padding:15px; border-radius:10px;">⚠️ Issue Reported: Needs Resolution</p>
                             <div style="display:flex; gap:10px; margin-top:15px; flex-wrap:wrap;">
-                                <button class="success" style="flex:1; padding:12px; font-size:0.9rem;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
-                                <button class="danger" style="flex:1; padding:12px; font-size:0.9rem;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
+                                <button class="success" style="flex:1; padding:14px; font-size:0.9rem;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
+                                <button class="danger" style="flex:1; padding:14px; font-size:0.9rem;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
                             </div>
                         </div>
                     `;
@@ -521,14 +620,14 @@
             }
 
             // 2. Standard Data
-            container.innerHTML = '<h4 style="margin-bottom:15px; color:#555;">Pending Verifications</h4>';
+            container.innerHTML = '<h4 style="margin-bottom:15px; color:#555; font-weight:800; text-transform:uppercase;">Pending Verifications</h4>';
             const pendingPayments = data.payments.filter(p => !p.verified);
             if(pendingPayments.length === 0) container.innerHTML += '<p style="color:#888;">No pending payments.</p>';
             pendingPayments.forEach(p => {
                 container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button></div>`;
             });
 
-            container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; margin-top:25px;">Ready to Release</h4>';
+            container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; font-weight:800; text-transform:uppercase; margin-top:25px;">Ready to Release</h4>';
             const readyToRelease = data.transactions.filter(t => t.status === 'delivered');
             if(readyToRelease.length === 0) container.innerHTML += '<p style="color:#888;">No transactions ready.</p>';
             readyToRelease.forEach(t => {
