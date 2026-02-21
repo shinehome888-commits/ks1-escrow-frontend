@@ -47,16 +47,35 @@
             margin: 10px 0;
             letter-spacing: 1px;
         }
-        
+
+        /* Success Box Styles */
         .success-box {
             background: #d4edda;
             color: #155724;
             padding: 15px;
             border-radius: 8px;
             border: 1px solid #c3e6cb;
-            margin-top: 15px;
+            margin-top: 10px;
             text-align: center;
             font-weight: bold;
+            font-size: 0.95rem;
+            animation: popIn 0.5s ease;
+        }
+        .waiting-box {
+            background: #fff3cd;
+            color: #856404;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ffeeba;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.95rem;
+            animation: popIn 0.5s ease;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.9); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
@@ -90,6 +109,9 @@
         
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
         
+        <!-- Global Status Message Area -->
+        <div id="global-status-msg" style="margin-top:15px;"></div>
+
         <div id="tx-list" style="margin-top:20px;"></div>
 
         <div class="admin-panel hidden" id="admin-controls">
@@ -137,7 +159,6 @@
 </div>
 
 <script>
-    // --- CONNECTED TO LIVE BACKEND (NO SPACES, NO CREDENTIALS) ---
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     console.log("🚀 KS1 Frontend Starting. Target API:", API_URL);
 
@@ -156,6 +177,7 @@
         document.getElementById('create-msg').innerText = '';
         document.getElementById('create-debug').innerText = '';
         document.getElementById('admin-error').innerText = '';
+        document.getElementById('global-status-msg').innerHTML = '';
     }
 
     function toggleLoading(isLoading) {
@@ -170,10 +192,7 @@
         const msgEl = document.getElementById('auth-msg');
         const debugEl = document.getElementById('auth-debug');
 
-        if(!phone || !pass) {
-            msgEl.innerText = "Please fill all fields";
-            return;
-        }
+        if(!phone || !pass) { msgEl.innerText = "Please fill all fields"; return; }
 
         const fullUrl = `${API_URL}/register`;
         debugEl.innerText = "Connecting to: " + fullUrl;
@@ -182,35 +201,23 @@
         toggleLoading(true);
         try {
             const res = await fetch(fullUrl, {
-                method: 'POST',
-                mode: 'cors',
+                method: 'POST', mode: 'cors',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: pass })
             });
             
-            console.log("📥 Response Status:", res.status, res.statusText);
-            
-            if (!res.ok) {
-                const errText = await res.text();
-                throw new Error(`Server responded with ${res.status}: ${errText}`);
-            }
-
+            if (!res.ok) { const errText = await res.text(); throw new Error(`Server responded with ${res.status}: ${errText}`); }
             const data = await res.json();
             
             if(data.success) {
                 alert("Account created! Please login.");
-                msgEl.innerText = "";
-                debugEl.innerText = "";
-            } else {
-                msgEl.innerText = data.error || "Registration failed";
-            }
+                msgEl.innerText = ""; debugEl.innerText = "";
+            } else { msgEl.innerText = data.error || "Registration failed"; }
         } catch (e) {
             console.error("❌ Full Error Object:", e);
             msgEl.innerText = "CONNECTION FAILED";
             debugEl.innerText = "Error: " + e.message;
-        } finally {
-            toggleLoading(false);
-        }
+        } finally { toggleLoading(false); }
     }
 
     async function handleLogin() {
@@ -229,8 +236,7 @@
         toggleLoading(true);
         try {
             const res = await fetch(`${API_URL}/login`, {
-                method: 'POST',
-                mode: 'cors',
+                method: 'POST', mode: 'cors',
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: pass })
             });
@@ -243,21 +249,14 @@
                 document.getElementById('admin-controls').classList.add('hidden');
                 showSection('dashboard-section');
                 loadTransactions();
-            } else {
-                msgEl.innerText = data.error || "Login failed";
-            }
+            } else { msgEl.innerText = data.error || "Login failed"; }
         } catch (e) {
             console.error(e);
             msgEl.innerText = "Connection Error: " + e.message;
-        } finally {
-            toggleLoading(false);
-        }
+        } finally { toggleLoading(false); }
     }
 
-    function logout() {
-        currentUser = null;
-        location.reload();
-    }
+    function logout() { currentUser = null; location.reload(); }
 
     async function submitTransaction() {
         const seller = document.getElementById('seller-phone').value.trim();
@@ -266,10 +265,7 @@
         const msgEl = document.getElementById('create-msg');
         const debugEl = document.getElementById('create-debug');
 
-        if(!seller || !amount) {
-            msgEl.innerText = "Please fill all fields";
-            return;
-        }
+        if(!seller || !amount) { msgEl.innerText = "Please fill all fields"; return; }
 
         const fullUrl = `${API_URL}/transactions`;
         debugEl.innerText = "Connecting to: " + fullUrl;
@@ -277,28 +273,20 @@
 
         try {
             const res = await fetch(fullUrl, {
-                method: 'POST',
-                mode: 'cors',
+                method: 'POST', mode: 'cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc })
             });
 
-            if (!res.ok) {
-                const errText = await res.text();
-                throw new Error(`Server error: ${res.status} - ${errText}`);
-            }
-
+            if (!res.ok) { const errText = await res.text(); throw new Error(`Server error: ${res.status} - ${errText}`); }
             const data = await res.json();
             if(data.success) {
                 currentTx = data.transaction;
                 document.getElementById('pay-tx-id').innerText = currentTx.transaction_id;
                 document.getElementById('pay-ref').innerText = currentTx.transaction_id;
-                msgEl.innerText = "";
-                debugEl.innerText = "";
+                msgEl.innerText = ""; debugEl.innerText = "";
                 showSection('payment-section');
-            } else {
-                msgEl.innerText = data.error || "Failed to create transaction";
-            }
+            } else { msgEl.innerText = data.error || "Failed to create transaction"; }
         } catch (e) {
             console.error(e);
             msgEl.innerText = "CONNECTION FAILED";
@@ -309,28 +297,25 @@
     async function confirmPayment() {
         const ref = document.getElementById('momo-ref').value.trim();
         if(!ref) { alert("Enter MoMo Reference"); return; }
-
         try {
             const res = await fetch(`${API_URL}/payments/confirm`, {
-                method: 'POST',
-                mode: 'cors',
+                method: 'POST', mode: 'cors',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref })
             });
             if(!res.ok) throw new Error("Failed");
             alert("Payment submitted! Waiting for Admin verification.");
             showSection('dashboard-section');
-        } catch (e) {
-            alert("Connection error: " + e.message);
-        }
+        } catch (e) { alert("Connection error: " + e.message); }
     }
 
     async function loadTransactions() {
         if(currentUser.isAdmin) return;
+        // Ensure we are on the dashboard section before loading
+        showSection('dashboard-section'); 
+        
         try {
-            const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, {
-                method: 'GET', mode: 'cors'
-            });
+            const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' });
             if(!res.ok) throw new Error("Failed to load");
             const txs = await res.json();
             renderTxList(txs);
@@ -351,7 +336,6 @@
             card.className = 'card';
             let actions = '';
             
-            // Logic for buttons based on status
             if(tx.status === 'funded') {
                 actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
             }
@@ -361,13 +345,12 @@
             if(tx.status === 'funded' || tx.status === 'delivered') {
                 actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">Open Dispute</button>`;
             }
+            
+            // Visual Status Boxes
             if(tx.status === 'completed') {
                 actions += `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.</div>`;
-            }
-            if(tx.status === 'delivered') {
-                actions += `<div class="success-box" style="background:#fff3cd; color:#856404; border-color:#ffeeba;">
-                    ⏳ Delivery Confirmed!<br>Admin is releasing funds to seller now.
-                    </div>`;
+            } else if (tx.status === 'delivered') {
+                actions += `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds to seller now.</div>`;
             }
 
             card.innerHTML = `
@@ -390,16 +373,29 @@
         showSection('payment-section');
     }
 
+    // --- FIXED ACTION CONFIRM FUNCTION ---
     async function actionConfirm(id) {
         if(confirm("Have you received the goods? Once confirmed, funds will be released to the seller.")) {
             try {
-                await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
+                // Optimistic UI Update: Show message immediately so screen doesn't look empty
+                const statusDiv = document.getElementById('global-status-msg');
+                statusDiv.innerHTML = '<div class="success-box">⏳ Confirming Delivery... Please wait.</div>';
                 
-                // Show success message immediately
+                await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { 
+                    method: 'PUT', 
+                    mode: 'cors', 
+                    headers: { 'Content-Type': 'application/json' } 
+                });
+                
+                // Clear temp message and reload list properly
+                statusDiv.innerHTML = '';
                 alert("✅ Delivery Confirmed!\n\nThe seller has been notified. The Admin will now release the funds to complete the trade.");
                 
-                loadTransactions();
+                // Force reload and ensure we stay on dashboard
+                await loadTransactions(); 
+                
             } catch(e) { 
+                document.getElementById('global-status-msg').innerHTML = '';
                 alert("Error: " + e.message); 
             }
         }
@@ -409,7 +405,11 @@
         const reason = prompt("Enter reason for dispute:");
         if(reason) {
             try {
-                await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
+                await fetch(`${API_URL}/transactions/${id}/dispute`, { 
+                    method: 'PUT', mode: 'cors', 
+                    headers: {'Content-Type': 'application/json'}, 
+                    body: JSON.stringify({ reason }) 
+                });
                 loadTransactions();
                 alert("Dispute opened. Admin will review shortly.");
             } catch(e) { alert("Error: " + e.message); }
