@@ -106,7 +106,7 @@
 </div>
 
 <script>
-    // --- CONNECTED TO LIVE BACKEND (NO SPACES!) ---
+    // --- CONNECTED TO LIVE BACKEND (NO SPACES, NO CREDENTIALS) ---
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     console.log("🚀 KS1 Frontend Starting. Target API:", API_URL);
 
@@ -153,7 +153,7 @@
             const res = await fetch(fullUrl, {
                 method: 'POST',
                 mode: 'cors',
-                credentials: 'include',
+                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: pass })
             });
@@ -178,9 +178,6 @@
             console.error("❌ Full Error Object:", e);
             msgEl.innerText = "CONNECTION FAILED";
             debugEl.innerText = "Error: " + e.message;
-            if (e.message.includes('Failed to fetch')) {
-                debugEl.innerText += " (Check if Backend is asleep or CORS blocked)";
-            }
         } finally {
             toggleLoading(false);
         }
@@ -204,7 +201,7 @@
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 mode: 'cors',
-                credentials: 'include',
+                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: pass })
             });
@@ -253,7 +250,7 @@
             const res = await fetch(fullUrl, {
                 method: 'POST',
                 mode: 'cors',
-                credentials: 'include',
+                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc })
             });
@@ -289,7 +286,7 @@
             const res = await fetch(`${API_URL}/payments/confirm`, {
                 method: 'POST',
                 mode: 'cors',
-                credentials: 'include',
+                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref })
             });
@@ -305,7 +302,8 @@
         if(currentUser.isAdmin) return;
         try {
             const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, {
-                method: 'GET', mode: 'cors', credentials: 'include'
+                method: 'GET', mode: 'cors'
+                // credentials: 'include', // REMOVED FOR STABILITY
             });
             if(!res.ok) throw new Error("Failed to load");
             const txs = await res.json();
@@ -353,7 +351,7 @@
     async function actionConfirm(id) {
         if(confirm("Have you received the goods?")) {
             try {
-                await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: { 'Content-Type': 'application/json' } });
+                await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
                 loadTransactions();
             } catch(e) { alert("Error: " + e.message); }
         }
@@ -363,7 +361,7 @@
         const reason = prompt("Enter reason for dispute:");
         if(reason) {
             try {
-                await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
+                await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
                 loadTransactions();
             } catch(e) { alert("Error: " + e.message); }
         }
@@ -377,7 +375,7 @@
         errorEl.innerText = "";
         
         try {
-            const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors', credentials: 'include' });
+            const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
             if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json();
             
@@ -409,14 +407,14 @@
 
     async function adminVerify(txId) {
         try {
-            await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+            await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
             loadAdminData(); alert("Payment Verified.");
         } catch(e) { alert("Error: " + e.message); }
     }
 
     async function adminRelease(txId) {
         try {
-            await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+            await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
             loadAdminData(); alert("Funds Released.");
         } catch(e) { alert("Error: " + e.message); }
     }
@@ -424,7 +422,7 @@
     async function adminRefund(txId) {
         if(confirm("Refund buyer?")) {
             try {
-                await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+                await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
                 loadAdminData(); alert("Funds Refunded.");
             } catch(e) { alert("Error: " + e.message); }
         }
