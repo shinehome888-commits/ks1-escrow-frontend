@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KS1 Escrow Pay | Alkebulan</title>
+    <style>
+        :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-glow: rgba(255, 215, 0, 0.4); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; }
+        header { background: linear-gradient(135deg, var(--primary-blue), #001540); color: white; padding: 20px; text-align: center; border-bottom: 4px solid var(--accent-gold); }
+        h1 { margin: 0; color: var(--accent-gold); text-shadow: 2px 2px 4px rgba(0,0,0,0.5); font-size: 1.8rem; }
+        .tagline { font-size: 0.9rem; color: #ddd; margin-top: 5px; }
+        .brand-sub { font-size: 0.75rem; color: var(--accent-gold); font-weight: bold; margin-top: 5px; }
+        .section { display: none; padding: 20px; animation: fadeIn 0.4s; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        input, textarea { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.3s; }
+        input:focus { border-color: var(--accent-gold); outline: none; box-shadow: 0 0 8px var(--gold-glow); }
+        
+        button { width: 100%; padding: 15px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 8px; color: var(--primary-blue); font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 0 #b39700, 0 5px 10px rgba(0,0,0,0.3); transition: transform 0.1s; }
+        button:active { transform: translateY(4px); box-shadow: 0 0 0 #b39700; }
+        button.secondary { background: white; color: var(--primary-blue); border: 2px solid var(--primary-blue); box-shadow: none; }
+        button.danger { background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; box-shadow: 0 4px 0 #a61e1e; }
+        
+        .card { background: #f9f9f9; border-left: 5px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: white; background: #ccc; font-weight: bold; }
+        .status-funded { background: #2ecc71; } .status-completed { background: #3498db; } .status-disputed { background: #e74c3c; } .status-pending_payment { background: #f39c12; }
+        
+        .admin-panel { border: 2px dashed var(--primary-blue); padding: 10px; margin-top: 20px; background: #f0f4ff; }
+        .hidden { display: none; }
+        .center-text { text-align: center; }
+        #loading-msg { text-align: center; color: #666; margin-top: 10px; display: none; font-weight: bold; }
+        .error-msg { color: red; text-align: center; font-size: 0.85rem; margin-top: 10px; background: #ffe6e6; padding: 10px; border-radius: 5px; border: 1px solid red; word-wrap: break-word; }
+        .debug-info { font-size: 0.7rem; color: #555; text-align: center; margin-top: 5px; font-family: monospace; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>KS1 Escrow Pay</h1>
+        <div class="tagline">Pay Securely. Trade Confidently.</div>
+        <div class="brand-sub">Non-custodial • Alkebulan (AFRICA)-first • Nonprofit-powered</div>
+    </header>
+
+    <!-- AUTH SECTION -->
+    <div id="auth-section" class="section active">
+        <h3 class="center-text" style="color:var(--primary-blue)">Secure Access</h3>
+        <input type="tel" id="auth-phone" placeholder="Phone Number (e.g., 055...)" />
+        <input type="password" id="auth-pass" placeholder="Password" />
+        <button onclick="handleLogin()" id="login-btn">Login</button>
+        <button class="secondary" onclick="handleRegister()" id="reg-btn">Create Account</button>
+        <p id="loading-msg">Processing...</p>
+        <p id="auth-msg" class="error-msg"></p>
+        <p id="auth-debug" class="debug-info"></p>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboard-section" class="section">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3 style="color:var(--primary-blue); margin:0;">My Transactions</h3>
+            <button onclick="logout()" style="width:auto; padding:8px; font-size:0.8rem; margin:0;" class="secondary">Exit</button>
+        </div>
+        
+        <button onclick="showSection('create-section')">+ Create Private Connection</button>
+        
+        <div id="tx-list" style="margin-top:20px;"></div>
+
+        <div class="admin-panel hidden" id="admin-controls">
+            <h4 style="color:var(--primary-blue); margin-top:0;">Admin Panel</h4>
+            <button onclick="loadAdminData()">Refresh Admin Data</button>
+            <div id="admin-data"></div>
+            <p id="admin-error" class="error-msg"></p>
+        </div>
+    </div>
+
+    <!-- CREATE TRANSACTION SECTION -->
+    <div id="create-section" class="section">
+        <h3 style="color:var(--primary-blue)">New Escrow</h3>
+        <input type="tel" id="seller-phone" placeholder="Seller Phone Number" />
+        <input type="number" id="tx-amount" placeholder="Amount (GHS)" />
+        <textarea id="tx-desc" rows="3" placeholder="Description of goods/service"></textarea>
+        <button onclick="submitTransaction()">Generate Invite Code</button>
+        <button class="secondary" onclick="showSection('dashboard-section')">Cancel</button>
+        <p id="create-msg" class="error-msg"></p>
+        <p id="create-debug" class="debug-info"></p>
+    </div>
+
+    <!-- PAYMENT INSTRUCTION SECTION -->
+    <div id="payment-section" class="section">
+        <h3 class="center-text" style="color:var(--primary-blue)">Payment Instructions</h3>
+        <div class="card" style="text-align:center;">
+            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.2rem; font-weight:bold;"></span></p>
+            <p><strong>Pay To:</strong> KS1 Escrow System Wallet</p>
+            <p><strong>Reference:</strong> <span id="pay-ref"></span></p>
+            <p style="font-size:0.9rem; color:#666;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
+        </div>
+        
+        <label style="font-weight:bold; color:var(--primary-blue)">Confirm Payment:</label>
+        <input type="text" id="momo-ref" placeholder="Enter MoMo Reference ID" />
+        <button onclick="confirmPayment()">I Have Paid</button>
+        <button class="secondary" onclick="showSection('dashboard-section')">Back</button>
+    </div>
+</div>
+
+<script>
+    // --- CONNECTED TO LIVE BACKEND ---
+    const API_URL = 'https://ks1-escrow-backend.onrender.com/api'; 
+    console.log("🚀 KS1 Frontend Starting. Target API:", API_URL);
+
+    let currentUser = null;
+    let currentTx = null;
+
+    function showSection(id) {
+        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        clearErrors();
+    }
+
+    function clearErrors() {
+        document.getElementById('auth-msg').innerText = '';
+        document.getElementById('auth-debug').innerText = '';
+        document.getElementById('create-msg').innerText = '';
+        document.getElementById('create-debug').innerText = '';
+        document.getElementById('admin-error').innerText = '';
+    }
+
+    function toggleLoading(isLoading) {
+        document.getElementById('loading-msg').style.display = isLoading ? 'block' : 'none';
+        document.getElementById('login-btn').disabled = isLoading;
+        document.getElementById('reg-btn').disabled = isLoading;
+    }
+
+    async function handleRegister() {
+        const phone = document.getElementById('auth-phone').value.trim();
+        const pass = document.getElementById('auth-pass').value.trim();
+        const msgEl = document.getElementById('auth-msg');
+        const debugEl = document.getElementById('auth-debug');
+
+        if(!phone || !pass) {
+            msgEl.innerText = "Please fill all fields";
+            return;
+        }
+
+        const fullUrl = `${API_URL}/register`;
+        debugEl.innerText = "Connecting to: " + fullUrl;
+        console.log("🔍 Attempting Register to:", fullUrl);
+
+        toggleLoading(true);
+        try {
+            const res = await fetch(fullUrl, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ phone_number: phone, password: pass })
+            });
+            
+            console.log("📥 Response Status:", res.status, res.statusText);
+            
+            // Check if response is OK (200-299)
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(`Server responded with ${res.status}: ${errText}`);
+            }
+
+            const data = await res.json();
+            
+            if(data.success) {
+                alert("Account created! Please login.");
+                msgEl.innerText = "";
+                debugEl.innerText = "";
+            } else {
+                msgEl.innerText = data.error || "Registration failed";
+            }
+        } catch (e) {
+            console.error("❌ Full Error Object:", e);
+            msgEl.innerText = "CONNECTION FAILED";
+            debugEl.innerText = "Error: " + e.message;
+            if (e.message.includes('Failed to fetch')) {
+                debugEl.innerText += " (Check if Backend is asleep or CORS blocked)";
+            }
+        } finally {
+            toggleLoading(false);
+        }
+    }
+
+    async function handleLogin() {
+        const phone = document.getElementById('auth-phone').value.trim();
+        const pass = document.getElementById('auth-pass').value.trim();
+        const msgEl = document.getElementById('auth-msg');
+        
+        if(phone === "admin" && pass === "admin123") {
+            currentUser = { id: 'admin', phone_number: 'Admin', isAdmin: true };
+            document.getElementById('admin-controls').classList.remove('hidden');
+            showSection('dashboard-section');
+            loadAdminData();
+            return;
+        }
+
+        toggleLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/login`, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ phone_number: phone, password: pass })
+            });
+            
+            if (!res.ok) throw new Error(`Login failed: ${res.status}`);
+            const data = await res.json();
+            
+            if(data.success) {
+                currentUser = data.user;
+                document.getElementById('admin-controls').classList.add('hidden');
+                showSection('dashboard-section');
+                loadTransactions();
+            } else {
+                msgEl.innerText = data.error || "Login failed";
+            }
+        } catch (e) {
+            console.error(e);
+            msgEl.innerText = "Connection Error: " + e.message;
+        } finally {
+            toggleLoading(false);
+        }
+    }
+
+    function logout() {
+        currentUser = null;
+        location.reload();
+    }
+
+    async function submitTransaction() {
+        const seller = document.getElementById('seller-phone').value.trim();
+        const amount = parseFloat(document.getElementById('tx-amount').value);
+        const desc = document.getElementById('tx-desc').value.trim();
+        const msgEl = document.getElementById('create-msg');
+        const debugEl = document.getElementById('create-debug');
+
+        if(!seller || !amount) {
+            msgEl.innerText = "Please fill all fields";
+            return;
+        }
+
+        const fullUrl = `${API_URL}/transactions`;
+        debugEl.innerText = "Connecting to: " + fullUrl;
+        msgEl.innerText = "Contacting secure network...";
+
+        try {
+            const res = await fetch(fullUrl, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc })
+            });
+
+            if (!res.ok) {
+                const errText = await res.text();
+                throw new Error(`Server error: ${res.status} - ${errText}`);
+            }
+
+            const data = await res.json();
+            if(data.success) {
+                currentTx = data.transaction;
+                document.getElementById('pay-tx-id').innerText = currentTx.transaction_id;
+                document.getElementById('pay-ref').innerText = currentTx.transaction_id;
+                msgEl.innerText = "";
+                debugEl.innerText = "";
+                showSection('payment-section');
+            } else {
+                msgEl.innerText = data.error || "Failed to create transaction";
+            }
+        } catch (e) {
+            console.error(e);
+            msgEl.innerText = "CONNECTION FAILED";
+            debugEl.innerText = "Error: " + e.message;
+        }
+    }
+
+    async function confirmPayment() {
+        const ref = document.getElementById('momo-ref').value.trim();
+        if(!ref) { alert("Enter MoMo Reference"); return; }
+
+        try {
+            const res = await fetch(`${API_URL}/payments/confirm`, {
+                method: 'POST',
+                mode: 'cors',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref })
+            });
+            if(!res.ok) throw new Error("Failed");
+            alert("Payment submitted! Waiting for Admin verification.");
+            showSection('dashboard-section');
+        } catch (e) {
+            alert("Connection error: " + e.message);
+        }
+    }
+
+    async function loadTransactions() {
+        if(currentUser.isAdmin) return;
+        try {
+            const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, {
+                method: 'GET', mode: 'cors', credentials: 'include'
+            });
+            if(!res.ok) throw new Error("Failed to load");
+            const txs = await res.json();
+            renderTxList(txs);
+        } catch (e) {
+            document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading: " + e.message + "</p>";
+        }
+    }
+
+    function renderTxList(txs) {
+        const list = document.getElementById('tx-list');
+        list.innerHTML = '';
+        if(txs.length === 0) {
+            list.innerHTML = '<p style="text-align:center; color:#666;">No transactions yet.</p>';
+            return;
+        }
+        txs.forEach(tx => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            let actions = '';
+            if(tx.status === 'funded') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
+            if(tx.status === 'pending_payment') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
+            if(tx.status === 'funded' || tx.status === 'delivered') actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">Open Dispute</button>`;
+
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <strong>${tx.transaction_id}</strong>
+                    <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ').toUpperCase()}</span>
+                </div>
+                <p style="margin:5px 0;">Seller: ${tx.seller_phone} | Amount: GHS ${tx.amount}</p>
+                <p style="font-size:0.9rem; color:#555; margin:5px 0;">${tx.description}</p>
+                <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">${actions}</div>
+            `;
+            list.appendChild(card);
+        });
+    }
+
+    function resumePayment(txId, amount) {
+        currentTx = { transaction_id: txId, amount: amount };
+        document.getElementById('pay-tx-id').innerText = txId;
+        document.getElementById('pay-ref').innerText = txId;
+        showSection('payment-section');
+    }
+
+    async function actionConfirm(id) {
+        if(confirm("Have you received the goods?")) {
+            try {
+                await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: { 'Content-Type': 'application/json' } });
+                loadTransactions();
+            } catch(e) { alert("Error: " + e.message); }
+        }
+    }
+
+    async function actionDispute(id) {
+        const reason = prompt("Enter reason for dispute:");
+        if(reason) {
+            try {
+                await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
+                loadTransactions();
+            } catch(e) { alert("Error: " + e.message); }
+        }
+    }
+
+    // Admin Functions
+    async function loadAdminData() {
+        const container = document.getElementById('admin-data');
+        const errorEl = document.getElementById('admin-error');
+        container.innerHTML = "Loading secure data...";
+        errorEl.innerText = "";
+        
+        try {
+            const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors', credentials: 'include' });
+            if(!res.ok) throw new Error(`Server returned ${res.status}`);
+            const data = await res.json();
+            
+            container.innerHTML = '<h4>Pending Verifications</h4>';
+            const pendingPayments = data.payments.filter(p => !p.verified);
+            if(pendingPayments.length === 0) container.innerHTML += '<p>No pending payments.</p>';
+            
+            pendingPayments.forEach(p => {
+                container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button></div>`;
+            });
+
+            container.innerHTML += '<h4>Ready to Release (Delivered)</h4>';
+            const readyToRelease = data.transactions.filter(t => t.status === 'delivered');
+            if(readyToRelease.length === 0) container.innerHTML += '<p>No transactions ready.</p>';
+
+            readyToRelease.forEach(t => {
+                container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}<br><strong>Fee:</strong> GHS ${t.fee}</p><button onclick="adminRelease('${t.transaction_id}')">Release Funds</button> <button class="danger" onclick="adminRefund('${t.transaction_id}')">Refund Buyer</button></div>`;
+            });
+            
+            const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
+            const destNum = data.commissions[0]?.destination_number || '+233240254680';
+            container.innerHTML += `<div class="card" style="background:#fff3cd;"><strong>Total Commission Earned:</strong> GHS ${totalComm.toFixed(2)}<br><small>Destination: ${destNum}</small></div>`;
+        } catch (e) {
+            console.error(e);
+            container.innerHTML = "";
+            errorEl.innerText = "ERROR LOADING ADMIN DATA: " + e.message + ". Check Render Logs.";
+        }
+    }
+
+    async function adminVerify(txId) {
+        try {
+            await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+            loadAdminData(); alert("Payment Verified.");
+        } catch(e) { alert("Error: " + e.message); }
+    }
+
+    async function adminRelease(txId) {
+        try {
+            await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+            loadAdminData(); alert("Funds Released.");
+        } catch(e) { alert("Error: " + e.message); }
+    }
+
+    async function adminRefund(txId) {
+        if(confirm("Refund buyer?")) {
+            try {
+                await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', credentials: 'include', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
+                loadAdminData(); alert("Funds Refunded.");
+            } catch(e) { alert("Error: " + e.message); }
+        }
+    }
+</script>
+</body>
+</html>
