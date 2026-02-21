@@ -34,6 +34,20 @@
         #loading-msg { text-align: center; color: #666; margin-top: 10px; display: none; font-weight: bold; }
         .error-msg { color: red; text-align: center; font-size: 0.85rem; margin-top: 10px; background: #ffe6e6; padding: 10px; border-radius: 5px; border: 1px solid red; word-wrap: break-word; }
         .debug-info { font-size: 0.7rem; color: #555; text-align: center; margin-top: 5px; font-family: monospace; }
+        
+        /* NEW STYLE FOR PHONE NUMBER */
+        .momo-number {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: var(--primary-blue);
+            background: #fff3cd;
+            padding: 10px;
+            border-radius: 8px;
+            border: 2px dashed var(--accent-gold);
+            display: block;
+            margin: 10px 0;
+            letter-spacing: 1px;
+        }
     </style>
 </head>
 <body>
@@ -93,9 +107,16 @@
         <h3 class="center-text" style="color:var(--primary-blue)">Payment Instructions</h3>
         <div class="card" style="text-align:center;">
             <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.2rem; font-weight:bold;"></span></p>
-            <p><strong>Pay To:</strong> KS1 Escrow System Wallet</p>
+            
+            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
+            
+            <p style="margin:5px 0; font-weight:bold;">Pay To: KS1 Escrow System Wallet</p>
+            
+            <!-- UPDATED SECTION: BIG VISIBLE PHONE NUMBER -->
+            <span class="momo-number">0240254680</span>
+            
             <p><strong>Reference:</strong> <span id="pay-ref"></span></p>
-            <p style="font-size:0.9rem; color:#666;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
+            <p style="font-size:0.9rem; color:#666; margin-top:10px;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
         </div>
         
         <label style="font-weight:bold; color:var(--primary-blue)">Confirm Payment:</label>
@@ -153,7 +174,6 @@
             const res = await fetch(fullUrl, {
                 method: 'POST',
                 mode: 'cors',
-                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: pass })
             });
@@ -201,7 +221,6 @@
             const res = await fetch(`${API_URL}/login`, {
                 method: 'POST',
                 mode: 'cors',
-                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
                 body: JSON.stringify({ phone_number: phone, password: pass })
             });
@@ -250,7 +269,6 @@
             const res = await fetch(fullUrl, {
                 method: 'POST',
                 mode: 'cors',
-                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc })
             });
@@ -286,7 +304,6 @@
             const res = await fetch(`${API_URL}/payments/confirm`, {
                 method: 'POST',
                 mode: 'cors',
-                // credentials: 'include', // REMOVED FOR STABILITY
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref })
             });
@@ -303,7 +320,6 @@
         try {
             const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, {
                 method: 'GET', mode: 'cors'
-                // credentials: 'include', // REMOVED FOR STABILITY
             });
             if(!res.ok) throw new Error("Failed to load");
             const txs = await res.json();
