@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KS1 Escrow Pay | Alkebulan</title>
     <style>
-        :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; }
+        :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --delete-gray: #6c757d; --gray-dark: #5a6268; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; }
         
@@ -46,6 +46,19 @@
         button.danger { background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; box-shadow: 0 4px 0 #a61e1e; }
         button.resolve-btn { background: linear-gradient(to bottom, #28a745, #218838); color: white; box-shadow: 0 4px 0 #1e7e34; }
         
+        /* DELETE BUTTON STYLE */
+        button.delete-btn { 
+            background: linear-gradient(to bottom, #adb5bd, #6c757d); 
+            color: white; 
+            box-shadow: 0 4px 0 #5a6268; 
+            font-size: 0.9rem;
+            padding: 10px;
+            margin-top: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        button.delete-btn:active { box-shadow: 0 0 0 #5a6268; }
+
         .card { background: #f9f9f9; border-left: 5px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
         /* Dispute Alert Card */
@@ -176,10 +189,10 @@
         <div class="admin-panel hidden" id="admin-controls">
             <h4 style="color:var(--primary-blue); margin-top:0;">👑 Admin Command Center</h4>
             
-            <!-- NEW: Dispute Alert Container -->
+            <!-- Dispute Alert Container -->
             <div id="dispute-alert-container" class="hidden"></div>
 
-            <button onclick="loadAdminData()">🔄 Refresh Data & Clear Old Pending</button>
+            <button onclick="loadAdminData()">🔄 Refresh Data</button>
             <div id="admin-data" style="margin-top:15px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
@@ -216,7 +229,6 @@
 </div>
 
 <script>
-    // FIXED: Removed spaces from URL
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     console.log("🚀 KS1 Frontend Starting. Target API:", API_URL);
 
@@ -390,13 +402,13 @@
         }
     }
 
-    // --- ADMIN FUNCTIONS WITH AUTO-CLEAR & ALERTS ---
+    // --- ADMIN FUNCTIONS WITH DELETE POWER ---
     async function loadAdminData() {
         const container = document.getElementById('admin-data');
         const disputeContainer = document.getElementById('dispute-alert-container');
         const errorEl = document.getElementById('admin-error');
         
-        container.innerHTML = "Loading secure data & clearing old pending...";
+        container.innerHTML = "Loading secure data...";
         disputeContainer.innerHTML = "";
         errorEl.innerText = "";
         
@@ -430,7 +442,6 @@
             }
 
             // 2. Standard Admin Data (Pending Verifications)
-            // Note: We only show UNVERIFIED payments here. Old ones stay in DB but aren't shown unless needed.
             container.innerHTML += '<h4>Pending Verifications</h4>';
             const pendingPayments = data.payments.filter(p => !p.verified);
             
@@ -438,7 +449,12 @@
                 container.innerHTML += '<p style="color:green; font-weight:bold;">✅ No pending payments. All clear!</p>';
             } else {
                 pendingPayments.forEach(p => {
-                    container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button></div>`;
+                    container.innerHTML += `
+                        <div class="card">
+                            <p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p>
+                            <button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button>
+                            <button class="delete-btn" onclick="adminDeletePayment('${p.transaction_id}')">🗑️ Delete Payment</button>
+                        </div>`;
                 });
             }
 
@@ -463,6 +479,23 @@
             await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
             loadAdminData(); alert("Payment Verified.");
         } catch(e) { alert("Error"); }
+    }
+
+    // NEW: DELETE PAYMENT FUNCTION
+    async function adminDeletePayment(txId) {
+        if(confirm("⚠️ WARNING: Are you sure you want to DELETE this payment record permanently? This cannot be undone.")) {
+            try {
+                const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' });
+                if(res.ok) {
+                    loadAdminData(); 
+                    alert("🗑️ Payment Record Deleted Successfully!");
+                } else {
+                    alert("Error: Failed to delete.");
+                }
+            } catch(e) { 
+                alert("Error deleting: " + e.message); 
+            }
+        }
     }
 
     async function adminRelease(txId) {
