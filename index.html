@@ -288,7 +288,10 @@
         errorEl.innerText = "";
         try {
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
-            if(!res.ok) throw new Error(`Server returned ${res.status}`);
+            if(!res.ok) {
+                const errData = await res.json();
+                throw new Error(errData.error || `Server returned ${res.status}`);
+            }
             const data = await res.json();
             
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
@@ -296,13 +299,14 @@
                 disputeContainer.classList.remove('hidden');
                 let alertsHtml = `<div class="dispute-header">🔴 URGENT: ${disputedTx.length} Dispute(s) Need Attention!</div>`;
                 disputedTx.forEach(t => {
-                    // NOW DISPLAYING BUYER_PHONE DIRECTLY
-                    const buyerPhoneDisplay = t.buyer_phone || t.buyer_id; 
+                    // Prioritize buyer_phone, fallback to buyer_id if missing
+                    const buyerDisplay = t.buyer_phone ? t.buyer_phone : `${t.buyer_id} (ID)`;
+                    
                     alertsHtml += `
                         <div class="dispute-alert-card">
                             <p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p>
                             <p><strong>Seller:</strong> ${t.seller_phone}</p>
-                            <p><strong>Buyer:</strong> ${buyerPhoneDisplay}</p>
+                            <p><strong>Buyer:</strong> ${buyerDisplay}</p>
                             <p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">⚠️ Issue Reported: Call both parties to resolve.</p>
                             <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
                                 <button class="resolve-btn" style="padding:8px; font-size:0.8rem; flex:1;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
@@ -340,6 +344,7 @@
         } catch (e) {
             container.innerHTML = "";
             errorEl.innerText = "Error: " + e.message;
+            console.error("Admin Load Error:", e);
         }
     }
     async function adminVerify(txId) {
