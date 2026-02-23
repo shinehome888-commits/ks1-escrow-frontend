@@ -255,6 +255,7 @@
             <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.4rem; text-align:center; font-weight:900; text-transform:uppercase;">👑 Admin Command Center</h4>
             <div id="dispute-alert-container" class="hidden"></div>
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
+            <!-- "Loading secure data..." text REMOVED from here -->
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
@@ -314,16 +315,16 @@
         const footerArea = document.getElementById('fixed-footer');
         
         if (id === 'auth-section') {
-            // LANDING PAGE MODE
+            // LANDING PAGE MODE - Hide Footer (Logout)
             landingHeader.classList.remove('hidden');
             dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
-            if(footerArea) footerArea.style.display = 'none'; // HIDE LOGOUT & TRADEMARK
+            if(footerArea) footerArea.style.display = 'none'; 
         } else {
-            // DASHBOARD MODE
+            // DASHBOARD MODE - Show Footer (Logout)
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
-            if(footerArea) footerArea.style.display = 'flex'; // SHOW LOGOUT & TRADEMARK
+            if(footerArea) footerArea.style.display = 'flex'; 
             
             if(refreshBtn) {
                 if(currentUser && currentUser.isAdmin) {
@@ -504,9 +505,12 @@
         const container = document.getElementById('admin-data');
         const disputeContainer = document.getElementById('dispute-alert-container');
         const errorEl = document.getElementById('admin-error');
-        container.innerHTML = "Loading secure data...";
+        
+        // "Loading secure data..." text REMOVED. Just clear the area.
+        container.innerHTML = ""; 
         disputeContainer.innerHTML = "";
         errorEl.innerText = "";
+        
         try {
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
             if(!res.ok) throw new Error(`Server returned ${res.status}`);
