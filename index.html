@@ -71,6 +71,48 @@
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
+        /* PASSWORD INPUT WRAPPER */
+        .password-wrapper {
+            position: relative;
+            width: 100%;
+            margin: 10px 0;
+        }
+        .password-wrapper input {
+            width: 100%;
+            padding: 16px;
+            padding-right: 50px; /* Space for eye */
+            border: 2px solid #eee;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            background: #f9f9f9;
+            transition: all 0.3s;
+        }
+        .password-wrapper input:focus {
+            border-color: var(--accent-gold);
+            outline: none;
+            background: #fff;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #888;
+            user-select: none;
+            background: none;
+            border: none;
+            padding: 0;
+            width: auto;
+            height: auto;
+            box-shadow: none;
+            margin: 0;
+        }
+        .toggle-password:hover { color: var(--primary-blue); }
+
         input, textarea { width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; transition: all 0.3s; background: #f9f9f9; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); font-weight: 500; }
         input:focus, textarea:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); transform: translateY(-2px); }
         
@@ -133,7 +175,6 @@
         .status-badge { display: inline-block; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: 900; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 1px; }
         .status-funded { background: #2b8a3e; } .status-completed { background: #1864ab; } .status-disputed { background: #c92a2a; } .status-pending_payment { background: #e67700; } .status-delivered { background: #be4bdb; } .status-cancelled { background: #868e96; }
         
-        /* ADMIN PANEL WITH GOLD GLOW - FIXED FOR MOBILE */
         .admin-panel { 
             border: 4px dashed var(--primary-blue); 
             padding: 25px; 
@@ -143,7 +184,7 @@
             box-shadow: 0 0 15px var(--accent-gold), inset 0 0 20px rgba(0,0,0,0.05); 
             position: relative;
             z-index: 1;
-            display: block !important; /* Force display via JS, but ensure CSS doesn't hide it */
+            display: block !important;
         }
         
         .admin-title-3d {
@@ -153,62 +194,27 @@
             text-align: center;
             margin-top: 0;
             text-transform: uppercase;
-            text-shadow: 
-                1px 1px 0 #ccc,
-                2px 2px 0 #bbb,
-                3px 3px 0 #aaa,
-                4px 4px 5px rgba(0,0,0,0.3);
+            text-shadow: 1px 1px 0 #ccc, 2px 2px 0 #bbb, 3px 3px 0 #aaa, 4px 4px 5px rgba(0,0,0,0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
         }
-        .crown-icon {
-            font-size: 1.8rem;
-            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
-        }
+        .crown-icon { font-size: 1.8rem; filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3)); }
 
-        .hidden { display: none !important; } /* Stronger hidden class */
+        .hidden { display: none !important; }
         .center-text { text-align: center; }
         #loading-msg { text-align: center; color: #666; margin-top: 15px; display: none; font-weight: bold; }
         .error-msg { color: var(--alert-red); text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: bold; min-height: 20px; }
         
         .momo-number { font-size: 1.8rem; font-weight: 900; color: var(--primary-blue); background: #fff9db; padding: 20px; border-radius: 12px; border: 3px dashed var(--accent-gold); display: block; margin: 20px 0; letter-spacing: 2px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
         
-        .success-box { 
-            background: var(--primary-blue); 
-            color: white; 
-            padding: 25px; 
-            border-radius: 12px; 
-            border: 2px solid var(--accent-gold); 
-            margin-top: 20px; 
-            text-align: center; 
-            font-weight: bold; 
-            font-size: 1.1rem; 
-            line-height: 1.6; 
-            box-shadow: 0 8px 20px rgba(0,35,102,0.3); 
-            animation: popIn 0.5s ease; 
-        }
-        .cancelled-box {
-            background: var(--primary-blue);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            border: 2px solid var(--accent-gold);
-            margin-top: 20px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            box-shadow: 0 8px 20px rgba(0,35,102,0.3);
-            animation: popIn 0.5s ease;
-        }
-
+        .success-box { background: var(--primary-blue); color: white; padding: 25px; border-radius: 12px; border: 2px solid var(--accent-gold); margin-top: 20px; text-align: center; font-weight: bold; font-size: 1.1rem; line-height: 1.6; box-shadow: 0 8px 20px rgba(0,35,102,0.3); animation: popIn 0.5s ease; }
+        .cancelled-box { background: var(--primary-blue); color: white; padding: 25px; border-radius: 12px; border: 2px solid var(--accent-gold); margin-top: 20px; text-align: center; font-weight: bold; font-size: 1.1rem; line-height: 1.6; box-shadow: 0 8px 20px rgba(0,35,102,0.3); animation: popIn 0.5s ease; }
         .waiting-box { background: #fff9db; color: #e67700; padding: 20px; border-radius: 12px; border: 2px solid #ffe066; margin-top: 20px; text-align: center; font-weight: bold; font-size: 1rem; line-height: 1.5; box-shadow: 0 8px 20px rgba(0,0,0,0.1); animation: popIn 0.5s ease; }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
-        /* FIXED FOOTER AREA */
         .fixed-footer-area {
             position: fixed;
             bottom: 0;
@@ -231,11 +237,12 @@
             justify-content: center;
             margin-bottom: 10px;
             pointer-events: auto;
+            gap: 10px; /* Space between buttons */
         }
-        .fixed-logout-btn { 
+        .fixed-logout-btn, .support-btn { 
             width: auto;
-            min-width: 150px;
-            padding: 12px 30px; 
+            min-width: 140px;
+            padding: 12px 20px; 
             background: linear-gradient(to bottom, #ffe033, #e6c200); 
             color: var(--primary-blue); 
             font-weight: 900; 
@@ -244,12 +251,18 @@
             border: none; 
             border-radius: 50px; 
             box-shadow: 0 6px 0 #b39700, 0 10px 15px rgba(0,0,0,0.3); 
-            font-size: 0.9rem; 
+            font-size: 0.85rem; 
             cursor: pointer; 
             transition: all 0.2s; 
             margin: 0;
+            text-align: center;
         }
-        .fixed-logout-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
+        .support-btn {
+            background: linear-gradient(to bottom, #28a745, #218838);
+            color: white;
+            box-shadow: 0 6px 0 #1e6b2e, 0 10px 15px rgba(0,0,0,0.3);
+        }
+        .fixed-logout-btn:active, .support-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
         
         .trademark-footer {
             width: 100%;
@@ -265,200 +278,88 @@
             border-top: 2px solid var(--accent-gold);
             box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
         }
-        .trademark-footer strong {
-            color: var(--accent-gold);
-            display: block;
-            margin-bottom: 4px;
-            font-size: 0.75rem;
-        }
-        
+        .trademark-footer strong { color: var(--accent-gold); display: block; margin-bottom: 4px; font-size: 0.75rem; }
         .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
 
-        /* GUIDE MODAL STYLES */
+        /* MODAL STYLES */
         .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 35, 102, 0.9);
-            z-index: 2000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            box-sizing: border-box;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 35, 102, 0.9); z-index: 2000;
+            display: none; justify-content: center; align-items: center;
+            padding: 20px; box-sizing: border-box;
         }
         .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 400px;
-            max-height: 80vh;
-            overflow-y: auto;
-            border-radius: 15px;
-            padding: 25px;
-            position: relative;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 4px solid var(--accent-gold);
-            animation: popIn 0.3s ease;
+            background: white; width: 100%; max-width: 400px; max-height: 80vh;
+            overflow-y: auto; border-radius: 15px; padding: 25px;
+            position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid var(--accent-gold); animation: popIn 0.3s ease;
         }
         .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-blue);
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 0;
-            margin: 0;
-            box-shadow: none;
-            width: auto;
-            line-height: 1;
+            position: absolute; top: 10px; right: 15px; font-size: 2rem;
+            font-weight: bold; color: var(--primary-blue); cursor: pointer;
+            background: none; border: none; padding: 0; margin: 0;
+            box-shadow: none; width: auto; line-height: 1;
         }
         .modal-close:hover { color: var(--alert-red); }
-        .guide-step {
-            margin-bottom: 20px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 15px;
-        }
+        .guide-step { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 15px; }
         .guide-step:last-child { border-bottom: none; }
-        .guide-step h3 {
-            color: var(--primary-blue);
-            margin: 0 0 8px 0;
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .step-number {
-            background: var(--accent-gold);
-            color: var(--primary-blue);
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 900;
-            font-size: 0.9rem;
-            flex-shrink: 0;
-        }
-        .guide-step p {
-            color: #555;
-            font-size: 0.9rem;
-            line-height: 1.5;
-            margin: 0;
-            padding-left: 35px;
-        }
-        .fee-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeeba;
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-        .guide-title {
-            text-align: center;
-            color: var(--primary-blue);
-            font-size: 1.5rem;
-            font-weight: 900;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
+        .guide-step h3 { color: var(--primary-blue); margin: 0 0 8px 0; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .step-number { background: var(--accent-gold); color: var(--primary-blue); width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; font-size: 0.9rem; flex-shrink: 0; }
+        .guide-step p { color: #555; font-size: 0.9rem; line-height: 1.5; margin: 0; padding-left: 35px; }
+        .fee-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 0.85rem; font-weight: 600; }
+        .guide-title { text-align: center; color: var(--primary-blue); font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
 
-        /* ARCHIVE MODAL SPECIFIC STYLES */
-        .archive-search-box {
-            position: sticky;
-            top: 0;
-            background: white;
-            padding: 10px 0;
-            z-index: 10;
-            border-bottom: 2px solid var(--accent-gold);
-            margin-bottom: 20px;
-        }
-        .archive-group-title {
-            color: var(--primary-blue);
-            font-size: 1.1rem;
-            font-weight: 900;
-            margin: 20px 0 10px 0;
-            padding-bottom: 5px;
-            border-bottom: 2px solid #eee;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .archive-item {
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            border-radius: 8px;
+        /* SUPPORT FORM STYLES */
+        .support-form textarea {
+            width: 100%;
             padding: 12px;
-            margin-bottom: 10px;
-            font-size: 0.85rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 100px;
         }
-        .archive-item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--primary-blue);
+        .support-form select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            margin-top: 10px;
+            background: white;
+            font-size: 1rem;
         }
-        .archive-detail-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 4px;
-            color: #555;
-        }
-        .archive-detail-label { font-weight: 600; }
-        .archive-date-row {
-            background: #e9ecef;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            text-align: center;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: var(--primary-blue);
-        }
-        .archive-dispute-reason {
-            background: #fff5f5;
-            color: #c92a2a;
-            padding: 8px;
-            border-radius: 5px;
-            margin-top: 8px;
-            font-style: italic;
-            border: 1px dashed #ffc9c9;
-        }
-
-        /* IDLE WARNING POPUP */
-        #idle-warning {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--alert-red);
+        .support-submit-btn {
+            background: linear-gradient(to bottom, #28a745, #218838);
             color: white;
-            padding: 15px 25px;
-            border-radius: 50px;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            z-index: 3000;
-            display: none;
-            animation: popIn 0.3s ease;
+            box-shadow: 0 6px 0 #1e6b2e;
+            margin-top: 15px;
+        }
+        .support-submit-btn:active { box-shadow: 0 0 0 #1e6b2e; }
+
+        /* ARCHIVE STYLES */
+        .archive-search-box { position: sticky; top: 0; background: white; padding: 10px 0; z-index: 10; border-bottom: 2px solid var(--accent-gold); margin-bottom: 20px; }
+        .archive-group-title { color: var(--primary-blue); font-size: 1.1rem; font-weight: 900; margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+        .archive-item { background: #f8f9fa; border: 1px solid #eee; border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.85rem; }
+        .archive-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-weight: bold; color: var(--primary-blue); }
+        .archive-detail-row { display: flex; justify-content: space-between; margin-bottom: 4px; color: #555; }
+        .archive-detail-label { font-weight: 600; }
+        .archive-date-row { background: #e9ecef; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; text-align: center; margin-bottom: 8px; font-weight: bold; color: var(--primary-blue); }
+        .archive-dispute-reason { background: #fff5f5; color: #c92a2a; padding: 8px; border-radius: 5px; margin-top: 8px; font-style: italic; border: 1px dashed #ffc9c9; }
+
+        #idle-warning {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: var(--alert-red); color: white; padding: 15px 25px;
+            border-radius: 50px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 3000; display: none; animation: popIn 0.3s ease;
         }
     </style>
 </head>
 <body>
 
-<!-- IDLE WARNING -->
 <div id="idle-warning">⏱️ Inactive! Logging out in 5 seconds...</div>
 
 <div class="container">
-    
     <div id="landing-header" class="landing-header">
         <h1 class="brand-title">KS1 Escrow Pay</h1>
         <div class="tagline">Pay Securely. Trade Confidently.</div>
@@ -472,7 +373,13 @@
     <div id="auth-section" class="section active">
         <span class="title-3d">Secure Access</span>
         <input type="tel" id="auth-phone" placeholder="Phone Number (e.g., 055...)" />
-        <input type="password" id="auth-pass" placeholder="Password" />
+        
+        <!-- PASSWORD WITH EYE ICON -->
+        <div class="password-wrapper">
+            <input type="password" id="auth-pass" placeholder="Password" />
+            <button type="button" class="toggle-password" onclick="togglePassword('auth-pass')">👁️</button>
+        </div>
+
         <button onclick="handleLogin()" id="login-btn">Login</button>
         <button onclick="handleRegister()" id="reg-btn">Create Account</button>
         <p id="loading-msg">Processing...</p>
@@ -481,16 +388,12 @@
 
     <div id="dashboard-section" class="section">
         <button class="refresh-gold" onclick="loadTransactions()">🔄 Refresh Transactions</button>
-        
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
         <div id="global-status-msg" style="margin-top:20px;"></div>
         <div id="tx-list" style="margin-top:25px;"></div>
 
-        <!-- ADMIN PANEL: Initially Hidden, Shown via JS -->
         <div class="admin-panel hidden" id="admin-controls">
-            <h4 class="admin-title-3d">
-                <span class="crown-icon">👑</span> Admin Command Center
-            </h4>
+            <h4 class="admin-title-3d"><span class="crown-icon">👑</span> Admin Command Center</h4>
             <div id="dispute-alert-container" class="hidden"></div>
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
             <div id="admin-data" style="margin-top:20px;"></div>
@@ -528,6 +431,7 @@
 <!-- FIXED FOOTER AREA -->
 <div class="fixed-footer-area" id="fixed-footer">
     <div class="fixed-logout-container">
+        <button class="support-btn" onclick="openSupport()">🆘 Contact Support</button>
         <button class="fixed-logout-btn" onclick="openGuide()">❓ How to Use</button>
     </div>
     <div class="trademark-footer">
@@ -542,32 +446,39 @@
     <div class="modal-content">
         <button class="modal-close" onclick="closeGuide()">&times;</button>
         <h2 class="guide-title">How to Use KS1 Escrow</h2>
-        <div class="guide-step">
-            <h3><span class="step-number">1</span> Register & Login</h3>
-            <p>Create an account with your phone number and password. Keep your password safe!</p>
-        </div>
-        <div class="guide-step">
-            <h3><span class="step-number">2</span> Create Escrow</h3>
-            <p>Click "+ Create Private Connection". Enter the Seller's phone number, the Amount (GHS), and a description of the goods.</p>
-        </div>
-        <div class="guide-step">
-            <h3><span class="step-number">3</span> Make Payment</h3>
-            <p>You will see a Transaction ID and our Wallet Number (<strong>0240254680</strong>). Send the exact amount via Mobile Money using the Transaction ID as reference. Then click "I Have Paid".</p>
-            <div class="fee-warning">
-                ⚠️ IMPORTANT: Please add the <strong>Mobile Money Charge</strong> on top of the transaction amount. The seller must receive the full agreed amount.
-            </div>
-        </div>
-        <div class="guide-step">
-            <h3><span class="step-number">4</span> Admin Verification</h3>
-            <p>Our Admin will verify your payment. Once verified, the status changes to <strong>FUNDED</strong>, and the seller is notified.</p>
-        </div>
-        <div class="guide-step">
-            <h3><span class="step-number">5</span> Confirm Delivery</h3>
-            <p>Once you receive your goods, click <strong>"Confirm Delivery"</strong>. This tells the Admin to release funds to the seller.</p>
-        </div>
-        <div class="guide-step">
-            <h3><span class="step-number">6</span> Disputes?</h3>
-            <p>If there is an issue, click <strong>"Open Dispute"</strong>. Our Admin will contact both parties to resolve it fairly.</p>
+        <div class="guide-step"><h3><span class="step-number">1</span> Register & Login</h3><p>Create an account with your phone number and password.</p></div>
+        <div class="guide-step"><h3><span class="step-number">2</span> Create Escrow</h3><p>Click "+ Create Private Connection". Enter Seller's phone, Amount, and Description.</p></div>
+        <div class="guide-step"><h3><span class="step-number">3</span> Make Payment</h3><p>Send exact amount to <strong>0240254680</strong> using Transaction ID as reference. Click "I Have Paid".</p><div class="fee-warning">⚠️ IMPORTANT: Add <strong>Mobile Money Charge</strong> on top. Seller must receive full amount.</div></div>
+        <div class="guide-step"><h3><span class="step-number">4</span> Admin Verification</h3><p>Admin verifies payment. Status changes to <strong>FUNDED</strong>.</p></div>
+        <div class="guide-step"><h3><span class="step-number">5</span> Confirm Delivery</h3><p>Receive goods? Click <strong>"Confirm Delivery"</strong> to release funds.</p></div>
+        <div class="guide-step"><h3><span class="step-number">6</span> Need Help?</h3><p>Click <strong>"🆘 Contact Support"</strong> at the bottom anytime for direct help!</p></div>
+    </div>
+</div>
+
+<!-- SUPPORT MODAL -->
+<div class="modal-overlay" id="supportModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeSupport()">&times;</button>
+        <h2 class="guide-title">🆘 Contact Support</h2>
+        <p style="text-align:center; color:#555; margin-bottom:20px;">Having trouble? Describe your issue below and we will contact you immediately via WhatsApp.</p>
+        
+        <div class="support-form">
+            <label style="font-weight:bold; color:var(--primary-blue);">Your Phone Number:</label>
+            <input type="tel" id="support-phone" placeholder="e.g. 0551234567" />
+            
+            <label style="font-weight:bold; color:var(--primary-blue); margin-top:10px; display:block;">Issue Type:</label>
+            <select id="support-type">
+                <option value="Login Issue">🔒 Login/Password Issue</option>
+                <option value="Payment Problem">💰 Payment Not Showing</option>
+                <option value="App Error">📱 App Technical Error</option>
+                <option value="General Question">❓ General Question</option>
+                <option value="Other">🛠️ Other</option>
+            </select>
+            
+            <label style="font-weight:bold; color:var(--primary-blue); margin-top:10px; display:block;">Describe Problem:</label>
+            <textarea id="support-message" placeholder="Please explain what is happening..."></textarea>
+            
+            <button class="support-submit-btn" onclick="sendSupportMessage()">📩 Send to Admin via WhatsApp</button>
         </div>
     </div>
 </div>
@@ -577,87 +488,90 @@
     <div class="modal-content" style="max-width: 500px; max-height: 90vh;">
         <button class="modal-close" onclick="closeArchive()">&times;</button>
         <h2 class="guide-title">📜 Master Transaction Archive</h2>
-        
-        <div class="archive-search-box">
-            <input type="text" id="archiveSearch" placeholder="🔍 Search by ID, Phone, or Date..." onkeyup="filterArchive()">
-        </div>
-        
-        <div id="archiveContent">
-            <!-- Content injected by JS -->
-        </div>
+        <div class="archive-search-box"><input type="text" id="archiveSearch" placeholder="🔍 Search by ID, Phone, or Date..." onkeyup="filterArchive()"></div>
+        <div id="archiveContent"></div>
     </div>
 </div>
 
 <script>
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
+    const ADMIN_WHATSAPP = '233240254680'; // Your number for support
     let currentUser = null;
     let currentTx = null;
     let allTransactions = []; 
 
-    // --- SMART AUTO LOGOUT SECURITY SYSTEM ---
-    let idleTimer;
-    let warningTimer;
-    const IDLE_LIMIT = 50000; 
-    const WARNING_TIME = 45000; 
-
-    function resetIdleTimer() {
-        if (!currentUser) {
-            clearTimeout(idleTimer);
-            clearTimeout(warningTimer);
-            document.getElementById('idle-warning').style.display = 'none';
-            return;
+    // --- PASSWORD TOGGLE ---
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const btn = input.nextElementSibling;
+        if (input.type === "password") {
+            input.type = "text";
+            btn.innerHTML = "🙈"; // Hide icon
+        } else {
+            input.type = "password";
+            btn.innerHTML = "👁️"; // Show icon
         }
-        clearTimeout(idleTimer);
-        clearTimeout(warningTimer);
-        document.getElementById('idle-warning').style.display = 'none';
-        warningTimer = setTimeout(() => {
-            document.getElementById('idle-warning').style.display = 'block';
-        }, WARNING_TIME);
-        idleTimer = setTimeout(() => {
-            if(currentUser) logout();
-        }, IDLE_LIMIT);
     }
 
-    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => {
-        document.addEventListener(evt, resetIdleTimer, true);
-    });
+    // --- AUTO LOGOUT ---
+    let idleTimer, warningTimer;
+    const IDLE_LIMIT = 50000; const WARNING_TIME = 45000; 
+    function resetIdleTimer() {
+        if (!currentUser) { clearTimeout(idleTimer); clearTimeout(warningTimer); document.getElementById('idle-warning').style.display = 'none'; return; }
+        clearTimeout(idleTimer); clearTimeout(warningTimer);
+        document.getElementById('idle-warning').style.display = 'none';
+        warningTimer = setTimeout(() => { document.getElementById('idle-warning').style.display = 'block'; }, WARNING_TIME);
+        idleTimer = setTimeout(() => { if(currentUser) logout(); }, IDLE_LIMIT);
+    }
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => { document.addEventListener(evt, resetIdleTimer, true); });
 
+    // --- MODALS ---
     function openGuide() { document.getElementById('guideModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; resetIdleTimer(); }
     function closeGuide() { document.getElementById('guideModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
     
-    function openArchive() { 
-        document.getElementById('archiveModal').style.display = 'flex'; 
-        document.body.style.overflow = 'hidden';
-        renderArchive(allTransactions);
-        resetIdleTimer();
+    function openSupport() { 
+        document.getElementById('supportModal').style.display = 'flex'; 
+        document.body.style.overflow = 'hidden'; 
+        // Pre-fill phone if logged in
+        if(currentUser && currentUser.phone_number !== 'Admin') {
+            document.getElementById('support-phone').value = currentUser.phone_number;
+        }
+        resetIdleTimer(); 
     }
+    function closeSupport() { document.getElementById('supportModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
+    
+    function sendSupportMessage() {
+        const phone = document.getElementById('support-phone').value.trim();
+        const type = document.getElementById('support-type').value;
+        const msg = document.getElementById('support-message').value.trim();
+        
+        if(!phone || !msg) { alert("Please enter your phone number and describe the problem."); return; }
+        
+        const text = `*KS1 SUPPORT REQUEST*%0A%0A👤 *User:* ${phone}%0A📋 *Type:* ${type}%0A💬 *Issue:* ${msg}%0A%0APlease assist me.`;
+        window.open(`https://wa.me/${ADMIN_WHATSAPP}?text=${text}`, '_blank');
+        closeSupport();
+    }
+
+    function openArchive() { document.getElementById('archiveModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; renderArchive(allTransactions); resetIdleTimer(); }
     function closeArchive() { document.getElementById('archiveModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
     
     window.onclick = function(event) {
         if (event.target == document.getElementById('guideModal')) closeGuide();
+        if (event.target == document.getElementById('supportModal')) closeSupport();
         if (event.target == document.getElementById('archiveModal')) closeArchive();
     }
 
     function filterArchive() {
         const query = document.getElementById('archiveSearch').value.toLowerCase();
-        const filtered = allTransactions.filter(tx => 
-            tx.transaction_id.toLowerCase().includes(query) ||
-            tx.seller_phone.includes(query) ||
-            (tx.buyer_phone && tx.buyer_phone.includes(query)) ||
-            tx.created_at.toLowerCase().includes(query)
-        );
-        renderArchive(filtered);
-        resetIdleTimer();
+        const filtered = allTransactions.filter(tx => tx.transaction_id.toLowerCase().includes(query) || tx.seller_phone.includes(query) || (tx.buyer_phone && tx.buyer_phone.includes(query)) || tx.created_at.toLowerCase().includes(query));
+        renderArchive(filtered); resetIdleTimer();
     }
 
     function renderArchive(txs) {
         const container = document.getElementById('archiveContent');
         container.innerHTML = '';
         if(txs.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888;">No transactions found.</p>'; return; }
-        const now = new Date();
-        const today = now.toDateString();
-        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        const now = new Date(); const today = now.toDateString(); const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
         const groups = { "Today": [], "This Week": [], "This Month": [], "Older": [] };
         txs.forEach(tx => {
             const txDate = new Date(tx.created_at);
@@ -671,26 +585,10 @@
             let html = `<div class="archive-group-title">${groupName} (${groupTxs.length})</div>`;
             groupTxs.forEach(tx => {
                 const dateObj = new Date(tx.created_at);
-                const dateStr = dateObj.toLocaleDateString();
-                const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const dateStr = dateObj.toLocaleDateString(); const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 let disputeHtml = '';
-                if(tx.status === 'disputed' && tx.dispute_reason) {
-                    disputeHtml = `<div class="archive-dispute-reason">⚠️ Reason: ${tx.dispute_reason}</div>`;
-                }
-                html += `
-                    <div class="archive-item">
-                        <div class="archive-date-row">📅 ${dateStr} at ${timeStr}</div>
-                        <div class="archive-item-header">
-                            <span>${tx.transaction_id}</span>
-                            <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
-                        </div>
-                        <div class="archive-detail-row"><span class="archive-detail-label">Buyer:</span><span>${tx.buyer_phone || tx.buyer_id}</span></div>
-                        <div class="archive-detail-row"><span class="archive-detail-label">Seller:</span><span>${tx.seller_phone}</span></div>
-                        <div class="archive-detail-row"><span class="archive-detail-label">Amount:</span><span style="font-weight:bold; color:var(--primary-blue);">GHS ${tx.amount}</span></div>
-                        <div class="archive-detail-row"><span class="archive-detail-label">Fee (1%):</span><span>GHS ${tx.fee}</span></div>
-                        ${disputeHtml}
-                    </div>
-                `;
+                if(tx.status === 'disputed' && tx.dispute_reason) disputeHtml = `<div class="archive-dispute-reason">⚠️ Reason: ${tx.dispute_reason}</div>`;
+                html += `<div class="archive-item"><div class="archive-date-row">📅 ${dateStr} at ${timeStr}</div><div class="archive-item-header"><span>${tx.transaction_id}</span><span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Buyer:</span><span>${tx.buyer_phone || tx.buyer_id}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Seller:</span><span>${tx.seller_phone}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Amount:</span><span style="font-weight:bold; color:var(--primary-blue);">GHS ${tx.amount}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Fee (1%):</span><span>GHS ${tx.fee}</span></div>${disputeHtml}</div>`;
             });
             container.innerHTML += html;
         }
@@ -700,281 +598,135 @@
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
         resetIdleTimer();
-        
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
         const refreshBtn = document.querySelector('.refresh-gold');
         const footerArea = document.getElementById('fixed-footer');
-        
         if (id === 'auth-section') {
-            landingHeader.classList.remove('hidden');
-            dashHeader.classList.add('hidden');
+            landingHeader.classList.remove('hidden'); dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
             if(footerArea) footerArea.style.display = 'flex';
         } else {
-            landingHeader.classList.add('hidden');
-            dashHeader.classList.remove('hidden');
+            landingHeader.classList.add('hidden'); dashHeader.classList.remove('hidden');
             if(footerArea) footerArea.style.display = 'flex'; 
-            if(refreshBtn) {
-                if(currentUser && currentUser.isAdmin) {
-                    refreshBtn.style.display = 'none';
-                } else {
-                    refreshBtn.style.display = 'block';
-                }
-            }
+            if(refreshBtn) { if(currentUser && currentUser.isAdmin) refreshBtn.style.display = 'none'; else refreshBtn.style.display = 'block'; }
         }
         clearErrors();
     }
 
-    function clearErrors() {
-        document.getElementById('auth-msg').innerText = '';
-        document.getElementById('create-msg').innerText = '';
-        document.getElementById('admin-error').innerText = '';
-        document.getElementById('global-status-msg').innerHTML = '';
-    }
-
-    function toggleLoading(isLoading) {
-        document.getElementById('loading-msg').style.display = isLoading ? 'block' : 'none';
-        document.getElementById('login-btn').disabled = isLoading;
-        document.getElementById('reg-btn').disabled = isLoading;
-    }
+    function clearErrors() { document.getElementById('auth-msg').innerText = ''; document.getElementById('create-msg').innerText = ''; document.getElementById('admin-error').innerText = ''; document.getElementById('global-status-msg').innerHTML = ''; }
+    function toggleLoading(isLoading) { document.getElementById('loading-msg').style.display = isLoading ? 'block' : 'none'; document.getElementById('login-btn').disabled = isLoading; document.getElementById('reg-btn').disabled = isLoading; }
 
     async function handleRegister() {
-        const phone = document.getElementById('auth-phone').value.trim();
-        const pass = document.getElementById('auth-pass').value.trim();
+        const phone = document.getElementById('auth-phone').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
         if(!phone || !pass) { document.getElementById('auth-msg').innerText = "Please fill all fields"; return; }
         toggleLoading(true);
         try {
             const res = await fetch(`${API_URL}/register`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
             const data = await res.json();
-            if(data.success) { alert("Account created! Please login."); showSection('auth-section'); } 
-            else { document.getElementById('auth-msg').innerText = data.error; }
-        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } 
-        finally { toggleLoading(false); }
+            if(data.success) { alert("Account created! Please login."); showSection('auth-section'); } else { document.getElementById('auth-msg').innerText = data.error; }
+        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } finally { toggleLoading(false); }
     }
 
     async function handleLogin() {
-        const phone = document.getElementById('auth-phone').value.trim();
-        const pass = document.getElementById('auth-pass').value.trim();
-        
-        // CHECK FOR ADMIN LOGIN
+        const phone = document.getElementById('auth-phone').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
         if(phone === "admin" && pass === "admin123") {
             currentUser = { id: 'admin', phone_number: 'Admin', isAdmin: true };
-            
-            // FORCE SHOW ADMIN PANEL
             const adminPanel = document.getElementById('admin-controls');
-            adminPanel.classList.remove('hidden');
-            adminPanel.style.display = 'block'; // Explicitly set display
-            
-            showSection('dashboard-section');
-            loadAdminData();
-            resetIdleTimer();
-            return;
+            adminPanel.classList.remove('hidden'); adminPanel.style.display = 'block';
+            showSection('dashboard-section'); loadAdminData(); resetIdleTimer(); return;
         }
-
-        // Regular User Login
         toggleLoading(true);
         try {
             const res = await fetch(`${API_URL}/login`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
             const data = await res.json();
             if(data.success) {
                 currentUser = data.user;
-                
-                // HIDE ADMIN PANEL FOR REGULAR USERS
-                const adminPanel = document.getElementById('admin-controls');
-                adminPanel.classList.add('hidden');
-                
-                showSection('dashboard-section');
-                loadTransactions();
-                resetIdleTimer();
+                const adminPanel = document.getElementById('admin-controls'); adminPanel.classList.add('hidden');
+                showSection('dashboard-section'); loadTransactions(); resetIdleTimer();
             } else { document.getElementById('auth-msg').innerText = data.error; }
-        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
-        finally { toggleLoading(false); }
+        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } finally { toggleLoading(false); }
     }
 
-    function logout() { 
-        currentUser = null; 
-        clearTimeout(idleTimer); 
-        clearTimeout(warningTimer);
-        document.getElementById('idle-warning').style.display = 'none';
-        location.reload(); 
-    }
+    function logout() { currentUser = null; clearTimeout(idleTimer); clearTimeout(warningTimer); document.getElementById('idle-warning').style.display = 'none'; location.reload(); }
 
     async function submitTransaction() {
-        const seller = document.getElementById('seller-phone').value.trim();
-        const amount = parseFloat(document.getElementById('tx-amount').value);
-        const desc = document.getElementById('tx-desc').value.trim();
+        const seller = document.getElementById('seller-phone').value.trim(); const amount = parseFloat(document.getElementById('tx-amount').value); const desc = document.getElementById('tx-desc').value.trim();
         if(!seller || !amount) { document.getElementById('create-msg').innerText = "Please fill all fields"; return; }
         try {
             const res = await fetch(`${API_URL}/transactions`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc }) });
             const data = await res.json();
-            if(data.success) {
-                currentTx = data.transaction;
-                document.getElementById('pay-tx-id').innerText = currentTx.transaction_id;
-                document.getElementById('pay-ref').innerText = currentTx.transaction_id;
-                showSection('payment-section');
-            }
+            if(data.success) { currentTx = data.transaction; document.getElementById('pay-tx-id').innerText = currentTx.transaction_id; document.getElementById('pay-ref').innerText = currentTx.transaction_id; showSection('payment-section'); }
         } catch (e) { document.getElementById('create-msg').innerText = "Error"; }
     }
 
     async function confirmPayment() {
-        const ref = document.getElementById('momo-ref').value.trim();
-        if(!ref) { alert("Enter MoMo Reference"); return; }
-        try {
-            await fetch(`${API_URL}/payments/confirm`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref }) });
-            alert("Payment submitted! Waiting for Admin verification.");
-            showSection('dashboard-section');
-        } catch (e) { alert("Error"); }
+        const ref = document.getElementById('momo-ref').value.trim(); if(!ref) { alert("Enter MoMo Reference"); return; }
+        try { await fetch(`${API_URL}/payments/confirm`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ transaction_id: currentTx.transaction_id, momo_reference: ref }) }); alert("Payment submitted! Waiting for Admin verification."); showSection('dashboard-section'); } catch (e) { alert("Error"); }
     }
 
     async function loadTransactions() {
         if(currentUser.isAdmin) return;
-        const btn = document.querySelector('.refresh-gold');
-        if(btn) { const original = btn.innerText; btn.innerText = "Refreshing..."; btn.disabled = true; }
-        try {
-            const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' });
-            const txs = await res.json();
-            renderTxList(txs);
-        } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; } 
-        finally { if(btn) { btn.innerText = "🔄 Refresh Transactions"; btn.disabled = false; } }
+        const btn = document.querySelector('.refresh-gold'); if(btn) { const original = btn.innerText; btn.innerText = "Refreshing..."; btn.disabled = true; }
+        try { const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' }); const txs = await res.json(); renderTxList(txs); } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; } finally { if(btn) { btn.innerText = "🔄 Refresh Transactions"; btn.disabled = false; } }
     }
 
     function renderTxList(txs) {
-        const list = document.getElementById('tx-list');
-        list.innerHTML = '';
+        const list = document.getElementById('tx-list'); list.innerHTML = '';
         if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; margin-top:30px;">No transactions yet.</p>'; return; }
         txs.forEach(tx => {
-            const card = document.createElement('div');
-            card.className = 'card';
-            let actions = '';
+            const card = document.createElement('div'); card.className = 'card'; let actions = '';
             if(tx.status === 'funded') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
             if(tx.status === 'pending_payment') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
-            if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
-                actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
-            }
+            if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             let statusBox = '';
-            if(tx.status === 'completed') {
-                statusBox = `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><br><em>Thank You For Trusting Us</em></div>`;
-            } else if (tx.status === 'cancelled') {
-                statusBox = `<div class="cancelled-box">❌ CANCELLED<br>Funds returned to buyer.<br><br><em>Trade Closed</em></div>`;
-            } else if (tx.status === 'delivered') {
-                statusBox = `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
-            } else if (tx.status === 'disputed') {
-                statusBox = `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified.</div>`;
-            }
-            const dateObj = new Date(tx.created_at);
-            const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const dayStr = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                    <strong style="font-size:1.1rem; color:var(--primary-blue);">${tx.transaction_id}</strong>
-                    <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
-                </div>
-                <p style="margin:5px 0; color:#555;">Seller: ${tx.seller_phone} | <strong>GHS ${tx.amount}</strong></p>
-                <p style="font-size:0.9rem; color:#777; margin:8px 0; font-style:italic;">"${tx.description}"</p>
-                <div class="timestamp">📅 ${dayStr}, ${dateStr}</div>
-                <div style="margin-top:15px; display:flex; gap:8px; flex-wrap:wrap;">${actions}</div>
-                ${statusBox}
-            `;
+            if(tx.status === 'completed') statusBox = `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><br><em>Thank You For Trusting Us</em></div>`;
+            else if (tx.status === 'cancelled') statusBox = `<div class="cancelled-box">❌ CANCELLED<br>Funds returned to buyer.<br><br><em>Trade Closed</em></div>`;
+            else if (tx.status === 'delivered') statusBox = `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
+            else if (tx.status === 'disputed') statusBox = `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified.</div>`;
+            const dateObj = new Date(tx.created_at); const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); const dayStr = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+            card.innerHTML = `<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;"><strong style="font-size:1.1rem; color:var(--primary-blue);">${tx.transaction_id}</strong><span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span></div><p style="margin:5px 0; color:#555;">Seller: ${tx.seller_phone} | <strong>GHS ${tx.amount}</strong></p><p style="font-size:0.9rem; color:#777; margin:8px 0; font-style:italic;">"${tx.description}"</p><div class="timestamp">📅 ${dayStr}, ${dateStr}</div><div style="margin-top:15px; display:flex; gap:8px; flex-wrap:wrap;">${actions}</div>${statusBox}`;
             list.appendChild(card);
         });
     }
 
-    function resumePayment(txId, amount) {
-        currentTx = { transaction_id: txId, amount: amount };
-        document.getElementById('pay-tx-id').innerText = txId;
-        document.getElementById('pay-ref').innerText = txId;
-        showSection('payment-section');
-    }
-
-    async function actionConfirm(id) {
-        if(confirm("Have you received the goods?")) {
-            try {
-                await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', headers: { 'Content-Type': 'application/json' } });
-                alert("✅ Delivery Confirmed! Admin will release funds shortly.");
-                loadTransactions();
-            } catch(e) { alert("Error"); }
-        }
-    }
-
-    async function actionDispute(id) {
-        const reason = prompt("⚠️ DISPUTE NOTICE:\n\nDescribe the problem clearly. The Admin will be notified IMMEDIATELY.\n\nReason:");
-        if(reason) {
-            try {
-                await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
-                alert("🛡️ DISPUTE OPENED!\n\nAdmin alerted instantly. Your funds are 100% safe.");
-                loadTransactions();
-            } catch(e) { alert("Error"); }
-        }
-    }
+    function resumePayment(txId, amount) { currentTx = { transaction_id: txId, amount: amount }; document.getElementById('pay-tx-id').innerText = txId; document.getElementById('pay-ref').innerText = txId; showSection('payment-section'); }
+    async function actionConfirm(id) { if(confirm("Have you received the goods?")) { try { await fetch(`${API_URL}/transactions/${id}/confirm-delivery`, { method: 'PUT', mode: 'cors', headers: { 'Content-Type': 'application/json' } }); alert("✅ Delivery Confirmed! Admin will release funds shortly."); loadTransactions(); } catch(e) { alert("Error"); } } }
+    async function actionDispute(id) { const reason = prompt("⚠️ DISPUTE NOTICE:\n\nDescribe the problem clearly.\n\nReason:"); if(reason) { try { await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) }); alert("🛡️ DISPUTE OPENED!\n\nAdmin alerted instantly."); loadTransactions(); } catch(e) { alert("Error"); } } }
 
     async function loadAdminData() {
-        const container = document.getElementById('admin-data');
-        const disputeContainer = document.getElementById('dispute-alert-container');
-        const errorEl = document.getElementById('admin-error');
-        container.innerHTML = ""; 
-        disputeContainer.innerHTML = "";
-        errorEl.innerText = "";
+        const container = document.getElementById('admin-data'); const disputeContainer = document.getElementById('dispute-alert-container'); const errorEl = document.getElementById('admin-error');
+        container.innerHTML = ""; disputeContainer.innerHTML = ""; errorEl.innerText = "";
         try {
-            const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
-            if(!res.ok) throw new Error(`Server returned ${res.status}`);
-            const data = await res.json();
-            allTransactions = data.transactions;
+            const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' }); if(!res.ok) throw new Error(`Server returned ${res.status}`);
+            const data = await res.json(); allTransactions = data.transactions;
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
             if(disputedTx.length > 0) {
                 disputeContainer.classList.remove('hidden');
                 let alertsHtml = `<div class="dispute-header">🔴 URGENT: ${disputedTx.length} Dispute(s) Need Attention!</div>`;
                 disputedTx.forEach(t => {
-                    const buyerDisplay = t.buyer_phone ? t.buyer_phone : `${t.buyer_id} (ID)`;
-                    const reasonDisplay = t.dispute_reason ? t.dispute_reason : "No reason provided";
-                    alertsHtml += `
-                        <div class="dispute-alert-card">
-                            <p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p>
-                            <p><strong>Seller:</strong> ${t.seller_phone}</p>
-                            <p><strong>Buyer:</strong> ${buyerDisplay}</p>
-                            <div class="dispute-reason-box"><strong>⚠️ Reason for Dispute:</strong><br>"${reasonDisplay}"</div>
-                            <p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">Call both parties to resolve.</p>
-                            <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
-                                <button class="resolve-btn" style="padding:12px; font-size:0.8rem; flex:1;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
-                                <button class="danger" style="padding:12px; font-size:0.8rem; flex:1;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
-                            </div>
-                        </div>
-                    `;
+                    const buyerDisplay = t.buyer_phone ? t.buyer_phone : `${t.buyer_id} (ID)`; const reasonDisplay = t.dispute_reason ? t.dispute_reason : "No reason provided";
+                    alertsHtml += `<div class="dispute-alert-card"><p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p><p><strong>Seller:</strong> ${t.seller_phone}</p><p><strong>Buyer:</strong> ${buyerDisplay}</p><div class="dispute-reason-box"><strong>⚠️ Reason:</strong><br>"${reasonDisplay}"</div><p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">Call both parties.</p><div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;"><button class="resolve-btn" style="padding:12px; font-size:0.8rem; flex:1;" onclick="adminRelease('${t.transaction_id}')">✅ Release</button><button class="danger" style="padding:12px; font-size:0.8rem; flex:1;" onclick="adminRefund('${t.transaction_id}')">💰 Refund</button></div></div>`;
                 });
                 disputeContainer.innerHTML = alertsHtml;
-            } else {
-                disputeContainer.classList.add('hidden');
-            }
+            } else { disputeContainer.classList.add('hidden'); }
             container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; font-weight:800; text-transform:uppercase;">Pending Verifications</h4>';
             const pendingPayments = data.payments.filter(p => !p.verified);
-            if(pendingPayments.length === 0) container.innerHTML += '<p style="color:green; font-weight:bold;">✅ No pending payments. All clear!</p>';
-            else {
-                pendingPayments.forEach(p => {
-                    container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button><button class="delete-btn" onclick="adminDeletePayment('${p.transaction_id}')">🗑️ Delete Payment</button></div>`;
-                });
-            }
+            if(pendingPayments.length === 0) container.innerHTML += '<p style="color:green; font-weight:bold;">✅ No pending payments.</p>';
+            else { pendingPayments.forEach(p => { container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify</button><button class="delete-btn" onclick="adminDeletePayment('${p.transaction_id}')">🗑️ Delete</button></div>`; }); }
             container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; font-weight:800; text-transform:uppercase; margin-top:25px;">Ready to Release</h4>';
             const readyToRelease = data.transactions.filter(t => t.status === 'delivered');
-            if(readyToRelease.length === 0) container.innerHTML += '<p style="color:#888;">No transactions ready.</p>';
-            readyToRelease.forEach(t => {
-                container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button onclick="adminRelease('${t.transaction_id}')">Release Funds</button></div>`;
-            });
+            if(readyToRelease.length === 0) container.innerHTML += '<p style="color:#888;">None ready.</p>';
+            readyToRelease.forEach(t => { container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button onclick="adminRelease('${t.transaction_id}')">Release</button></div>`; });
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
-            container.innerHTML += `
-                <div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;">
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>
-                    </div>
-                    <button class="archive-btn" onclick="openArchive()">📜 View Full Archive</button>
-                </div>
-            `;
+            container.innerHTML += `<div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;"><div style="display:flex; justify-content:space-between; align-items:center;"><div><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div></div><button class="archive-btn" onclick="openArchive()">📜 View Archive</button></div>`;
         } catch (e) { container.innerHTML = ""; errorEl.innerText = "Error: " + e.message; }
     }
 
-    async function adminVerify(txId) { try { await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Payment Verified."); } catch(e) { alert("Error"); } }
-    async function adminDeletePayment(txId) { if(confirm("⚠️ WARNING: Delete permanently?")) { try { const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' }); if(res.ok) { loadAdminData(); alert("🗑️ Deleted!"); } } catch(e) { alert("Error"); } } }
-    async function adminRelease(txId) { if(confirm("Confirm: Release funds to SELLER?")) { try { await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("✅ Funds Released."); } catch(e) { alert("Error"); } } }
-    async function adminRefund(txId) { if(confirm("Confirm: Refund FULL amount to BUYER? This will mark the trade as CANCELLED.")) { try { await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("💰 Funds Refunded. Trade Cancelled."); } catch(e) { alert("Error"); } } }
+    async function adminVerify(txId) { try { await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Verified."); } catch(e) { alert("Error"); } }
+    async function adminDeletePayment(txId) { if(confirm("Delete permanently?")) { try { const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' }); if(res.ok) { loadAdminData(); alert("Deleted!"); } } catch(e) { alert("Error"); } } }
+    async function adminRelease(txId) { if(confirm("Release to Seller?")) { try { await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Released."); } catch(e) { alert("Error"); } } }
+    async function adminRefund(txId) { if(confirm("Refund Buyer?")) { try { await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Refunded."); } catch(e) { alert("Error"); } } }
 </script>
 </body>
 </html>
