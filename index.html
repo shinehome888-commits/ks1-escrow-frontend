@@ -7,7 +7,6 @@
     <style>
         :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-dark: #b39700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --delete-gray: #6c757d; }
         
-        /* Body Background is Blue */
         body { 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             background-color: var(--primary-blue); 
@@ -17,7 +16,6 @@
             min-height: 100vh; 
         }
 
-        /* White Container Card - Stops above trademark */
         .container { 
             width: 100%; 
             max-width: 480px; 
@@ -25,13 +23,11 @@
             min-height: 100vh; 
             box-shadow: 0 0 20px var(--gold-glow); 
             position: relative; 
-            /* Extra padding at bottom so content doesn't hide behind fixed buttons */
             padding-bottom: 120px; 
             box-sizing: border-box; 
-            z-index: 1; /* Ensures white stays below fixed footer */
+            z-index: 1; 
         }
         
-        /* LANDING HEADER */
         .landing-header { 
             background: linear-gradient(135deg, var(--primary-blue), #001540); 
             color: white; 
@@ -50,7 +46,6 @@
         .tagline { font-size: 1rem; color: #e0e0e0; margin-top: 10px; font-weight: 500; }
         .brand-sub { font-size: 0.75rem; color: var(--accent-gold); font-weight: bold; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.9; }
 
-        /* DASHBOARD HEADER */
         .dash-header {
             background: var(--primary-blue);
             padding: 30px 20px;
@@ -79,7 +74,6 @@
         input, textarea { width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; transition: all 0.3s; background: #f9f9f9; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); font-weight: 500; }
         input:focus, textarea:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); transform: translateY(-2px); }
         
-        /* Universal Button Style */
         button { width: 100%; padding: 16px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 12px; color: var(--primary-blue); font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 0 var(--gold-dark), 0 10px 15px rgba(0,0,0,0.2); transition: all 0.15s; position: relative; top: 0; }
         button:active { transform: translateY(6px); box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 10px rgba(0,0,0,0.2); }
 
@@ -95,7 +89,6 @@
         button.delete-btn { background: linear-gradient(to bottom, #adb5bd, #6c757d); color: white; box-shadow: 0 6px 0 #5a6268; font-size: 0.9rem; padding: 12px; margin-top: 10px; font-weight: 700; text-transform: uppercase; }
         button.delete-btn:active { box-shadow: 0 0 0 #5a6268; }
 
-        /* 3D GOLD REFRESH BUTTON FOR USER */
         button.refresh-gold { 
             background: linear-gradient(to bottom, #ffe033, #e6c200); 
             color: var(--primary-blue); 
@@ -127,7 +120,6 @@
         
         .momo-number { font-size: 1.8rem; font-weight: 900; color: var(--primary-blue); background: #fff9db; padding: 20px; border-radius: 12px; border: 3px dashed var(--accent-gold); display: block; margin: 20px 0; letter-spacing: 2px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
         
-        /* BLUE COMPLETED BOX */
         .success-box { 
             background: var(--primary-blue); 
             color: white; 
@@ -142,7 +134,6 @@
             box-shadow: 0 8px 20px rgba(0,35,102,0.3); 
             animation: popIn 0.5s ease; 
         }
-        /* BLUE CANCELLED BOX (Updated per request) */
         .cancelled-box {
             background: var(--primary-blue);
             color: white;
@@ -162,16 +153,16 @@
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
-        /* FIXED FOOTER AREA (Logout + Trademark) */
+        /* FIXED FOOTER AREA */
         .fixed-footer-area {
             position: fixed;
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
             width: 100%;
-            max-width: 480px; /* Match container width */
+            max-width: 480px;
             z-index: 1000;
-            pointer-events: none; /* Let clicks pass through empty areas */
+            pointer-events: none;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -179,12 +170,11 @@
             padding-bottom: 0;
         }
 
-        /* Smaller Gold Logout Button */
         .fixed-logout-container {
             width: 100%;
             display: flex;
             justify-content: center;
-            margin-bottom: 10px; /* Space between logout and trademark */
+            margin-bottom: 10px;
             pointer-events: auto;
         }
         .fixed-logout-btn { 
@@ -206,11 +196,10 @@
         }
         .fixed-logout-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
         
-        /* TRADEMARK FOOTER - Blue Background, Black Text */
         .trademark-footer {
             width: 100%;
-            background-color: var(--primary-blue); /* Explicit Blue Background */
-            color: black; /* Black Text */
+            background-color: var(--primary-blue);
+            color: black;
             text-align: center;
             font-size: 0.7rem;
             font-weight: 700;
@@ -218,11 +207,11 @@
             padding: 15px 10px;
             box-sizing: border-box;
             pointer-events: auto;
-            border-top: 2px solid var(--accent-gold); /* Gold separator */
+            border-top: 2px solid var(--accent-gold);
             box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
         }
         .trademark-footer strong {
-            color: var(--accent-gold); /* Gold highlight for year/name */
+            color: var(--accent-gold);
             display: block;
             margin-bottom: 4px;
             font-size: 0.75rem;
@@ -235,14 +224,12 @@
 
 <div class="container">
     
-    <!-- LANDING HEADER -->
     <div id="landing-header" class="landing-header">
         <h1 class="brand-title">KS1 Escrow Pay</h1>
         <div class="tagline">Pay Securely. Trade Confidently.</div>
         <div class="brand-sub">Non-custodial • Alkebulan (AFRICA)-first • Nonprofit-powered</div>
     </div>
 
-    <!-- DASHBOARD HEADER -->
     <div id="dash-header" class="dash-header hidden">
         <h2 class="dash-title">DASHBOARD</h2>
     </div>
@@ -300,13 +287,11 @@
     </div>
 </div>
 
-<!-- FIXED FOOTER AREA (Outside Container, Always at Bottom) -->
-<div class="fixed-footer-area">
-    <!-- Logout Button -->
+<!-- FIXED FOOTER AREA -->
+<div class="fixed-footer-area" id="fixed-footer">
     <div class="fixed-logout-container">
         <button class="fixed-logout-btn" onclick="logout()">Logout</button>
     </div>
-    <!-- Trademark -->
     <div class="trademark-footer">
         <strong>@2026 KS1 Escrow Pay</strong>
         A nonprofit project by KS1 Empire Group & Foundation (KS1EGF)<br>
@@ -326,17 +311,20 @@
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
         const refreshBtn = document.querySelector('.refresh-gold');
-        const footerArea = document.querySelector('.fixed-footer-area');
+        const footerArea = document.getElementById('fixed-footer');
         
         if (id === 'auth-section') {
+            // LANDING PAGE MODE
             landingHeader.classList.remove('hidden');
             dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
-            if(footerArea) footerArea.style.display = 'none'; // Hide footer on login page
+            if(footerArea) footerArea.style.display = 'none'; // HIDE LOGOUT & TRADEMARK
         } else {
+            // DASHBOARD MODE
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
-            if(footerArea) footerArea.style.display = 'flex'; // Show footer on dashboard
+            if(footerArea) footerArea.style.display = 'flex'; // SHOW LOGOUT & TRADEMARK
+            
             if(refreshBtn) {
                 if(currentUser && currentUser.isAdmin) {
                     refreshBtn.style.display = 'none';
@@ -347,17 +335,20 @@
         }
         clearErrors();
     }
+
     function clearErrors() {
         document.getElementById('auth-msg').innerText = '';
         document.getElementById('create-msg').innerText = '';
         document.getElementById('admin-error').innerText = '';
         document.getElementById('global-status-msg').innerHTML = '';
     }
+
     function toggleLoading(isLoading) {
         document.getElementById('loading-msg').style.display = isLoading ? 'block' : 'none';
         document.getElementById('login-btn').disabled = isLoading;
         document.getElementById('reg-btn').disabled = isLoading;
     }
+
     async function handleRegister() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
@@ -371,6 +362,7 @@
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } 
         finally { toggleLoading(false); }
     }
+
     async function handleLogin() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
@@ -394,7 +386,9 @@
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
         finally { toggleLoading(false); }
     }
+
     function logout() { currentUser = null; location.reload(); }
+
     async function submitTransaction() {
         const seller = document.getElementById('seller-phone').value.trim();
         const amount = parseFloat(document.getElementById('tx-amount').value);
@@ -411,6 +405,7 @@
             }
         } catch (e) { document.getElementById('create-msg').innerText = "Error"; }
     }
+
     async function confirmPayment() {
         const ref = document.getElementById('momo-ref').value.trim();
         if(!ref) { alert("Enter MoMo Reference"); return; }
@@ -420,6 +415,7 @@
             showSection('dashboard-section');
         } catch (e) { alert("Error"); }
     }
+
     async function loadTransactions() {
         if(currentUser.isAdmin) return;
         const btn = document.querySelector('.refresh-gold');
@@ -431,6 +427,7 @@
         } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; } 
         finally { if(btn) { btn.innerText = "🔄 Refresh Transactions"; btn.disabled = false; } }
     }
+
     function renderTxList(txs) {
         const list = document.getElementById('tx-list');
         list.innerHTML = '';
@@ -474,12 +471,14 @@
             list.appendChild(card);
         });
     }
+
     function resumePayment(txId, amount) {
         currentTx = { transaction_id: txId, amount: amount };
         document.getElementById('pay-tx-id').innerText = txId;
         document.getElementById('pay-ref').innerText = txId;
         showSection('payment-section');
     }
+
     async function actionConfirm(id) {
         if(confirm("Have you received the goods?")) {
             try {
@@ -489,6 +488,7 @@
             } catch(e) { alert("Error"); }
         }
     }
+
     async function actionDispute(id) {
         const reason = prompt("⚠️ DISPUTE NOTICE:\n\nDescribe the problem clearly. The Admin will be notified IMMEDIATELY.\n\nReason:");
         if(reason) {
@@ -499,6 +499,7 @@
             } catch(e) { alert("Error"); }
         }
     }
+
     async function loadAdminData() {
         const container = document.getElementById('admin-data');
         const disputeContainer = document.getElementById('dispute-alert-container');
@@ -554,6 +555,7 @@
             container.innerHTML += `<div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
         } catch (e) { container.innerHTML = ""; errorEl.innerText = "Error: " + e.message; }
     }
+
     async function adminVerify(txId) { try { await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Payment Verified."); } catch(e) { alert("Error"); } }
     async function adminDeletePayment(txId) { if(confirm("⚠️ WARNING: Delete permanently?")) { try { const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' }); if(res.ok) { loadAdminData(); alert("🗑️ Deleted!"); } } catch(e) { alert("Error"); } } }
     async function adminRelease(txId) { if(confirm("Confirm: Release funds to SELLER?")) { try { await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("✅ Funds Released."); } catch(e) { alert("Error"); } } }
