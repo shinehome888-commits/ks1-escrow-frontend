@@ -17,7 +17,7 @@
             min-height: 100vh; 
         }
 
-        /* White Container Card */
+        /* White Container Card - Stops above trademark */
         .container { 
             width: 100%; 
             max-width: 480px; 
@@ -25,9 +25,10 @@
             min-height: 100vh; 
             box-shadow: 0 0 20px var(--gold-glow); 
             position: relative; 
-            /* Add padding at bottom so content doesn't hide behind fixed buttons */
-            padding-bottom: 100px; 
+            /* Extra padding at bottom so content doesn't hide behind fixed buttons */
+            padding-bottom: 120px; 
             box-sizing: border-box; 
+            z-index: 1; /* Ensures white stays below fixed footer */
         }
         
         /* LANDING HEADER */
@@ -141,19 +142,19 @@
             box-shadow: 0 8px 20px rgba(0,35,102,0.3); 
             animation: popIn 0.5s ease; 
         }
-        /* CANCELLED BOX */
+        /* BLUE CANCELLED BOX (Updated per request) */
         .cancelled-box {
-            background: #f8f9fa;
-            color: #495057;
+            background: var(--primary-blue);
+            color: white;
             padding: 25px;
             border-radius: 12px;
-            border: 2px solid #dee2e6;
+            border: 2px solid var(--accent-gold);
             margin-top: 20px;
             text-align: center;
             font-weight: bold;
             font-size: 1.1rem;
             line-height: 1.6;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 8px 20px rgba(0,35,102,0.3);
             animation: popIn 0.5s ease;
         }
 
@@ -161,19 +162,35 @@
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
-        /* SMALLER GOLD LOGOUT BUTTON */
-        .fixed-logout-container { 
+        /* FIXED FOOTER AREA (Logout + Trademark) */
+        .fixed-footer-area {
             position: fixed;
-            bottom: 50px; /* Moved up slightly to make room for trademark */
+            bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: auto;
-            max-width: 300px; /* Reduced width */
+            width: 100%;
+            max-width: 480px; /* Match container width */
             z-index: 1000;
+            pointer-events: none; /* Let clicks pass through empty areas */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 0;
+        }
+
+        /* Smaller Gold Logout Button */
+        .fixed-logout-container {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-bottom: 10px; /* Space between logout and trademark */
+            pointer-events: auto;
         }
         .fixed-logout-btn { 
-            width: 100%; 
-            padding: 12px 25px; /* Smaller padding */
+            width: auto;
+            min-width: 150px;
+            padding: 12px 30px; 
             background: linear-gradient(to bottom, #ffe033, #e6c200); 
             color: var(--primary-blue); 
             font-weight: 900; 
@@ -182,48 +199,39 @@
             border: none; 
             border-radius: 50px; 
             box-shadow: 0 6px 0 #b39700, 0 10px 15px rgba(0,0,0,0.3); 
-            font-size: 0.9rem; /* Smaller font */
+            font-size: 0.9rem; 
             cursor: pointer; 
             transition: all 0.2s; 
             margin: 0;
         }
         .fixed-logout-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
         
-        .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
-
-        /* TRADEMARK FOOTER - FIXED ON BLUE BACKGROUND */
+        /* TRADEMARK FOOTER - Blue Background, Black Text */
         .trademark-footer {
-            position: fixed;
-            bottom: 10px;
-            left: 0;
             width: 100%;
+            background-color: var(--primary-blue); /* Explicit Blue Background */
+            color: black; /* Black Text */
             text-align: center;
-            color: #ccc; /* Light gray for visibility on blue */
-            font-size: 0.65rem;
-            font-weight: 600;
+            font-size: 0.7rem;
+            font-weight: 700;
             letter-spacing: 0.5px;
-            z-index: 900;
-            pointer-events: none;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
-            background: transparent; /* Ensures it sits on the blue body background */
-            padding: 0 10px;
+            padding: 15px 10px;
             box-sizing: border-box;
+            pointer-events: auto;
+            border-top: 2px solid var(--accent-gold); /* Gold separator */
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2);
         }
         .trademark-footer strong {
-            color: var(--accent-gold);
+            color: var(--accent-gold); /* Gold highlight for year/name */
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
+            font-size: 0.75rem;
         }
+        
+        .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
     </style>
 </head>
 <body>
-
-<!-- TRADEMARK FOOTER (Outside Container, on Blue Background) -->
-<div class="trademark-footer">
-    <strong>@2026 KS1 Escrow Pay</strong>
-    A nonprofit project by KS1 Empire Group & Foundation (KS1EGF)<br>
-    Pay Securely and Trade Confidently.
-</div>
 
 <div class="container">
     
@@ -263,11 +271,6 @@
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
-        
-        <!-- Smaller Gold Logout Button -->
-        <div class="fixed-logout-container">
-            <button class="fixed-logout-btn" onclick="logout()">Logout</button>
-        </div>
     </div>
 
     <div id="create-section" class="section">
@@ -297,6 +300,20 @@
     </div>
 </div>
 
+<!-- FIXED FOOTER AREA (Outside Container, Always at Bottom) -->
+<div class="fixed-footer-area">
+    <!-- Logout Button -->
+    <div class="fixed-logout-container">
+        <button class="fixed-logout-btn" onclick="logout()">Logout</button>
+    </div>
+    <!-- Trademark -->
+    <div class="trademark-footer">
+        <strong>@2026 KS1 Escrow Pay</strong>
+        A nonprofit project by KS1 Empire Group & Foundation (KS1EGF)<br>
+        Pay Securely and Trade Confidently.
+    </div>
+</div>
+
 <script>
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     let currentUser = null;
@@ -309,14 +326,17 @@
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
         const refreshBtn = document.querySelector('.refresh-gold');
+        const footerArea = document.querySelector('.fixed-footer-area');
         
         if (id === 'auth-section') {
             landingHeader.classList.remove('hidden');
             dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
+            if(footerArea) footerArea.style.display = 'none'; // Hide footer on login page
         } else {
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
+            if(footerArea) footerArea.style.display = 'flex'; // Show footer on dashboard
             if(refreshBtn) {
                 if(currentUser && currentUser.isAdmin) {
                     refreshBtn.style.display = 'none';
