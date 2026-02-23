@@ -218,6 +218,91 @@
         }
         
         .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
+
+        /* GUIDE MODAL STYLES */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 35, 102, 0.9);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .modal-content {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border-radius: 15px;
+            padding: 25px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 4px solid var(--accent-gold);
+            animation: popIn 0.3s ease;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0;
+            margin: 0;
+            box-shadow: none;
+            width: auto;
+            line-height: 1;
+        }
+        .modal-close:hover { color: var(--alert-red); }
+        .guide-step {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+        .guide-step:last-child { border-bottom: none; }
+        .guide-step h3 {
+            color: var(--primary-blue);
+            margin: 0 0 8px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .step-number {
+            background: var(--accent-gold);
+            color: var(--primary-blue);
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .guide-step p {
+            color: #555;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+            padding-left: 35px;
+        }
+        .guide-title {
+            text-align: center;
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
@@ -255,7 +340,6 @@
             <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.4rem; text-align:center; font-weight:900; text-transform:uppercase;">👑 Admin Command Center</h4>
             <div id="dispute-alert-container" class="hidden"></div>
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
-            <!-- "Loading secure data..." text REMOVED from here -->
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
@@ -291,7 +375,8 @@
 <!-- FIXED FOOTER AREA -->
 <div class="fixed-footer-area" id="fixed-footer">
     <div class="fixed-logout-container">
-        <button class="fixed-logout-btn" onclick="logout()">Logout</button>
+        <!-- Button now opens Guide instead of Logout -->
+        <button class="fixed-logout-btn" onclick="openGuide()">❓ How to Use</button>
     </div>
     <div class="trademark-footer">
         <strong>@2026 KS1 Escrow Pay</strong>
@@ -300,10 +385,69 @@
     </div>
 </div>
 
+<!-- GUIDE MODAL -->
+<div class="modal-overlay" id="guideModal">
+    <div class="modal-content">
+        <button class="modal-close" onclick="closeGuide()">&times;</button>
+        <h2 class="guide-title">How to Use KS1 Escrow</h2>
+        
+        <div class="guide-step">
+            <h3><span class="step-number">1</span> Register & Login</h3>
+            <p>Create an account with your phone number and password. Keep your password safe!</p>
+        </div>
+        
+        <div class="guide-step">
+            <h3><span class="step-number">2</span> Create Escrow</h3>
+            <p>Click "+ Create Private Connection". Enter the Seller's phone number, the Amount (GHS), and a description of the goods.</p>
+        </div>
+        
+        <div class="guide-step">
+            <h3><span class="step-number">3</span> Make Payment</h3>
+            <p>You will see a Transaction ID and our Wallet Number (<strong>0240254680</strong>). Send the exact amount via Mobile Money (MTN/Telecel/AirtelTigo) using the Transaction ID as your reference. Then click "I Have Paid".</p>
+        </div>
+        
+        <div class="guide-step">
+            <h3><span class="step-number">4</span> Admin Verification</h3>
+            <p>Our Admin will verify your payment. Once verified, the status changes to <strong>FUNDED</strong>, and the seller is notified to send your goods.</p>
+        </div>
+        
+        <div class="guide-step">
+            <h3><span class="step-number">5</span> Confirm Delivery</h3>
+            <p>Once you receive your goods and are satisfied, click <strong>"Confirm Delivery"</strong>. This tells the Admin to release the funds to the seller.</p>
+        </div>
+        
+        <div class="guide-step">
+            <h3><span class="step-number">6</span> Disputes?</h3>
+            <p>If there is an issue, click <strong>"Open Dispute"</strong> before confirming delivery. Our Admin will contact both parties to resolve it fairly. Your funds are safe!</p>
+        </div>
+
+        <div style="text-align:center; margin-top:20px;">
+            <p style="color:var(--primary-blue); font-weight:bold; font-size:0.9rem;">Trade Securely. Trade Confidently.</p>
+        </div>
+    </div>
+</div>
+
 <script>
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     let currentUser = null;
     let currentTx = null;
+
+    // Guide Modal Functions
+    function openGuide() {
+        document.getElementById('guideModal').style.display = 'flex';
+        document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+    }
+    function closeGuide() {
+        document.getElementById('guideModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    // Close modal if clicking outside content
+    window.onclick = function(event) {
+        const modal = document.getElementById('guideModal');
+        if (event.target == modal) {
+            closeGuide();
+        }
+    }
 
     function showSection(id) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
@@ -315,13 +459,11 @@
         const footerArea = document.getElementById('fixed-footer');
         
         if (id === 'auth-section') {
-            // LANDING PAGE MODE - Hide Footer (Logout)
             landingHeader.classList.remove('hidden');
             dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
-            if(footerArea) footerArea.style.display = 'none'; 
+            if(footerArea) footerArea.style.display = 'flex'; // Show footer (with Guide button) on landing page too
         } else {
-            // DASHBOARD MODE - Show Footer (Logout)
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
             if(footerArea) footerArea.style.display = 'flex'; 
@@ -505,12 +647,9 @@
         const container = document.getElementById('admin-data');
         const disputeContainer = document.getElementById('dispute-alert-container');
         const errorEl = document.getElementById('admin-error');
-        
-        // "Loading secure data..." text REMOVED. Just clear the area.
         container.innerHTML = ""; 
         disputeContainer.innerHTML = "";
         errorEl.innerText = "";
-        
         try {
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
             if(!res.ok) throw new Error(`Server returned ${res.status}`);
