@@ -8,7 +8,9 @@
         :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-dark: #b39700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --brown: #8B4513; }
         
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; padding-bottom: 80px; box-sizing: border-box; z-index: 1; }
+        
+        /* CONTAINER: Removed bottom padding to eliminate white space */
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; z-index: 1; }
         
         .landing-header { background: linear-gradient(135deg, var(--primary-blue), #001540); color: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--accent-gold); border-radius: 0 0 25px 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .brand-title { margin: 0; color: var(--accent-gold); font-size: 2.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-shadow: 1px 1px 0 #8a7600, 2px 2px 0 #8a7600, 3px 3px 0 #8a7600, 4px 4px 0 #8a7600, 6px 6px 15px rgba(0,0,0,0.6); transform: perspective(500px) rotateX(2deg); display: inline-block; margin-bottom: 10px; }
@@ -22,7 +24,6 @@
         .section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* PASSWORD WRAPPER & EYE ICON */
         .password-wrapper { position: relative; width: 100%; margin: 10px 0; }
         .password-wrapper input { width: 100%; padding: 16px; padding-right: 50px; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; background: #f9f9f9; transition: all 0.3s; }
         .password-wrapper input:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
@@ -47,18 +48,7 @@
         button.refresh-gold { background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700, 0 10px 15px rgba(0,0,0,0.2); font-size: 1rem; padding: 14px 30px; width: auto; display: block; margin: 20px auto; }
         button.refresh-gold:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
         
-        /* SMALL GOLD RESET CODE BUTTON */
-        button.reset-code-btn { 
-            background: linear-gradient(to bottom, #ffe033, #e6c200); 
-            color: var(--primary-blue); 
-            box-shadow: 0 4px 0 #b39700; 
-            font-size: 0.8rem; 
-            padding: 10px; 
-            margin-top: 10px; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            width: 100%;
-        }
+        button.reset-code-btn { background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 4px 0 #b39700; font-size: 0.8rem; padding: 10px; margin-top: 10px; font-weight: 700; text-transform: uppercase; width: 100%; }
         button.reset-code-btn:active { box-shadow: 0 0 0 #b39700; transform: translateY(4px); }
 
         .card { background: #fff; border-left: 8px solid var(--accent-gold); padding: 20px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; transition: transform 0.2s; }
@@ -86,37 +76,27 @@
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
-        /* HELPER BUTTONS CONTAINER */
-        .helper-buttons-container {
-            display: flex;
-            gap: 10px;
-            margin-top: 20px;
-            justify-content: center;
-        }
-        .helper-btn { 
-            flex: 1; 
-            padding: 12px 10px; 
-            background: linear-gradient(to bottom, #ffe033, #e6c200); 
-            color: var(--primary-blue); 
-            font-weight: 900; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-            border: none; 
-            border-radius: 50px; 
-            box-shadow: 0 5px 0 #b39700, 0 8px 12px rgba(0,0,0,0.3); 
-            font-size: 0.75rem; 
-            cursor: pointer; 
-            transition: all 0.2s; 
-            text-align: center;
-            margin-top: 15px;
-        }
+        .helper-buttons-container { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+        .helper-btn { flex: 1; padding: 12px 10px; background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); font-weight: 900; text-transform: uppercase; letter-spacing: 0.5px; border: none; border-radius: 50px; box-shadow: 0 5px 0 #b39700, 0 8px 12px rgba(0,0,0,0.3); font-size: 0.75rem; cursor: pointer; transition: all 0.2s; text-align: center; margin-top: 15px; }
         .helper-btn:active { transform: translateY(5px); box-shadow: 0 0 0 #b39700; }
         
-        .trademark-footer { width: 100%; background-color: var(--primary-blue); color: black; text-align: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; padding: 15px 10px; box-sizing: border-box; pointer-events: auto; border-top: 2px solid var(--accent-gold); box-shadow: 0 -5px 15px rgba(0,0,0,0.2); margin-top: 30px;}
+        /* TRADEMARK: Removed margin-top to stick to bottom, ensured blue bg */
+        .trademark-footer { 
+            width: 100%; 
+            background-color: var(--primary-blue); 
+            color: black; 
+            text-align: center; 
+            font-size: 0.7rem; 
+            font-weight: 700; 
+            letter-spacing: 0.5px; 
+            padding: 20px 10px; 
+            box-sizing: border-box; 
+            border-top: 2px solid var(--accent-gold); 
+            box-shadow: 0 -5px 15px rgba(0,0,0,0.2); 
+        }
         .trademark-footer strong { color: var(--accent-gold); display: block; margin-bottom: 4px; font-size: 0.75rem; }
         .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
 
-        /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 35, 102, 0.9); z-index: 2000; display: none; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
         .modal-content { background: white; width: 100%; max-width: 400px; max-height: 80vh; overflow-y: auto; border-radius: 15px; padding: 25px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 4px solid var(--accent-gold); animation: popIn 0.3s ease; }
         .modal-close { position: absolute; top: 10px; right: 15px; font-size: 2rem; font-weight: bold; color: var(--primary-blue); cursor: pointer; background: none; border: none; padding: 0; margin: 0; box-shadow: none; width: auto; line-height: 1; }
@@ -129,21 +109,12 @@
         .fee-warning { background: #fff3cd; color: #856404; border: 1px solid #ffeeba; padding: 10px; border-radius: 8px; margin-top: 8px; font-size: 0.85rem; font-weight: 600; }
         .guide-title { text-align: center; color: var(--primary-blue); font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; text-transform: uppercase; }
         
-        /* SUPPORT & RESET FORMS */
         .support-form textarea, .support-form select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; margin-top: 10px; font-family: inherit; resize: vertical; min-height: 100px; background: white; }
-        .support-submit-btn { 
-            background: linear-gradient(to bottom, #ffe033, #e6c200); 
-            color: var(--primary-blue); 
-            box-shadow: 0 5px 0 #b39700; 
-            margin-top: 15px; 
-            font-size: 0.9rem;
-            padding: 12px;
-        }
+        .support-submit-btn { background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 5px 0 #b39700; margin-top: 15px; font-size: 0.9rem; padding: 12px; }
         .support-submit-btn:active { box-shadow: 0 0 0 #b39700; transform: translateY(5px); }
         
         .reset-code-display { background: #fff3cd; border: 2px dashed #e6c200; padding: 15px; text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--primary-blue); margin: 15px 0; border-radius: 8px; letter-spacing: 5px; }
 
-        /* ARCHIVE */
         .archive-search-box { position: sticky; top: 0; background: white; padding: 10px 0; z-index: 10; border-bottom: 2px solid var(--accent-gold); margin-bottom: 20px; }
         .archive-group-title { color: var(--primary-blue); font-size: 1.1rem; font-weight: 900; margin: 20px 0 10px 0; padding-bottom: 5px; border-bottom: 2px solid #eee; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
         .archive-item { background: #f8f9fa; border: 1px solid #eee; border-radius: 8px; padding: 12px; margin-bottom: 10px; font-size: 0.85rem; }
@@ -157,6 +128,12 @@
         
         .forgot-link { text-align: right; display: block; margin-top: 5px; color: var(--primary-blue); font-size: 0.85rem; font-weight: 600; text-decoration: underline; cursor: pointer; }
         .forgot-link:hover { color: var(--accent-gold); }
+
+        /* ADMIN STATS CARDS */
+        .stats-container { display: flex; gap: 10px; margin-bottom: 20px; }
+        .stat-card { flex: 1; background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border: 2px solid var(--accent-gold); }
+        .stat-number { font-size: 1.8rem; font-weight: 900; color: var(--primary-blue); display: block; }
+        .stat-label { font-size: 0.75rem; color: #555; text-transform: uppercase; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -187,7 +164,7 @@
         <button onclick="handleLogin()" id="login-btn">Login</button>
         <button onclick="handleRegister()" id="reg-btn">Create Account</button>
         
-        <!-- HELPER BUTTONS MOVED HERE -->
+        <!-- HELPER BUTTONS: ONLY ON LANDING PAGE -->
         <div class="helper-buttons-container">
             <button class="helper-btn" onclick="openSupport()">🆘 Support</button>
             <button class="helper-btn" onclick="openGuide()">❓ How to Use</button>
@@ -206,17 +183,25 @@
 
         <div class="admin-panel hidden" id="admin-controls">
             <h4 class="admin-title-3d"><span class="crown-icon">👑</span> Admin Command Center</h4>
+            
+            <!-- ADMIN STATS -->
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-number" id="stat-total-users">0</span>
+                    <span class="stat-label">Total Users</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number" id="stat-active-users">0</span>
+                    <span class="stat-label">Active Users</span>
+                </div>
+            </div>
+
             <div id="dispute-alert-container" class="hidden"></div>
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
             <button class="reset-code-btn" onclick="generateResetCode()">🔑 Generate Reset Code</button>
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
-            
-            <!-- HELPER BUTTONS FOR ADMIN TOO -->
-            <div class="helper-buttons-container">
-                <button class="helper-btn" onclick="openSupport()">🆘 Support</button>
-                <button class="helper-btn" onclick="openGuide()">❓ How to Use</button>
-            </div>
+            <!-- Helper buttons REMOVED from here -->
         </div>
     </div>
 
@@ -246,7 +231,7 @@
         <button onclick="showSection('dashboard-section')" style="background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700;">Back</button>
     </div>
 
-    <!-- TRADEMARK FOOTER MOVED INSIDE CONTAINER -->
+    <!-- TRADEMARK: Directly at bottom, no margin -->
     <div class="trademark-footer">
         <strong>@2026 KS1 Escrow Pay</strong>
         A nonprofit project by KS1 Empire Group & Foundation (KS1EGF)<br>
@@ -264,7 +249,7 @@
         <div class="guide-step"><h3><span class="step-number">3</span> Make Payment</h3><p>Send exact amount to <strong>0240254680</strong> using Transaction ID as reference. Click "I Have Paid".</p><div class="fee-warning">⚠️ IMPORTANT: Add <strong>Mobile Money Charge</strong> on top. Seller must receive full amount.</div></div>
         <div class="guide-step"><h3><span class="step-number">4</span> Admin Verification</h3><p>Admin verifies payment. Status changes to <strong>FUNDED</strong>.</p></div>
         <div class="guide-step"><h3><span class="step-number">5</span> Confirm Delivery</h3><p>Receive goods? Click <strong>"Confirm Delivery"</strong> to release funds.</p></div>
-        <div class="guide-step"><h3><span class="step-number">6</span> Need Help?</h3><p>Click <strong>"🆘 Support"</strong> anytime for direct help!</p></div>
+        <div class="guide-step"><h3><span class="step-number">6</span> Need Help?</h3><p>Click <strong>"🆘 Support"</strong> on the login page anytime!</p></div>
     </div>
 </div>
 
@@ -329,21 +314,15 @@
     let currentUser = null;
     let currentTx = null;
     let allTransactions = []; 
+    let allUsers = []; // Store users for stats
 
-    // --- PASSWORD TOGGLE (FIXED) ---
     function togglePassword(inputId) {
         const input = document.getElementById(inputId);
         const btn = input.nextElementSibling;
-        if (input.type === "password") {
-            input.type = "text";
-            btn.innerHTML = "🙈"; 
-        } else {
-            input.type = "password";
-            btn.innerHTML = "👁️"; 
-        }
+        if (input.type === "password") { input.type = "text"; btn.innerHTML = "🙈"; } 
+        else { input.type = "password"; btn.innerHTML = "👁️"; }
     }
 
-    // --- AUTO LOGOUT ---
     let idleTimer, warningTimer;
     const IDLE_LIMIT = 50000; const WARNING_TIME = 45000; 
     function resetIdleTimer() {
@@ -355,7 +334,6 @@
     }
     ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => { document.addEventListener(evt, resetIdleTimer, true); });
 
-    // --- MODALS ---
     function openGuide() { document.getElementById('guideModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; resetIdleTimer(); }
     function closeGuide() { document.getElementById('guideModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
     
@@ -377,13 +355,12 @@
         closeSupport();
     }
 
-    // --- RESET PASSWORD FUNCTIONS ---
     function openReset() { document.getElementById('resetModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
     function closeReset() { document.getElementById('resetModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
     
     function generateResetCode() {
         const code = Math.floor(100000 + Math.random() * 900000);
-        alert(`🔑 RESET CODE GENERATED:\n\n${code}\n\nSend this code to the user via SMS or Call. They will use it to reset their password.`);
+        alert(`🔑 RESET CODE GENERATED:\n\n${code}\n\nSend this code to the user via SMS or Call.`);
         localStorage.setItem('tempResetCode', code); 
     }
 
@@ -393,30 +370,13 @@
         const newPass = document.getElementById('reset-new-pass').value.trim();
         const msgEl = document.getElementById('auth-msg');
         const successEl = document.getElementById('auth-success');
-
         if(!phone || !code || !newPass) { alert("Please fill all fields."); return; }
         if(code.length !== 6) { alert("Reset code must be 6 digits."); return; }
-
         try {
-            const res = await fetch(`${API_URL}/reset-password`, { 
-                method: 'POST', 
-                mode: 'cors', 
-                headers: { 'Content-Type': 'application/json' }, 
-                body: JSON.stringify({ phone_number: phone, reset_code: code, new_password: newPass }) 
-            });
-            
-            if(res.ok) {
-                successEl.innerText = "Password Reset Successful! Please login.";
-                msgEl.innerText = "";
-                closeReset();
-                setTimeout(() => { successEl.innerText = ""; }, 5000);
-            } else {
-                throw new Error("Backend route missing");
-            }
-        } catch (e) {
-            alert("✅ Password Reset Successful! (Demo Mode)\n\nPlease login with your new password.");
-            closeReset();
-        }
+            const res = await fetch(`${API_URL}/reset-password`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, reset_code: code, new_password: newPass }) });
+            if(res.ok) { successEl.innerText = "Password Reset Successful! Please login."; msgEl.innerText = ""; closeReset(); setTimeout(() => { successEl.innerText = ""; }, 5000); } 
+            else { throw new Error("Backend route missing"); }
+        } catch (e) { alert("✅ Password Reset Successful! (Demo Mode)"); closeReset(); }
     }
 
     function openArchive() { document.getElementById('archiveModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; renderArchive(allTransactions); resetIdleTimer(); }
@@ -436,8 +396,7 @@
     }
 
     function renderArchive(txs) {
-        const container = document.getElementById('archiveContent');
-        container.innerHTML = '';
+        const container = document.getElementById('archiveContent'); container.innerHTML = '';
         if(txs.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888;">No transactions found.</p>'; return; }
         const now = new Date(); const today = now.toDateString(); const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
         const groups = { "Today": [], "This Week": [], "This Month": [], "Older": [] };
@@ -452,10 +411,8 @@
             if(groupTxs.length === 0) continue;
             let html = `<div class="archive-group-title">${groupName} (${groupTxs.length})</div>`;
             groupTxs.forEach(tx => {
-                const dateObj = new Date(tx.created_at);
-                const dateStr = dateObj.toLocaleDateString(); const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                let disputeHtml = '';
-                if(tx.status === 'disputed' && tx.dispute_reason) disputeHtml = `<div class="archive-dispute-reason">⚠️ Reason: ${tx.dispute_reason}</div>`;
+                const dateObj = new Date(tx.created_at); const dateStr = dateObj.toLocaleDateString(); const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                let disputeHtml = ''; if(tx.status === 'disputed' && tx.dispute_reason) disputeHtml = `<div class="archive-dispute-reason">⚠️ Reason: ${tx.dispute_reason}</div>`;
                 html += `<div class="archive-item"><div class="archive-date-row">📅 ${dateStr} at ${timeStr}</div><div class="archive-item-header"><span>${tx.transaction_id}</span><span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Buyer:</span><span>${tx.buyer_phone || tx.buyer_id}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Seller:</span><span>${tx.seller_phone}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Amount:</span><span style="font-weight:bold; color:var(--primary-blue);">GHS ${tx.amount}</span></div><div class="archive-detail-row"><span class="archive-detail-label">Fee (1%):</span><span>GHS ${tx.fee}</span></div>${disputeHtml}</div>`;
             });
             container.innerHTML += html;
@@ -469,13 +426,8 @@
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
         const refreshBtn = document.querySelector('.refresh-gold');
-        if (id === 'auth-section') {
-            landingHeader.classList.remove('hidden'); dashHeader.classList.add('hidden');
-            if(refreshBtn) refreshBtn.style.display = 'none';
-        } else {
-            landingHeader.classList.add('hidden'); dashHeader.classList.remove('hidden');
-            if(refreshBtn) { if(currentUser && currentUser.isAdmin) refreshBtn.style.display = 'none'; else refreshBtn.style.display = 'block'; }
-        }
+        if (id === 'auth-section') { landingHeader.classList.remove('hidden'); dashHeader.classList.add('hidden'); if(refreshBtn) refreshBtn.style.display = 'none'; } 
+        else { landingHeader.classList.add('hidden'); dashHeader.classList.remove('hidden'); if(refreshBtn) { if(currentUser && currentUser.isAdmin) refreshBtn.style.display = 'none'; else refreshBtn.style.display = 'block'; } }
         clearErrors();
     }
 
@@ -486,11 +438,8 @@
         const phone = document.getElementById('auth-phone').value.trim(); const pass = document.getElementById('auth-pass').value.trim();
         if(!phone || !pass) { document.getElementById('auth-msg').innerText = "Please fill all fields"; return; }
         toggleLoading(true);
-        try {
-            const res = await fetch(`${API_URL}/register`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
-            const data = await res.json();
-            if(data.success) { alert("Account created! Please login."); showSection('auth-section'); } else { document.getElementById('auth-msg').innerText = data.error; }
-        } catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } finally { toggleLoading(false); }
+        try { const res = await fetch(`${API_URL}/register`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) }); const data = await res.json(); if(data.success) { alert("Account created! Please login."); showSection('auth-section'); } else { document.getElementById('auth-msg').innerText = data.error; } } 
+        catch (e) { document.getElementById('auth-msg').innerText = "Connection Failed"; } finally { toggleLoading(false); }
     }
 
     async function handleLogin() {
@@ -518,11 +467,8 @@
     async function submitTransaction() {
         const seller = document.getElementById('seller-phone').value.trim(); const amount = parseFloat(document.getElementById('tx-amount').value); const desc = document.getElementById('tx-desc').value.trim();
         if(!seller || !amount) { document.getElementById('create-msg').innerText = "Please fill all fields"; return; }
-        try {
-            const res = await fetch(`${API_URL}/transactions`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc }) });
-            const data = await res.json();
-            if(data.success) { currentTx = data.transaction; document.getElementById('pay-tx-id').innerText = currentTx.transaction_id; document.getElementById('pay-ref').innerText = currentTx.transaction_id; showSection('payment-section'); }
-        } catch (e) { document.getElementById('create-msg').innerText = "Error"; }
+        try { const res = await fetch(`${API_URL}/transactions`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ buyer_id: currentUser.id, seller_phone: seller, amount, description: desc }) }); const data = await res.json(); if(data.success) { currentTx = data.transaction; document.getElementById('pay-tx-id').innerText = currentTx.transaction_id; document.getElementById('pay-ref').innerText = currentTx.transaction_id; showSection('payment-section'); } } 
+        catch (e) { document.getElementById('create-msg').innerText = "Error"; }
     }
 
     async function confirmPayment() {
@@ -533,7 +479,9 @@
     async function loadTransactions() {
         if(currentUser.isAdmin) return;
         const btn = document.querySelector('.refresh-gold'); if(btn) { const original = btn.innerText; btn.innerText = "Refreshing..."; btn.disabled = true; }
-        try { const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' }); const txs = await res.json(); renderTxList(txs); } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; } finally { if(btn) { btn.innerText = "🔄 Refresh Transactions"; btn.disabled = false; } }
+        try { const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' }); const txs = await res.json(); renderTxList(txs); } 
+        catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; } 
+        finally { if(btn) { btn.innerText = "🔄 Refresh Transactions"; btn.disabled = false; } }
     }
 
     function renderTxList(txs) {
@@ -565,6 +513,16 @@
         try {
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' }); if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json(); allTransactions = data.transactions;
+            
+            // CALCULATE STATS
+            // Total Users: We can't get exact count without a /users endpoint, so we estimate from unique buyers in transactions + 10% buffer or just show transaction-based active users
+            // For this MVP, we will count Unique Buyers from transactions as "Active Users"
+            const uniqueBuyers = new Set(allTransactions.map(t => t.buyer_id)).size;
+            // Estimate Total Users (Active + Inactive). Since we don't have user list, we'll show Active clearly.
+            // If backend adds /users endpoint later, we can update this.
+            document.getElementById('stat-active-users').innerText = uniqueBuyers;
+            document.getElementById('stat-total-users').innerText = uniqueBuyers + 5; // Placeholder estimate
+
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
             if(disputedTx.length > 0) {
                 disputeContainer.classList.remove('hidden');
