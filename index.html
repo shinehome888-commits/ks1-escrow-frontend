@@ -317,6 +317,16 @@
             margin: 0;
             padding-left: 35px;
         }
+        .fee-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
         .guide-title {
             text-align: center;
             color: var(--primary-blue);
@@ -371,6 +381,16 @@
             color: #555;
         }
         .archive-detail-label { font-weight: 600; }
+        .archive-date-row {
+            background: #e9ecef;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
         .archive-dispute-reason {
             background: #fff5f5;
             color: #c92a2a;
@@ -477,6 +497,9 @@
         <div class="guide-step">
             <h3><span class="step-number">3</span> Make Payment</h3>
             <p>You will see a Transaction ID and our Wallet Number (<strong>0240254680</strong>). Send the exact amount via Mobile Money using the Transaction ID as reference. Then click "I Have Paid".</p>
+            <div class="fee-warning">
+                ⚠️ IMPORTANT: Please add the <strong>Mobile Money Charge</strong> on top of the transaction amount. The seller must receive the full agreed amount.
+            </div>
         </div>
         <div class="guide-step">
             <h3><span class="step-number">4</span> Admin Verification</h3>
@@ -579,6 +602,7 @@
             
             groupTxs.forEach(tx => {
                 const dateObj = new Date(tx.created_at);
+                const dateStr = dateObj.toLocaleDateString(); // Full Date
                 const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 
                 let disputeHtml = '';
@@ -588,6 +612,7 @@
 
                 html += `
                     <div class="archive-item">
+                        <div class="archive-date-row">📅 ${dateStr} at ${timeStr}</div>
                         <div class="archive-item-header">
                             <span>${tx.transaction_id}</span>
                             <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
@@ -607,10 +632,6 @@
                         <div class="archive-detail-row">
                             <span class="archive-detail-label">Fee (1%):</span>
                             <span>GHS ${tx.fee}</span>
-                        </div>
-                        <div class="archive-detail-row">
-                            <span class="archive-detail-label">Time:</span>
-                            <span>${timeStr}</span>
                         </div>
                         ${disputeHtml}
                     </div>
