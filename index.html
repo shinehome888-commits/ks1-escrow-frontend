@@ -28,24 +28,15 @@
         button.resolve-btn { background: linear-gradient(to bottom, #28a745, #218838); color: white; box-shadow: 0 4px 0 #1e7e34; }
         button.delete-btn { background: linear-gradient(to bottom, #adb5bd, #6c757d); color: white; box-shadow: 0 4px 0 #5a6268; font-size: 0.9rem; padding: 10px; margin-top: 8px; font-weight: 700; text-transform: uppercase; }
         button.delete-btn:active { box-shadow: 0 0 0 #5a6268; }
+        button.refresh-btn { background: linear-gradient(to bottom, #17a2b8, #138496); color: white; box-shadow: 0 4px 0 #117a8b; width: auto; padding: 10px 20px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle; display: inline-block; }
+        button.refresh-btn:active { box-shadow: 0 0 0 #117a8b; }
 
         .card { background: #f9f9f9; border-left: 5px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        .dispute-alert-card {
-            background: #fff5f5;
-            border: 2px solid var(--alert-red);
-            border-left: 8px solid var(--alert-red);
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); }
-            70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); }
-        }
+        .dispute-alert-card { background: #fff5f5; border: 2px solid var(--alert-red); border-left: 8px solid var(--alert-red); padding: 15px; margin-bottom: 20px; border-radius: 8px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
         .dispute-header { color: var(--alert-red); font-weight: 900; font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
+        .dispute-reason-box { background: #fff; border: 1px dashed #dc3545; padding: 10px; margin: 10px 0; font-style: italic; color: #555; font-size: 0.9rem; border-radius: 5px; }
 
         .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: white; background: #ccc; font-weight: bold; }
         .status-funded { background: #2ecc71; } .status-completed { background: #3498db; } .status-disputed { background: #dc3545; } .status-pending_payment { background: #f39c12; } .status-delivered { background: #9b59b6; }
@@ -65,6 +56,8 @@
         .fixed-logout-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; z-index: 1000; }
         .fixed-logout-btn { width: 100%; padding: 18px; background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border: none; border-radius: 50px; box-shadow: 0 8px 0 #b39700, 0 15px 25px rgba(0,0,0,0.3); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; margin-top: 0; }
         .fixed-logout-btn:active { transform: translateY(8px); box-shadow: 0 0 0 #b39700, inset 0 2px 10px rgba(0,0,0,0.2); }
+        
+        .timestamp { font-size: 0.75rem; color: #888; text-align: right; margin-top: 5px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -86,7 +79,12 @@
     </div>
 
     <div id="dashboard-section" class="section">
-        <h3 class="center-text" style="color:var(--primary-blue); margin: 20px 0; font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">My Transactions</h3>
+        <div style="display:flex; justify-content:center; align-items:center; margin: 20px 0; flex-wrap: wrap;">
+            <h3 style="color:var(--primary-blue); margin:0; font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">My Transactions</h3>
+            <!-- NEW REFRESH BUTTON FOR USER -->
+            <button class="refresh-btn" onclick="loadTransactions()">🔄 Refresh</button>
+        </div>
+        
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
         <div id="global-status-msg" style="margin-top:15px;"></div>
         <div id="tx-list" style="margin-top:25px;"></div>
@@ -215,7 +213,7 @@
     }
     async function loadTransactions() {
         if(currentUser.isAdmin) return;
-        showSection('dashboard-section'); 
+        // Show loading state on button if needed, but for now just reload
         try {
             const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' });
             const txs = await res.json();
@@ -230,18 +228,27 @@
             const card = document.createElement('div');
             card.className = 'card';
             let actions = '';
+            
+            // Format Timestamp
+            const dateObj = new Date(tx.created_at);
+            const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dayStr = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
+
             if(tx.status === 'funded') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
             if(tx.status === 'pending_payment') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
             if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
                 actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             }
+            
+            let statusBox = '';
             if(tx.status === 'completed') {
-                actions += `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.</div>`;
+                statusBox = `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><br><em>Thank You For Trusting Us</em></div>`;
             } else if (tx.status === 'delivered') {
-                actions += `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
+                statusBox = `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
             } else if (tx.status === 'disputed') {
-                actions += `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified. Funds are safe.</div>`;
+                statusBox = `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified.</div>`;
             }
+
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <strong>${tx.transaction_id}</strong>
@@ -249,7 +256,9 @@
                 </div>
                 <p style="margin:5px 0;">Seller: ${tx.seller_phone} | Amount: GHS ${tx.amount}</p>
                 <p style="font-size:0.9rem; color:#555; margin:5px 0;">${tx.description}</p>
+                <div class="timestamp">📅 ${dayStr}, ${dateStr}</div>
                 <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">${actions}</div>
+                ${statusBox}
             `;
             list.appendChild(card);
         });
@@ -270,11 +279,11 @@
         }
     }
     async function actionDispute(id) {
-        const reason = prompt("⚠️ DISPUTE NOTICE:\n\nDescribe the problem clearly. The Admin will be notified IMMEDIATELY and will contact you to resolve this.\n\nReason:");
+        const reason = prompt("⚠️ DISPUTE NOTICE:\n\nDescribe the problem clearly. The Admin will be notified IMMEDIATELY.\n\nReason:");
         if(reason) {
             try {
                 await fetch(`${API_URL}/transactions/${id}/dispute`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ reason }) });
-                alert("🛡️ DISPUTE OPENED!\n\nAdmin alerted instantly. Your funds are 100% safe in Escrow. We will contact you shortly.");
+                alert("🛡️ DISPUTE OPENED!\n\nAdmin alerted instantly. Your funds are 100% safe.");
                 loadTransactions();
             } catch(e) { alert("Error"); }
         }
@@ -288,10 +297,7 @@
         errorEl.innerText = "";
         try {
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
-            if(!res.ok) {
-                const errData = await res.json();
-                throw new Error(errData.error || `Server returned ${res.status}`);
-            }
+            if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json();
             
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
@@ -299,15 +305,19 @@
                 disputeContainer.classList.remove('hidden');
                 let alertsHtml = `<div class="dispute-header">🔴 URGENT: ${disputedTx.length} Dispute(s) Need Attention!</div>`;
                 disputedTx.forEach(t => {
-                    // Prioritize buyer_phone, fallback to buyer_id if missing
                     const buyerDisplay = t.buyer_phone ? t.buyer_phone : `${t.buyer_id} (ID)`;
+                    const reasonDisplay = t.dispute_reason ? t.dispute_reason : "No reason provided";
                     
                     alertsHtml += `
                         <div class="dispute-alert-card">
                             <p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p>
                             <p><strong>Seller:</strong> ${t.seller_phone}</p>
                             <p><strong>Buyer:</strong> ${buyerDisplay}</p>
-                            <p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">⚠️ Issue Reported: Call both parties to resolve.</p>
+                            <div class="dispute-reason-box">
+                                <strong>⚠️ Reason for Dispute:</strong><br>
+                                "${reasonDisplay}"
+                            </div>
+                            <p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">Call both parties to resolve based on the reason above.</p>
                             <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
                                 <button class="resolve-btn" style="padding:8px; font-size:0.8rem; flex:1;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
                                 <button class="danger" style="padding:8px; font-size:0.8rem; flex:1;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
@@ -321,16 +331,10 @@
             }
             container.innerHTML += '<h4>Pending Verifications</h4>';
             const pendingPayments = data.payments.filter(p => !p.verified);
-            if(pendingPayments.length === 0) {
-                container.innerHTML += '<p style="color:green; font-weight:bold;">✅ No pending payments. All clear!</p>';
-            } else {
+            if(pendingPayments.length === 0) container.innerHTML += '<p style="color:green; font-weight:bold;">✅ No pending payments. All clear!</p>';
+            else {
                 pendingPayments.forEach(p => {
-                    container.innerHTML += `
-                        <div class="card">
-                            <p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p>
-                            <button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button>
-                            <button class="delete-btn" onclick="adminDeletePayment('${p.transaction_id}')">🗑️ Delete Payment</button>
-                        </div>`;
+                    container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button><button class="delete-btn" onclick="adminDeletePayment('${p.transaction_id}')">🗑️ Delete Payment</button></div>`;
                 });
             }
             container.innerHTML += '<h4 style="margin-top:20px;">Ready to Release (Delivered)</h4>';
@@ -341,43 +345,12 @@
             });
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
             container.innerHTML += `<div class="card" style="background:#fff3cd; margin-top:15px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
-        } catch (e) {
-            container.innerHTML = "";
-            errorEl.innerText = "Error: " + e.message;
-            console.error("Admin Load Error:", e);
-        }
+        } catch (e) { container.innerHTML = ""; errorEl.innerText = "Error: " + e.message; }
     }
-    async function adminVerify(txId) {
-        try {
-            await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-            loadAdminData(); alert("Payment Verified.");
-        } catch(e) { alert("Error"); }
-    }
-    async function adminDeletePayment(txId) {
-        if(confirm("⚠️ WARNING: Are you sure you want to DELETE this payment record permanently?")) {
-            try {
-                const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' });
-                if(res.ok) { loadAdminData(); alert("🗑️ Deleted!"); } 
-                else { alert("Error deleting."); }
-            } catch(e) { alert("Error"); }
-        }
-    }
-    async function adminRelease(txId) {
-        if(confirm("Confirm: Release funds to SELLER?")) {
-            try {
-                await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-                loadAdminData(); alert("✅ Funds Released.");
-            } catch(e) { alert("Error"); }
-        }
-    }
-    async function adminRefund(txId) {
-        if(confirm("Confirm: Refund FULL amount to BUYER?")) {
-            try {
-                await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) });
-                loadAdminData(); alert("💰 Funds Refunded.");
-            } catch(e) { alert("Error"); }
-        }
-    }
+    async function adminVerify(txId) { try { await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Payment Verified."); } catch(e) { alert("Error"); } }
+    async function adminDeletePayment(txId) { if(confirm("⚠️ WARNING: Delete permanently?")) { try { const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' }); if(res.ok) { loadAdminData(); alert("🗑️ Deleted!"); } } catch(e) { alert("Error"); } } }
+    async function adminRelease(txId) { if(confirm("Confirm: Release funds to SELLER?")) { try { await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("✅ Funds Released."); } catch(e) { alert("Error"); } } }
+    async function adminRefund(txId) { if(confirm("Confirm: Refund FULL amount to BUYER?")) { try { await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("💰 Funds Refunded."); } catch(e) { alert("Error"); } } }
 </script>
 </body>
 </html>
