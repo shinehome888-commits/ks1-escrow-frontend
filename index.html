@@ -74,11 +74,9 @@
         input, textarea { width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; transition: all 0.3s; background: #f9f9f9; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); font-weight: 500; }
         input:focus, textarea:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); transform: translateY(-2px); }
         
-        /* Universal Button Style */
         button { width: 100%; padding: 16px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 12px; color: var(--primary-blue); font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 0 var(--gold-dark), 0 10px 15px rgba(0,0,0,0.2); transition: all 0.15s; position: relative; top: 0; }
         button:active { transform: translateY(6px); box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 10px rgba(0,0,0,0.2); }
 
-        /* Secondary Button (White/Blue) - Kept for specific cases if needed, but mostly Gold now */
         button.secondary { background: linear-gradient(to bottom, #ffffff, #f0f0f0); color: var(--primary-blue); box-shadow: 0 6px 0 #ccc, 0 10px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; }
         button.secondary:active { box-shadow: 0 0 0 #ccc; }
 
@@ -91,7 +89,6 @@
         button.delete-btn { background: linear-gradient(to bottom, #adb5bd, #6c757d); color: white; box-shadow: 0 6px 0 #5a6268; font-size: 0.9rem; padding: 12px; margin-top: 10px; font-weight: 700; text-transform: uppercase; }
         button.delete-btn:active { box-shadow: 0 0 0 #5a6268; }
         
-        /* ARCHIVE BUTTON STYLE */
         button.archive-btn {
             background: linear-gradient(to bottom, #ffe033, #e6c200);
             color: var(--primary-blue);
@@ -136,7 +133,41 @@
         .status-badge { display: inline-block; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: 900; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 1px; }
         .status-funded { background: #2b8a3e; } .status-completed { background: #1864ab; } .status-disputed { background: #c92a2a; } .status-pending_payment { background: #e67700; } .status-delivered { background: #be4bdb; } .status-cancelled { background: #868e96; }
         
-        .admin-panel { border: 3px dashed var(--primary-blue); padding: 25px; margin-top: 30px; background: #f8f9fa; border-radius: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
+        /* ADMIN PANEL WITH GOLD GLOW */
+        .admin-panel { 
+            border: 4px dashed var(--primary-blue); 
+            padding: 25px; 
+            margin-top: 30px; 
+            background: #f8f9fa; 
+            border-radius: 20px; 
+            /* Bold Blue Border with Gold Glow */
+            box-shadow: 0 0 15px var(--accent-gold), inset 0 0 20px rgba(0,0,0,0.05); 
+            position: relative;
+            z-index: 1;
+        }
+        /* 3D Admin Title Style */
+        .admin-title-3d {
+            color: var(--primary-blue);
+            font-size: 1.5rem;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 0;
+            text-transform: uppercase;
+            text-shadow: 
+                1px 1px 0 #ccc,
+                2px 2px 0 #bbb,
+                3px 3px 0 #aaa,
+                4px 4px 5px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        .crown-icon {
+            font-size: 1.8rem;
+            filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
+        }
+
         .hidden { display: none; }
         .center-text { text-align: center; }
         #loading-msg { text-align: center; color: #666; margin-top: 15px; display: none; font-weight: bold; }
@@ -456,7 +487,10 @@
         <div id="tx-list" style="margin-top:25px;"></div>
 
         <div class="admin-panel hidden" id="admin-controls">
-            <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.4rem; text-align:center; font-weight:900; text-transform:uppercase;">👑 Admin Command Center</h4>
+            <!-- 3D ADMIN TITLE WITH REAL CROWN -->
+            <h4 class="admin-title-3d">
+                <span class="crown-icon">👑</span> Admin Command Center
+            </h4>
             <div id="dispute-alert-container" class="hidden"></div>
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
             <div id="admin-data" style="margin-top:20px;"></div>
@@ -470,7 +504,6 @@
         <input type="number" id="tx-amount" placeholder="Amount (GHS)" />
         <textarea id="tx-desc" rows="3" placeholder="Description of goods/service"></textarea>
         <button onclick="submitTransaction()">Generate Invite Code</button>
-        <!-- CHANGED TO GOLD -->
         <button onclick="showSection('dashboard-section')" style="background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700;">Cancel</button>
         <p id="create-msg" class="error-msg"></p>
     </div>
@@ -488,7 +521,6 @@
         <label style="font-weight:bold; color:var(--primary-blue); display:block; margin-top:15px; font-size:1.1rem;">Confirm Payment:</label>
         <input type="text" id="momo-ref" placeholder="Enter MoMo Reference ID" />
         <button onclick="confirmPayment()">I Have Paid</button>
-        <!-- CHANGED TO GOLD -->
         <button onclick="showSection('dashboard-section')" style="background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700;">Back</button>
     </div>
 </div>
@@ -562,13 +594,21 @@
     let currentTx = null;
     let allTransactions = []; // Store for archive
 
-    // --- AUTO LOGOUT SECURITY SYSTEM ---
+    // --- SMART AUTO LOGOUT SECURITY SYSTEM ---
     let idleTimer;
     let warningTimer;
     const IDLE_LIMIT = 50000; // 50 seconds
     const WARNING_TIME = 45000; // 45 seconds
 
     function resetIdleTimer() {
+        // ONLY run if user is logged in (currentUser exists)
+        if (!currentUser) {
+            clearTimeout(idleTimer);
+            clearTimeout(warningTimer);
+            document.getElementById('idle-warning').style.display = 'none';
+            return;
+        }
+
         clearTimeout(idleTimer);
         clearTimeout(warningTimer);
         document.getElementById('idle-warning').style.display = 'none';
@@ -745,7 +785,7 @@
             document.getElementById('admin-controls').classList.remove('hidden');
             showSection('dashboard-section');
             loadAdminData();
-            resetIdleTimer(); // Start timer on login
+            resetIdleTimer(); // Start timer ONLY when logged in
             return;
         }
         toggleLoading(true);
@@ -757,7 +797,7 @@
                 document.getElementById('admin-controls').classList.add('hidden');
                 showSection('dashboard-section');
                 loadTransactions();
-                resetIdleTimer(); // Start timer on login
+                resetIdleTimer(); // Start timer ONLY when logged in
             } else { document.getElementById('auth-msg').innerText = data.error; }
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
         finally { toggleLoading(false); }
