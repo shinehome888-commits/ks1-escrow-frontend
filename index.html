@@ -133,19 +133,19 @@
         .status-badge { display: inline-block; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: 900; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 1px; }
         .status-funded { background: #2b8a3e; } .status-completed { background: #1864ab; } .status-disputed { background: #c92a2a; } .status-pending_payment { background: #e67700; } .status-delivered { background: #be4bdb; } .status-cancelled { background: #868e96; }
         
-        /* ADMIN PANEL WITH GOLD GLOW */
+        /* ADMIN PANEL WITH GOLD GLOW - FIXED FOR MOBILE */
         .admin-panel { 
             border: 4px dashed var(--primary-blue); 
             padding: 25px; 
             margin-top: 30px; 
             background: #f8f9fa; 
             border-radius: 20px; 
-            /* Bold Blue Border with Gold Glow */
             box-shadow: 0 0 15px var(--accent-gold), inset 0 0 20px rgba(0,0,0,0.05); 
             position: relative;
             z-index: 1;
+            display: block !important; /* Force display via JS, but ensure CSS doesn't hide it */
         }
-        /* 3D Admin Title Style */
+        
         .admin-title-3d {
             color: var(--primary-blue);
             font-size: 1.5rem;
@@ -168,7 +168,7 @@
             filter: drop-shadow(2px 2px 2px rgba(0,0,0,0.3));
         }
 
-        .hidden { display: none; }
+        .hidden { display: none !important; } /* Stronger hidden class */
         .center-text { text-align: center; }
         #loading-msg { text-align: center; color: #666; margin-top: 15px; display: none; font-weight: bold; }
         .error-msg { color: var(--alert-red); text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: bold; min-height: 20px; }
@@ -486,8 +486,8 @@
         <div id="global-status-msg" style="margin-top:20px;"></div>
         <div id="tx-list" style="margin-top:25px;"></div>
 
+        <!-- ADMIN PANEL: Initially Hidden, Shown via JS -->
         <div class="admin-panel hidden" id="admin-controls">
-            <!-- 3D ADMIN TITLE WITH REAL CROWN -->
             <h4 class="admin-title-3d">
                 <span class="crown-icon">👑</span> Admin Command Center
             </h4>
@@ -592,50 +592,39 @@
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     let currentUser = null;
     let currentTx = null;
-    let allTransactions = []; // Store for archive
+    let allTransactions = []; 
 
     // --- SMART AUTO LOGOUT SECURITY SYSTEM ---
     let idleTimer;
     let warningTimer;
-    const IDLE_LIMIT = 50000; // 50 seconds
-    const WARNING_TIME = 45000; // 45 seconds
+    const IDLE_LIMIT = 50000; 
+    const WARNING_TIME = 45000; 
 
     function resetIdleTimer() {
-        // ONLY run if user is logged in (currentUser exists)
         if (!currentUser) {
             clearTimeout(idleTimer);
             clearTimeout(warningTimer);
             document.getElementById('idle-warning').style.display = 'none';
             return;
         }
-
         clearTimeout(idleTimer);
         clearTimeout(warningTimer);
         document.getElementById('idle-warning').style.display = 'none';
-
-        // Set warning at 45s
         warningTimer = setTimeout(() => {
             document.getElementById('idle-warning').style.display = 'block';
         }, WARNING_TIME);
-
-        // Logout at 50s
         idleTimer = setTimeout(() => {
-            if(currentUser) {
-                logout();
-            }
+            if(currentUser) logout();
         }, IDLE_LIMIT);
     }
 
-    // Attach event listeners to reset timer on any activity
     ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => {
         document.addEventListener(evt, resetIdleTimer, true);
     });
 
-    // Guide Modal Functions
     function openGuide() { document.getElementById('guideModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; resetIdleTimer(); }
     function closeGuide() { document.getElementById('guideModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
     
-    // Archive Modal Functions
     function openArchive() { 
         document.getElementById('archiveModal').style.display = 'flex'; 
         document.body.style.overflow = 'hidden';
@@ -664,19 +653,12 @@
     function renderArchive(txs) {
         const container = document.getElementById('archiveContent');
         container.innerHTML = '';
-        
-        if(txs.length === 0) {
-            container.innerHTML = '<p style="text-align:center; color:#888;">No transactions found.</p>';
-            return;
-        }
-
+        if(txs.length === 0) { container.innerHTML = '<p style="text-align:center; color:#888;">No transactions found.</p>'; return; }
         const now = new Date();
         const today = now.toDateString();
         const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-
         const groups = { "Today": [], "This Week": [], "This Month": [], "Older": [] };
-
         txs.forEach(tx => {
             const txDate = new Date(tx.created_at);
             if(txDate.toDateString() === today) groups["Today"].push(tx);
@@ -684,22 +666,17 @@
             else if(txDate > monthAgo) groups["This Month"].push(tx);
             else groups["Older"].push(tx);
         });
-
         for (const [groupName, groupTxs] of Object.entries(groups)) {
             if(groupTxs.length === 0) continue;
-            
             let html = `<div class="archive-group-title">${groupName} (${groupTxs.length})</div>`;
-            
             groupTxs.forEach(tx => {
                 const dateObj = new Date(tx.created_at);
                 const dateStr = dateObj.toLocaleDateString();
                 const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                
                 let disputeHtml = '';
                 if(tx.status === 'disputed' && tx.dispute_reason) {
                     disputeHtml = `<div class="archive-dispute-reason">⚠️ Reason: ${tx.dispute_reason}</div>`;
                 }
-
                 html += `
                     <div class="archive-item">
                         <div class="archive-date-row">📅 ${dateStr} at ${timeStr}</div>
@@ -722,7 +699,7 @@
     function showSection(id) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
-        resetIdleTimer(); // Reset timer on navigation
+        resetIdleTimer();
         
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
@@ -738,7 +715,6 @@
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
             if(footerArea) footerArea.style.display = 'flex'; 
-            
             if(refreshBtn) {
                 if(currentUser && currentUser.isAdmin) {
                     refreshBtn.style.display = 'none';
@@ -780,24 +756,37 @@
     async function handleLogin() {
         const phone = document.getElementById('auth-phone').value.trim();
         const pass = document.getElementById('auth-pass').value.trim();
+        
+        // CHECK FOR ADMIN LOGIN
         if(phone === "admin" && pass === "admin123") {
-            currentUser = { id: 'admin', isAdmin: true };
-            document.getElementById('admin-controls').classList.remove('hidden');
+            currentUser = { id: 'admin', phone_number: 'Admin', isAdmin: true };
+            
+            // FORCE SHOW ADMIN PANEL
+            const adminPanel = document.getElementById('admin-controls');
+            adminPanel.classList.remove('hidden');
+            adminPanel.style.display = 'block'; // Explicitly set display
+            
             showSection('dashboard-section');
             loadAdminData();
-            resetIdleTimer(); // Start timer ONLY when logged in
+            resetIdleTimer();
             return;
         }
+
+        // Regular User Login
         toggleLoading(true);
         try {
             const res = await fetch(`${API_URL}/login`, { method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ phone_number: phone, password: pass }) });
             const data = await res.json();
             if(data.success) {
                 currentUser = data.user;
-                document.getElementById('admin-controls').classList.add('hidden');
+                
+                // HIDE ADMIN PANEL FOR REGULAR USERS
+                const adminPanel = document.getElementById('admin-controls');
+                adminPanel.classList.add('hidden');
+                
                 showSection('dashboard-section');
                 loadTransactions();
-                resetIdleTimer(); // Start timer ONLY when logged in
+                resetIdleTimer();
             } else { document.getElementById('auth-msg').innerText = data.error; }
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
         finally { toggleLoading(false); }
@@ -863,7 +852,6 @@
             if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
                 actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             }
-            
             let statusBox = '';
             if(tx.status === 'completed') {
                 statusBox = `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><br><em>Thank You For Trusting Us</em></div>`;
@@ -874,11 +862,9 @@
             } else if (tx.status === 'disputed') {
                 statusBox = `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified.</div>`;
             }
-            
             const dateObj = new Date(tx.created_at);
             const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             const dayStr = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
                     <strong style="font-size:1.1rem; color:var(--primary-blue);">${tx.transaction_id}</strong>
@@ -933,9 +919,7 @@
             const res = await fetch(`${API_URL}/admin/data`, { method: 'GET', mode: 'cors' });
             if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json();
-            
             allTransactions = data.transactions;
-
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
             if(disputedTx.length > 0) {
                 disputeContainer.classList.remove('hidden');
@@ -976,7 +960,6 @@
                 container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button onclick="adminRelease('${t.transaction_id}')">Release Funds</button></div>`;
             });
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
-            
             container.innerHTML += `
                 <div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
