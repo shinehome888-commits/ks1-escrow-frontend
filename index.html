@@ -74,9 +74,11 @@
         input, textarea { width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; transition: all 0.3s; background: #f9f9f9; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); font-weight: 500; }
         input:focus, textarea:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); transform: translateY(-2px); }
         
+        /* Universal Button Style */
         button { width: 100%; padding: 16px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 12px; color: var(--primary-blue); font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 0 var(--gold-dark), 0 10px 15px rgba(0,0,0,0.2); transition: all 0.15s; position: relative; top: 0; }
         button:active { transform: translateY(6px); box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 10px rgba(0,0,0,0.2); }
 
+        /* Secondary Button (White/Blue) - Kept for specific cases if needed, but mostly Gold now */
         button.secondary { background: linear-gradient(to bottom, #ffffff, #f0f0f0); color: var(--primary-blue); box-shadow: 0 6px 0 #ccc, 0 10px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; }
         button.secondary:active { box-shadow: 0 0 0 #ccc; }
 
@@ -400,9 +402,29 @@
             font-style: italic;
             border: 1px dashed #ffc9c9;
         }
+
+        /* IDLE WARNING POPUP */
+        #idle-warning {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--alert-red);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 3000;
+            display: none;
+            animation: popIn 0.3s ease;
+        }
     </style>
 </head>
 <body>
+
+<!-- IDLE WARNING -->
+<div id="idle-warning">⏱️ Inactive! Logging out in 5 seconds...</div>
 
 <div class="container">
     
@@ -448,7 +470,8 @@
         <input type="number" id="tx-amount" placeholder="Amount (GHS)" />
         <textarea id="tx-desc" rows="3" placeholder="Description of goods/service"></textarea>
         <button onclick="submitTransaction()">Generate Invite Code</button>
-        <button class="secondary" onclick="showSection('dashboard-section')">Cancel</button>
+        <!-- CHANGED TO GOLD -->
+        <button onclick="showSection('dashboard-section')" style="background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700;">Cancel</button>
         <p id="create-msg" class="error-msg"></p>
     </div>
 
@@ -465,7 +488,8 @@
         <label style="font-weight:bold; color:var(--primary-blue); display:block; margin-top:15px; font-size:1.1rem;">Confirm Payment:</label>
         <input type="text" id="momo-ref" placeholder="Enter MoMo Reference ID" />
         <button onclick="confirmPayment()">I Have Paid</button>
-        <button class="secondary" onclick="showSection('dashboard-section')">Back</button>
+        <!-- CHANGED TO GOLD -->
+        <button onclick="showSection('dashboard-section')" style="background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700;">Back</button>
     </div>
 </div>
 
@@ -538,17 +562,48 @@
     let currentTx = null;
     let allTransactions = []; // Store for archive
 
+    // --- AUTO LOGOUT SECURITY SYSTEM ---
+    let idleTimer;
+    let warningTimer;
+    const IDLE_LIMIT = 50000; // 50 seconds
+    const WARNING_TIME = 45000; // 45 seconds
+
+    function resetIdleTimer() {
+        clearTimeout(idleTimer);
+        clearTimeout(warningTimer);
+        document.getElementById('idle-warning').style.display = 'none';
+
+        // Set warning at 45s
+        warningTimer = setTimeout(() => {
+            document.getElementById('idle-warning').style.display = 'block';
+        }, WARNING_TIME);
+
+        // Logout at 50s
+        idleTimer = setTimeout(() => {
+            if(currentUser) {
+                logout();
+            }
+        }, IDLE_LIMIT);
+    }
+
+    // Attach event listeners to reset timer on any activity
+    ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'].forEach(evt => {
+        document.addEventListener(evt, resetIdleTimer, true);
+    });
+
     // Guide Modal Functions
-    function openGuide() { document.getElementById('guideModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
-    function closeGuide() { document.getElementById('guideModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+    function openGuide() { document.getElementById('guideModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; resetIdleTimer(); }
+    function closeGuide() { document.getElementById('guideModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
     
     // Archive Modal Functions
     function openArchive() { 
         document.getElementById('archiveModal').style.display = 'flex'; 
         document.body.style.overflow = 'hidden';
         renderArchive(allTransactions);
+        resetIdleTimer();
     }
-    function closeArchive() { document.getElementById('archiveModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+    function closeArchive() { document.getElementById('archiveModal').style.display = 'none'; document.body.style.overflow = 'auto'; resetIdleTimer(); }
+    
     window.onclick = function(event) {
         if (event.target == document.getElementById('guideModal')) closeGuide();
         if (event.target == document.getElementById('archiveModal')) closeArchive();
@@ -563,6 +618,7 @@
             tx.created_at.toLowerCase().includes(query)
         );
         renderArchive(filtered);
+        resetIdleTimer();
     }
 
     function renderArchive(txs) {
@@ -574,18 +630,12 @@
             return;
         }
 
-        // Group by Time
         const now = new Date();
         const today = now.toDateString();
         const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
         const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
-        const groups = {
-            "Today": [],
-            "This Week": [],
-            "This Month": [],
-            "Older": []
-        };
+        const groups = { "Today": [], "This Week": [], "This Month": [], "Older": [] };
 
         txs.forEach(tx => {
             const txDate = new Date(tx.created_at);
@@ -602,7 +652,7 @@
             
             groupTxs.forEach(tx => {
                 const dateObj = new Date(tx.created_at);
-                const dateStr = dateObj.toLocaleDateString(); // Full Date
+                const dateStr = dateObj.toLocaleDateString();
                 const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
                 
                 let disputeHtml = '';
@@ -617,22 +667,10 @@
                             <span>${tx.transaction_id}</span>
                             <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
                         </div>
-                        <div class="archive-detail-row">
-                            <span class="archive-detail-label">Buyer:</span>
-                            <span>${tx.buyer_phone || tx.buyer_id}</span>
-                        </div>
-                        <div class="archive-detail-row">
-                            <span class="archive-detail-label">Seller:</span>
-                            <span>${tx.seller_phone}</span>
-                        </div>
-                        <div class="archive-detail-row">
-                            <span class="archive-detail-label">Amount:</span>
-                            <span style="font-weight:bold; color:var(--primary-blue);">GHS ${tx.amount}</span>
-                        </div>
-                        <div class="archive-detail-row">
-                            <span class="archive-detail-label">Fee (1%):</span>
-                            <span>GHS ${tx.fee}</span>
-                        </div>
+                        <div class="archive-detail-row"><span class="archive-detail-label">Buyer:</span><span>${tx.buyer_phone || tx.buyer_id}</span></div>
+                        <div class="archive-detail-row"><span class="archive-detail-label">Seller:</span><span>${tx.seller_phone}</span></div>
+                        <div class="archive-detail-row"><span class="archive-detail-label">Amount:</span><span style="font-weight:bold; color:var(--primary-blue);">GHS ${tx.amount}</span></div>
+                        <div class="archive-detail-row"><span class="archive-detail-label">Fee (1%):</span><span>GHS ${tx.fee}</span></div>
                         ${disputeHtml}
                     </div>
                 `;
@@ -644,6 +682,7 @@
     function showSection(id) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        resetIdleTimer(); // Reset timer on navigation
         
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
@@ -706,6 +745,7 @@
             document.getElementById('admin-controls').classList.remove('hidden');
             showSection('dashboard-section');
             loadAdminData();
+            resetIdleTimer(); // Start timer on login
             return;
         }
         toggleLoading(true);
@@ -717,12 +757,19 @@
                 document.getElementById('admin-controls').classList.add('hidden');
                 showSection('dashboard-section');
                 loadTransactions();
+                resetIdleTimer(); // Start timer on login
             } else { document.getElementById('auth-msg').innerText = data.error; }
         } catch (e) { document.getElementById('auth-msg').innerText = "Connection Error"; } 
         finally { toggleLoading(false); }
     }
 
-    function logout() { currentUser = null; location.reload(); }
+    function logout() { 
+        currentUser = null; 
+        clearTimeout(idleTimer); 
+        clearTimeout(warningTimer);
+        document.getElementById('idle-warning').style.display = 'none';
+        location.reload(); 
+    }
 
     async function submitTransaction() {
         const seller = document.getElementById('seller-phone').value.trim();
@@ -847,7 +894,6 @@
             if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json();
             
-            // Store all transactions for the archive
             allTransactions = data.transactions;
 
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
@@ -891,7 +937,6 @@
             });
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
             
-            // ADDED ARCHIVE BUTTON HERE
             container.innerHTML += `
                 <div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;">
                     <div style="display:flex; justify-content:space-between; align-items:center;">
