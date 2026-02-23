@@ -88,6 +88,28 @@
 
         button.delete-btn { background: linear-gradient(to bottom, #adb5bd, #6c757d); color: white; box-shadow: 0 6px 0 #5a6268; font-size: 0.9rem; padding: 12px; margin-top: 10px; font-weight: 700; text-transform: uppercase; }
         button.delete-btn:active { box-shadow: 0 0 0 #5a6268; }
+        
+        /* ARCHIVE BUTTON STYLE */
+        button.archive-btn {
+            background: linear-gradient(to bottom, #ffe033, #e6c200);
+            color: var(--primary-blue);
+            box-shadow: 0 6px 0 #b39700, 0 10px 15px rgba(0,0,0,0.2);
+            font-size: 1rem;
+            padding: 14px;
+            margin-top: 15px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        button.archive-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
 
         button.refresh-gold { 
             background: linear-gradient(to bottom, #ffe033, #e6c200); 
@@ -303,6 +325,61 @@
             margin-bottom: 20px;
             text-transform: uppercase;
         }
+
+        /* ARCHIVE MODAL SPECIFIC STYLES */
+        .archive-search-box {
+            position: sticky;
+            top: 0;
+            background: white;
+            padding: 10px 0;
+            z-index: 10;
+            border-bottom: 2px solid var(--accent-gold);
+            margin-bottom: 20px;
+        }
+        .archive-group-title {
+            color: var(--primary-blue);
+            font-size: 1.1rem;
+            font-weight: 900;
+            margin: 20px 0 10px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid #eee;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .archive-item {
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+        .archive-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: var(--primary-blue);
+        }
+        .archive-detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            color: #555;
+        }
+        .archive-detail-label { font-weight: 600; }
+        .archive-dispute-reason {
+            background: #fff5f5;
+            color: #c92a2a;
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 8px;
+            font-style: italic;
+            border: 1px dashed #ffc9c9;
+        }
     </style>
 </head>
 <body>
@@ -375,7 +452,6 @@
 <!-- FIXED FOOTER AREA -->
 <div class="fixed-footer-area" id="fixed-footer">
     <div class="fixed-logout-container">
-        <!-- Button now opens Guide instead of Logout -->
         <button class="fixed-logout-btn" onclick="openGuide()">❓ How to Use</button>
     </div>
     <div class="trademark-footer">
@@ -390,39 +466,45 @@
     <div class="modal-content">
         <button class="modal-close" onclick="closeGuide()">&times;</button>
         <h2 class="guide-title">How to Use KS1 Escrow</h2>
-        
         <div class="guide-step">
             <h3><span class="step-number">1</span> Register & Login</h3>
             <p>Create an account with your phone number and password. Keep your password safe!</p>
         </div>
-        
         <div class="guide-step">
             <h3><span class="step-number">2</span> Create Escrow</h3>
             <p>Click "+ Create Private Connection". Enter the Seller's phone number, the Amount (GHS), and a description of the goods.</p>
         </div>
-        
         <div class="guide-step">
             <h3><span class="step-number">3</span> Make Payment</h3>
-            <p>You will see a Transaction ID and our Wallet Number (<strong>0240254680</strong>). Send the exact amount via Mobile Money (MTN/Telecel/AirtelTigo) using the Transaction ID as your reference. Then click "I Have Paid".</p>
+            <p>You will see a Transaction ID and our Wallet Number (<strong>0240254680</strong>). Send the exact amount via Mobile Money using the Transaction ID as reference. Then click "I Have Paid".</p>
         </div>
-        
         <div class="guide-step">
             <h3><span class="step-number">4</span> Admin Verification</h3>
-            <p>Our Admin will verify your payment. Once verified, the status changes to <strong>FUNDED</strong>, and the seller is notified to send your goods.</p>
+            <p>Our Admin will verify your payment. Once verified, the status changes to <strong>FUNDED</strong>, and the seller is notified.</p>
         </div>
-        
         <div class="guide-step">
             <h3><span class="step-number">5</span> Confirm Delivery</h3>
-            <p>Once you receive your goods and are satisfied, click <strong>"Confirm Delivery"</strong>. This tells the Admin to release the funds to the seller.</p>
+            <p>Once you receive your goods, click <strong>"Confirm Delivery"</strong>. This tells the Admin to release funds to the seller.</p>
         </div>
-        
         <div class="guide-step">
             <h3><span class="step-number">6</span> Disputes?</h3>
-            <p>If there is an issue, click <strong>"Open Dispute"</strong> before confirming delivery. Our Admin will contact both parties to resolve it fairly. Your funds are safe!</p>
+            <p>If there is an issue, click <strong>"Open Dispute"</strong>. Our Admin will contact both parties to resolve it fairly.</p>
         </div>
+    </div>
+</div>
 
-        <div style="text-align:center; margin-top:20px;">
-            <p style="color:var(--primary-blue); font-weight:bold; font-size:0.9rem;">Trade Securely. Trade Confidently.</p>
+<!-- ARCHIVE MODAL -->
+<div class="modal-overlay" id="archiveModal">
+    <div class="modal-content" style="max-width: 500px; max-height: 90vh;">
+        <button class="modal-close" onclick="closeArchive()">&times;</button>
+        <h2 class="guide-title">📜 Master Transaction Archive</h2>
+        
+        <div class="archive-search-box">
+            <input type="text" id="archiveSearch" placeholder="🔍 Search by ID, Phone, or Date..." onkeyup="filterArchive()">
+        </div>
+        
+        <div id="archiveContent">
+            <!-- Content injected by JS -->
         </div>
     </div>
 </div>
@@ -431,21 +513,110 @@
     const API_URL = 'https://ks1-escrow-backend.onrender.com/api';
     let currentUser = null;
     let currentTx = null;
+    let allTransactions = []; // Store for archive
 
     // Guide Modal Functions
-    function openGuide() {
-        document.getElementById('guideModal').style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Prevent scrolling behind modal
+    function openGuide() { document.getElementById('guideModal').style.display = 'flex'; document.body.style.overflow = 'hidden'; }
+    function closeGuide() { document.getElementById('guideModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
+    
+    // Archive Modal Functions
+    function openArchive() { 
+        document.getElementById('archiveModal').style.display = 'flex'; 
+        document.body.style.overflow = 'hidden';
+        renderArchive(allTransactions);
     }
-    function closeGuide() {
-        document.getElementById('guideModal').style.display = 'none';
-        document.body.style.overflow = 'auto';
-    }
-    // Close modal if clicking outside content
+    function closeArchive() { document.getElementById('archiveModal').style.display = 'none'; document.body.style.overflow = 'auto'; }
     window.onclick = function(event) {
-        const modal = document.getElementById('guideModal');
-        if (event.target == modal) {
-            closeGuide();
+        if (event.target == document.getElementById('guideModal')) closeGuide();
+        if (event.target == document.getElementById('archiveModal')) closeArchive();
+    }
+
+    function filterArchive() {
+        const query = document.getElementById('archiveSearch').value.toLowerCase();
+        const filtered = allTransactions.filter(tx => 
+            tx.transaction_id.toLowerCase().includes(query) ||
+            tx.seller_phone.includes(query) ||
+            (tx.buyer_phone && tx.buyer_phone.includes(query)) ||
+            tx.created_at.toLowerCase().includes(query)
+        );
+        renderArchive(filtered);
+    }
+
+    function renderArchive(txs) {
+        const container = document.getElementById('archiveContent');
+        container.innerHTML = '';
+        
+        if(txs.length === 0) {
+            container.innerHTML = '<p style="text-align:center; color:#888;">No transactions found.</p>';
+            return;
+        }
+
+        // Group by Time
+        const now = new Date();
+        const today = now.toDateString();
+        const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+        const groups = {
+            "Today": [],
+            "This Week": [],
+            "This Month": [],
+            "Older": []
+        };
+
+        txs.forEach(tx => {
+            const txDate = new Date(tx.created_at);
+            if(txDate.toDateString() === today) groups["Today"].push(tx);
+            else if(txDate > weekAgo) groups["This Week"].push(tx);
+            else if(txDate > monthAgo) groups["This Month"].push(tx);
+            else groups["Older"].push(tx);
+        });
+
+        for (const [groupName, groupTxs] of Object.entries(groups)) {
+            if(groupTxs.length === 0) continue;
+            
+            let html = `<div class="archive-group-title">${groupName} (${groupTxs.length})</div>`;
+            
+            groupTxs.forEach(tx => {
+                const dateObj = new Date(tx.created_at);
+                const timeStr = dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                let disputeHtml = '';
+                if(tx.status === 'disputed' && tx.dispute_reason) {
+                    disputeHtml = `<div class="archive-dispute-reason">⚠️ Reason: ${tx.dispute_reason}</div>`;
+                }
+
+                html += `
+                    <div class="archive-item">
+                        <div class="archive-item-header">
+                            <span>${tx.transaction_id}</span>
+                            <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
+                        </div>
+                        <div class="archive-detail-row">
+                            <span class="archive-detail-label">Buyer:</span>
+                            <span>${tx.buyer_phone || tx.buyer_id}</span>
+                        </div>
+                        <div class="archive-detail-row">
+                            <span class="archive-detail-label">Seller:</span>
+                            <span>${tx.seller_phone}</span>
+                        </div>
+                        <div class="archive-detail-row">
+                            <span class="archive-detail-label">Amount:</span>
+                            <span style="font-weight:bold; color:var(--primary-blue);">GHS ${tx.amount}</span>
+                        </div>
+                        <div class="archive-detail-row">
+                            <span class="archive-detail-label">Fee (1%):</span>
+                            <span>GHS ${tx.fee}</span>
+                        </div>
+                        <div class="archive-detail-row">
+                            <span class="archive-detail-label">Time:</span>
+                            <span>${timeStr}</span>
+                        </div>
+                        ${disputeHtml}
+                    </div>
+                `;
+            });
+            container.innerHTML += html;
         }
     }
 
@@ -462,7 +633,7 @@
             landingHeader.classList.remove('hidden');
             dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
-            if(footerArea) footerArea.style.display = 'flex'; // Show footer (with Guide button) on landing page too
+            if(footerArea) footerArea.style.display = 'flex';
         } else {
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
@@ -655,6 +826,9 @@
             if(!res.ok) throw new Error(`Server returned ${res.status}`);
             const data = await res.json();
             
+            // Store all transactions for the archive
+            allTransactions = data.transactions;
+
             const disputedTx = data.transactions.filter(t => t.status === 'disputed');
             if(disputedTx.length > 0) {
                 disputeContainer.classList.remove('hidden');
@@ -695,7 +869,16 @@
                 container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button onclick="adminRelease('${t.transaction_id}')">Release Funds</button></div>`;
             });
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
-            container.innerHTML += `<div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
+            
+            // ADDED ARCHIVE BUTTON HERE
+            container.innerHTML += `
+                <div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <div><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>
+                    </div>
+                    <button class="archive-btn" onclick="openArchive()">📜 View Full Archive</button>
+                </div>
+            `;
         } catch (e) { container.innerHTML = ""; errorEl.innerText = "Error: " + e.message; }
     }
 
