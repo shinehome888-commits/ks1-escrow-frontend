@@ -7,7 +7,7 @@
     <style>
         :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-dark: #b39700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --delete-gray: #6c757d; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; padding-bottom: 100px; box-sizing: border-box; }
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; padding-bottom: 120px; box-sizing: border-box; }
         
         /* LANDING HEADER */
         .landing-header { 
@@ -86,11 +86,8 @@
             font-size: 1rem; 
             padding: 14px 30px; 
             width: auto; 
-            display: inline-block; 
-            margin: 20px auto; 
             display: block;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 20px auto;
         }
         button.refresh-gold:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
 
@@ -103,7 +100,7 @@
         .dispute-reason-box { background: #fff; border: 1px dashed #dc3545; padding: 15px; margin: 15px 0; font-style: italic; color: #555; font-size: 0.95rem; border-radius: 8px; }
 
         .status-badge { display: inline-block; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: 900; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 1px; }
-        .status-funded { background: #2b8a3e; } .status-completed { background: #1864ab; } .status-disputed { background: #c92a2a; } .status-pending_payment { background: #e67700; } .status-delivered { background: #be4bdb; }
+        .status-funded { background: #2b8a3e; } .status-completed { background: #1864ab; } .status-disputed { background: #c92a2a; } .status-pending_payment { background: #e67700; } .status-delivered { background: #be4bdb; } .status-cancelled { background: #868e96; }
         
         .admin-panel { border: 3px dashed var(--primary-blue); padding: 25px; margin-top: 30px; background: #f8f9fa; border-radius: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
         .hidden { display: none; }
@@ -112,16 +109,79 @@
         .error-msg { color: var(--alert-red); text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: bold; min-height: 20px; }
         
         .momo-number { font-size: 1.8rem; font-weight: 900; color: var(--primary-blue); background: #fff9db; padding: 20px; border-radius: 12px; border: 3px dashed var(--accent-gold); display: block; margin: 20px 0; letter-spacing: 2px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
-        .success-box { background: #d3f9d8; color: #2b8a3e; padding: 25px; border-radius: 12px; border: 2px solid #b2f2bb; margin-top: 20px; text-align: center; font-weight: bold; font-size: 1.1rem; line-height: 1.6; box-shadow: 0 8px 20px rgba(0,0,0,0.1); animation: popIn 0.5s ease; }
+        
+        /* BLUE COMPLETED BOX (Brand Color) */
+        .success-box { 
+            background: var(--primary-blue); 
+            color: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            border: 2px solid var(--accent-gold); 
+            margin-top: 20px; 
+            text-align: center; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            line-height: 1.6; 
+            box-shadow: 0 8px 20px rgba(0,35,102,0.3); 
+            animation: popIn 0.5s ease; 
+        }
+        /* CANCELLED BOX */
+        .cancelled-box {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #dee2e6;
+            margin-top: 20px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            animation: popIn 0.5s ease;
+        }
+
         .waiting-box { background: #fff9db; color: #e67700; padding: 20px; border-radius: 12px; border: 2px solid #ffe066; margin-top: 20px; text-align: center; font-weight: bold; font-size: 1rem; line-height: 1.5; box-shadow: 0 8px 20px rgba(0,0,0,0.1); animation: popIn 0.5s ease; }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
+        /* GOLD LOGOUT BUTTON */
         .fixed-logout-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; z-index: 1000; }
-        .fixed-logout-btn { width: 100%; padding: 18px; background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border: none; border-radius: 50px; box-shadow: 0 10px 25px rgba(201, 42, 42, 0.4); font-size: 1rem; cursor: pointer; transition: all 0.2s; margin-top: 0; }
-        .fixed-logout-btn:active { transform: translateY(4px); box-shadow: 0 5px 15px rgba(201, 42, 42, 0.3); }
+        .fixed-logout-btn { 
+            width: 100%; 
+            padding: 18px; 
+            background: linear-gradient(to bottom, #ffe033, #e6c200); 
+            color: var(--primary-blue); 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: 2px; 
+            border: none; 
+            border-radius: 50px; 
+            box-shadow: 0 8px 0 #b39700, 0 15px 25px rgba(0,0,0,0.3); 
+            font-size: 1.1rem; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            margin-top: 0; 
+        }
+        .fixed-logout-btn:active { transform: translateY(8px); box-shadow: 0 0 0 #b39700, inset 0 2px 10px rgba(0,0,0,0.2); }
         
         .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
+
+        /* TRADEMARK FOOTER */
+        .trademark-footer {
+            position: fixed;
+            bottom: 10px;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            z-index: 900;
+            pointer-events: none; /* Let clicks pass through */
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
     </style>
 </head>
 <body>
@@ -143,14 +203,15 @@
         <span class="title-3d">Secure Access</span>
         <input type="tel" id="auth-phone" placeholder="Phone Number (e.g., 055...)" />
         <input type="password" id="auth-pass" placeholder="Password" />
+        <!-- Both buttons now Gold 3D -->
         <button onclick="handleLogin()" id="login-btn">Login</button>
-        <button class="secondary" onclick="handleRegister()" id="reg-btn">Create Account</button>
+        <button onclick="handleRegister()" id="reg-btn">Create Account</button>
         <p id="loading-msg">Processing...</p>
         <p id="auth-msg" class="error-msg"></p>
     </div>
 
     <div id="dashboard-section" class="section">
-        <!-- Removed extra refresh button from here -->
+        <!-- Refresh Button ONLY for Users (Hidden for Admin via JS logic or CSS if needed, but here we keep it simple) -->
         <button class="refresh-gold" onclick="loadTransactions()">🔄 Refresh Transactions</button>
         
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
@@ -164,6 +225,8 @@
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
+        
+        <!-- Gold Logout Button -->
         <div class="fixed-logout-container">
             <button class="fixed-logout-btn" onclick="logout()">Logout</button>
         </div>
@@ -194,6 +257,12 @@
         <button onclick="confirmPayment()">I Have Paid</button>
         <button class="secondary" onclick="showSection('dashboard-section')">Back</button>
     </div>
+
+    <!-- TRADEMARK FOOTER -->
+    <div class="trademark-footer">
+        @2026 KS1 Escrow Pay - A nonprofit project by KS1 Empire Group & Foundation (KS1EGF)<br>
+        Pay Securely and Trade Confidently.
+    </div>
 </div>
 
 <script>
@@ -208,12 +277,23 @@
         // Toggle Headers
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
+        const refreshBtn = document.querySelector('.refresh-gold');
+        
         if (id === 'auth-section') {
             landingHeader.classList.remove('hidden');
             dashHeader.classList.add('hidden');
+            if(refreshBtn) refreshBtn.style.display = 'none';
         } else {
             landingHeader.classList.add('hidden');
             dashHeader.classList.remove('hidden');
+            // Show refresh button ONLY if NOT admin
+            if(refreshBtn) {
+                if(currentUser && currentUser.isAdmin) {
+                    refreshBtn.style.display = 'none';
+                } else {
+                    refreshBtn.style.display = 'block';
+                }
+            }
         }
         clearErrors();
     }
@@ -314,9 +394,12 @@
             if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
                 actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             }
+            
             let statusBox = '';
             if(tx.status === 'completed') {
                 statusBox = `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><br><em>Thank You For Trusting Us</em></div>`;
+            } else if (tx.status === 'cancelled') {
+                statusBox = `<div class="cancelled-box">❌ CANCELLED<br>Funds returned to buyer.<br><br><em>Trade Closed</em></div>`;
             } else if (tx.status === 'delivered') {
                 statusBox = `<div class="waiting-box">⏳ Delivery Confirmed!<br>Admin is releasing funds now.</div>`;
             } else if (tx.status === 'disputed') {
@@ -424,7 +507,7 @@
     async function adminVerify(txId) { try { await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Payment Verified."); } catch(e) { alert("Error"); } }
     async function adminDeletePayment(txId) { if(confirm("⚠️ WARNING: Delete permanently?")) { try { const res = await fetch(`${API_URL}/admin/delete-payment/${txId}`, { method: 'DELETE', mode: 'cors' }); if(res.ok) { loadAdminData(); alert("🗑️ Deleted!"); } } catch(e) { alert("Error"); } } }
     async function adminRelease(txId) { if(confirm("Confirm: Release funds to SELLER?")) { try { await fetch(`${API_URL}/admin/release`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("✅ Funds Released."); } catch(e) { alert("Error"); } } }
-    async function adminRefund(txId) { if(confirm("Confirm: Refund FULL amount to BUYER?")) { try { await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("💰 Funds Refunded."); } catch(e) { alert("Error"); } } }
+    async function adminRefund(txId) { if(confirm("Confirm: Refund FULL amount to BUYER? This will mark the trade as CANCELLED.")) { try { await fetch(`${API_URL}/admin/refund`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("💰 Funds Refunded. Trade Cancelled."); } catch(e) { alert("Error"); } } }
 </script>
 </body>
 </html>
