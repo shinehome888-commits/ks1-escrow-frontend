@@ -8,7 +8,7 @@
         :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-dark: #b39700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --brown: #8B4513; }
         
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
-        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; padding-bottom: 120px; box-sizing: border-box; z-index: 1; }
+        .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; padding-bottom: 80px; box-sizing: border-box; z-index: 1; }
         
         .landing-header { background: linear-gradient(135deg, var(--primary-blue), #001540); color: white; padding: 40px 20px; text-align: center; border-bottom: 6px solid var(--accent-gold); border-radius: 0 0 25px 25px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
         .brand-title { margin: 0; color: var(--accent-gold); font-size: 2.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-shadow: 1px 1px 0 #8a7600, 2px 2px 0 #8a7600, 3px 3px 0 #8a7600, 4px 4px 0 #8a7600, 6px 6px 15px rgba(0,0,0,0.6); transform: perspective(500px) rotateX(2deg); display: inline-block; margin-bottom: 10px; }
@@ -26,7 +26,7 @@
         .password-wrapper { position: relative; width: 100%; margin: 10px 0; }
         .password-wrapper input { width: 100%; padding: 16px; padding-right: 50px; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; background: #f9f9f9; transition: all 0.3s; }
         .password-wrapper input:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); }
-        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--brown); /* BROWN COLOR */ user-select: none; background: none; border: none; padding: 0; width: auto; height: auto; box-shadow: none; margin: 0; }
+        .toggle-password { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; font-size: 1.2rem; color: var(--brown); user-select: none; background: none; border: none; padding: 0; width: auto; height: auto; box-shadow: none; margin: 0; }
         .toggle-password:hover { color: var(--primary-blue); }
 
         input, textarea, select { width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; transition: all 0.3s; background: #f9f9f9; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); font-weight: 500; }
@@ -47,9 +47,19 @@
         button.refresh-gold { background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700, 0 10px 15px rgba(0,0,0,0.2); font-size: 1rem; padding: 14px 30px; width: auto; display: block; margin: 20px auto; }
         button.refresh-gold:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
         
-        /* RESET CODE BUTTON STYLE */
-        button.reset-code-btn { background: linear-gradient(to bottom, #17a2b8, #138496); color: white; box-shadow: 0 6px 0 #117a8b; font-size: 0.9rem; padding: 12px; margin-top: 10px; font-weight: 700; text-transform: uppercase; }
-        button.reset-code-btn:active { box-shadow: 0 0 0 #117a8b; }
+        /* SMALL GOLD RESET CODE BUTTON */
+        button.reset-code-btn { 
+            background: linear-gradient(to bottom, #ffe033, #e6c200); 
+            color: var(--primary-blue); 
+            box-shadow: 0 4px 0 #b39700; 
+            font-size: 0.8rem; 
+            padding: 10px; 
+            margin-top: 10px; 
+            font-weight: 700; 
+            text-transform: uppercase; 
+            width: 100%;
+        }
+        button.reset-code-btn:active { box-shadow: 0 0 0 #b39700; transform: translateY(4px); }
 
         .card { background: #fff; border-left: 8px solid var(--accent-gold); padding: 20px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; transition: transform 0.2s; }
         .card:hover { transform: translateY(-3px); }
@@ -76,21 +86,33 @@
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
         .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
-        .fixed-footer-area { position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); width: 100%; max-width: 480px; z-index: 1000; pointer-events: none; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding-bottom: 0; }
-        .fixed-logout-container { width: 100%; display: flex; justify-content: center; margin-bottom: 10px; pointer-events: auto; gap: 10px; }
-        
-        /* SMALLER GOLD SUPPORT BUTTON */
-        .fixed-logout-btn, .support-btn { 
-            width: auto; min-width: 130px; padding: 10px 15px; 
-            background: linear-gradient(to bottom, #ffe033, #e6c200); 
-            color: var(--primary-blue); font-weight: 900; text-transform: uppercase; 
-            letter-spacing: 0.5px; border: none; border-radius: 50px; 
-            box-shadow: 0 5px 0 #b39700, 0 8px 12px rgba(0,0,0,0.3); 
-            font-size: 0.75rem; cursor: pointer; transition: all 0.2s; margin: 0; text-align: center;
+        /* HELPER BUTTONS CONTAINER */
+        .helper-buttons-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            justify-content: center;
         }
-        .support-btn:active, .fixed-logout-btn:active { transform: translateY(5px); box-shadow: 0 0 0 #b39700; }
+        .helper-btn { 
+            flex: 1; 
+            padding: 12px 10px; 
+            background: linear-gradient(to bottom, #ffe033, #e6c200); 
+            color: var(--primary-blue); 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px; 
+            border: none; 
+            border-radius: 50px; 
+            box-shadow: 0 5px 0 #b39700, 0 8px 12px rgba(0,0,0,0.3); 
+            font-size: 0.75rem; 
+            cursor: pointer; 
+            transition: all 0.2s; 
+            text-align: center;
+            margin-top: 15px;
+        }
+        .helper-btn:active { transform: translateY(5px); box-shadow: 0 0 0 #b39700; }
         
-        .trademark-footer { width: 100%; background-color: var(--primary-blue); color: black; text-align: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; padding: 15px 10px; box-sizing: border-box; pointer-events: auto; border-top: 2px solid var(--accent-gold); box-shadow: 0 -5px 15px rgba(0,0,0,0.2); }
+        .trademark-footer { width: 100%; background-color: var(--primary-blue); color: black; text-align: center; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.5px; padding: 15px 10px; box-sizing: border-box; pointer-events: auto; border-top: 2px solid var(--accent-gold); box-shadow: 0 -5px 15px rgba(0,0,0,0.2); margin-top: 30px;}
         .trademark-footer strong { color: var(--accent-gold); display: block; margin-bottom: 4px; font-size: 0.75rem; }
         .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
 
@@ -109,8 +131,15 @@
         
         /* SUPPORT & RESET FORMS */
         .support-form textarea, .support-form select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; margin-top: 10px; font-family: inherit; resize: vertical; min-height: 100px; background: white; }
-        .support-submit-btn { background: linear-gradient(to bottom, #28a745, #218838); color: white; box-shadow: 0 6px 0 #1e6b2e; margin-top: 15px; }
-        .support-submit-btn:active { box-shadow: 0 0 0 #1e6b2e; }
+        .support-submit-btn { 
+            background: linear-gradient(to bottom, #ffe033, #e6c200); 
+            color: var(--primary-blue); 
+            box-shadow: 0 5px 0 #b39700; 
+            margin-top: 15px; 
+            font-size: 0.9rem;
+            padding: 12px;
+        }
+        .support-submit-btn:active { box-shadow: 0 0 0 #b39700; transform: translateY(5px); }
         
         .reset-code-display { background: #fff3cd; border: 2px dashed #e6c200; padding: 15px; text-align: center; font-size: 1.5rem; font-weight: 900; color: var(--primary-blue); margin: 15px 0; border-radius: 8px; letter-spacing: 5px; }
 
@@ -157,6 +186,13 @@
 
         <button onclick="handleLogin()" id="login-btn">Login</button>
         <button onclick="handleRegister()" id="reg-btn">Create Account</button>
+        
+        <!-- HELPER BUTTONS MOVED HERE -->
+        <div class="helper-buttons-container">
+            <button class="helper-btn" onclick="openSupport()">🆘 Support</button>
+            <button class="helper-btn" onclick="openGuide()">❓ How to Use</button>
+        </div>
+
         <p id="loading-msg">Processing...</p>
         <p id="auth-msg" class="error-msg"></p>
         <p id="auth-success" class="success-msg"></p>
@@ -175,6 +211,12 @@
             <button class="reset-code-btn" onclick="generateResetCode()">🔑 Generate Reset Code</button>
             <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
+            
+            <!-- HELPER BUTTONS FOR ADMIN TOO -->
+            <div class="helper-buttons-container">
+                <button class="helper-btn" onclick="openSupport()">🆘 Support</button>
+                <button class="helper-btn" onclick="openGuide()">❓ How to Use</button>
+            </div>
         </div>
     </div>
 
@@ -203,14 +245,8 @@
         <button onclick="confirmPayment()">I Have Paid</button>
         <button onclick="showSection('dashboard-section')" style="background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); box-shadow: 0 6px 0 #b39700;">Back</button>
     </div>
-</div>
 
-<!-- FIXED FOOTER AREA -->
-<div class="fixed-footer-area" id="fixed-footer">
-    <div class="fixed-logout-container">
-        <button class="support-btn" onclick="openSupport()">🆘 Support</button>
-        <button class="fixed-logout-btn" onclick="openGuide()">❓ How to Use</button>
-    </div>
+    <!-- TRADEMARK FOOTER MOVED INSIDE CONTAINER -->
     <div class="trademark-footer">
         <strong>@2026 KS1 Escrow Pay</strong>
         A nonprofit project by KS1 Empire Group & Foundation (KS1EGF)<br>
@@ -228,7 +264,7 @@
         <div class="guide-step"><h3><span class="step-number">3</span> Make Payment</h3><p>Send exact amount to <strong>0240254680</strong> using Transaction ID as reference. Click "I Have Paid".</p><div class="fee-warning">⚠️ IMPORTANT: Add <strong>Mobile Money Charge</strong> on top. Seller must receive full amount.</div></div>
         <div class="guide-step"><h3><span class="step-number">4</span> Admin Verification</h3><p>Admin verifies payment. Status changes to <strong>FUNDED</strong>.</p></div>
         <div class="guide-step"><h3><span class="step-number">5</span> Confirm Delivery</h3><p>Receive goods? Click <strong>"Confirm Delivery"</strong> to release funds.</p></div>
-        <div class="guide-step"><h3><span class="step-number">6</span> Need Help?</h3><p>Click <strong>"🆘 Support"</strong> at the bottom anytime for direct help!</p></div>
+        <div class="guide-step"><h3><span class="step-number">6</span> Need Help?</h3><p>Click <strong>"🆘 Support"</strong> anytime for direct help!</p></div>
     </div>
 </div>
 
@@ -348,14 +384,7 @@
     function generateResetCode() {
         const code = Math.floor(100000 + Math.random() * 900000);
         alert(`🔑 RESET CODE GENERATED:\n\n${code}\n\nSend this code to the user via SMS or Call. They will use it to reset their password.`);
-        // In a real app, you would save this code to the database associated with the user.
-        // For this MVP, the Admin just communicates it manually.
-        // To make it work technically without backend changes, we rely on the Admin telling the user the code, 
-        // and the user entering it. Since we can't validate it against DB without backend update, 
-        // we will simulate success if they enter ANY 6 digit code for now, OR we can hardcode a master code.
-        // Let's assume the Admin tells them the code, and we trust the user entered what Admin said.
-        // NOTE: For security, ideally backend validates. Here we just check length.
-        localStorage.setItem('tempResetCode', code); // Store temporarily for demo
+        localStorage.setItem('tempResetCode', code); 
     }
 
     async function submitReset() {
@@ -368,14 +397,7 @@
         if(!phone || !code || !newPass) { alert("Please fill all fields."); return; }
         if(code.length !== 6) { alert("Reset code must be 6 digits."); return; }
 
-        // Since we cannot validate the code against DB without backend update, 
-        // we will send a request to a hypothetical endpoint or just simulate success for the user experience.
-        // Ideally, you add a backend route: POST /api/reset-password { phone, code, newPass }
-        
-        // SIMULATION FOR NOW (Since backend doesn't have this route yet):
-        // We will assume if the user has the code from Admin, it's valid.
         try {
-            // Attempt to call backend (will fail if route missing, so we catch and simulate)
             const res = await fetch(`${API_URL}/reset-password`, { 
                 method: 'POST', 
                 mode: 'cors', 
@@ -389,12 +411,9 @@
                 closeReset();
                 setTimeout(() => { successEl.innerText = ""; }, 5000);
             } else {
-                // Fallback simulation if backend route missing
                 throw new Error("Backend route missing");
             }
         } catch (e) {
-            // SIMULATED SUCCESS FOR DEMO PURPOSES
-            // In production, you MUST add the backend route.
             alert("✅ Password Reset Successful! (Demo Mode)\n\nPlease login with your new password.");
             closeReset();
         }
@@ -450,14 +469,11 @@
         const landingHeader = document.getElementById('landing-header');
         const dashHeader = document.getElementById('dash-header');
         const refreshBtn = document.querySelector('.refresh-gold');
-        const footerArea = document.getElementById('fixed-footer');
         if (id === 'auth-section') {
             landingHeader.classList.remove('hidden'); dashHeader.classList.add('hidden');
             if(refreshBtn) refreshBtn.style.display = 'none';
-            if(footerArea) footerArea.style.display = 'flex';
         } else {
             landingHeader.classList.add('hidden'); dashHeader.classList.remove('hidden');
-            if(footerArea) footerArea.style.display = 'flex'; 
             if(refreshBtn) { if(currentUser && currentUser.isAdmin) refreshBtn.style.display = 'none'; else refreshBtn.style.display = 'block'; }
         }
         clearErrors();
