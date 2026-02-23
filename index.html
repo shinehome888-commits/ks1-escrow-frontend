@@ -5,95 +5,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KS1 Escrow Pay | Alkebulan</title>
     <style>
-        :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-dark: #b39700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --delete-gray: #6c757d; --gray-dark: #5a6268; }
+        :root { --primary-blue: #002366; --accent-gold: #FFD700; --gold-dark: #b39700; --gold-glow: rgba(255, 215, 0, 0.4); --alert-red: #dc3545; --delete-gray: #6c757d; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--primary-blue); margin: 0; display: flex; justify-content: center; min-height: 100vh; }
         .container { width: 100%; max-width: 480px; background: white; min-height: 100vh; box-shadow: 0 0 20px var(--gold-glow); position: relative; padding-bottom: 100px; box-sizing: border-box; }
         
-        header { background: linear-gradient(135deg, var(--primary-blue), #001540); color: white; padding: 25px 20px; text-align: center; border-bottom: 4px solid var(--accent-gold); }
-        h1 { margin: 0; color: var(--accent-gold); font-size: 2rem; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; text-shadow: 1px 1px 0 #b39700, 2px 2px 0 #b39700, 3px 3px 0 #b39700, 4px 4px 0 #b39700, 5px 5px 10px rgba(0,0,0,0.5); transform: perspective(500px) rotateX(5deg); display: inline-block; }
-        .tagline { font-size: 0.9rem; color: #ddd; margin-top: 10px; }
-        .brand-sub { font-size: 0.75rem; color: var(--accent-gold); font-weight: bold; margin-top: 5px; }
-        
+        /* LANDING HEADER */
+        .landing-header { 
+            background: linear-gradient(135deg, var(--primary-blue), #001540); 
+            color: white; 
+            padding: 40px 20px; 
+            text-align: center; 
+            border-bottom: 6px solid var(--accent-gold); 
+            border-radius: 0 0 25px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .brand-title { 
+            margin: 0; color: var(--accent-gold); font-size: 2.4rem; font-weight: 900; text-transform: uppercase; letter-spacing: 2px;
+            text-shadow: 1px 1px 0 #8a7600, 2px 2px 0 #8a7600, 3px 3px 0 #8a7600, 4px 4px 0 #8a7600, 6px 6px 15px rgba(0,0,0,0.6);
+            transform: perspective(500px) rotateX(2deg); display: inline-block; margin-bottom: 10px;
+        }
+        .tagline { font-size: 1rem; color: #e0e0e0; margin-top: 10px; font-weight: 500; }
+        .brand-sub { font-size: 0.75rem; color: var(--accent-gold); font-weight: bold; margin-top: 8px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.9; }
+
+        /* DASHBOARD HEADER (Blue Background, Gold 3D Text) */
+        .dash-header {
+            background: var(--primary-blue);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--accent-gold);
+            border-radius: 0 0 20px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .dash-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                1px 1px 0 #8a7600,
+                2px 2px 0 #8a7600,
+                3px 3px 0 #8a7600,
+                4px 4px 0 #8a7600,
+                6px 6px 15px rgba(0,0,0,0.6);
+            margin: 0;
+            display: inline-block;
+            transform: perspective(500px) rotateX(2deg);
+        }
+
         .section { display: none; padding: 20px; animation: fadeIn 0.4s; }
         .section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        input, textarea { width: 100%; padding: 15px; margin: 10px 0; border: 2px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; transition: border-color 0.3s; }
-        input:focus { border-color: var(--accent-gold); outline: none; box-shadow: 0 0 8px var(--gold-glow); }
+        input, textarea { width: 100%; padding: 16px; margin: 12px 0; border: 2px solid #eee; border-radius: 12px; box-sizing: border-box; font-size: 1rem; transition: all 0.3s; background: #f9f9f9; box-shadow: inset 0 2px 5px rgba(0,0,0,0.03); font-weight: 500; }
+        input:focus, textarea:focus { border-color: var(--accent-gold); outline: none; background: #fff; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); transform: translateY(-2px); }
         
-        button { width: 100%; padding: 15px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 8px; color: var(--primary-blue); font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 15px; box-shadow: 0 4px 0 #b39700, 0 5px 10px rgba(0,0,0,0.3); transition: transform 0.1s; }
-        button:active { transform: translateY(4px); box-shadow: 0 0 0 #b39700; }
-        button.secondary { background: white; color: var(--primary-blue); border: 2px solid var(--primary-blue); box-shadow: none; }
-        button.danger { background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; box-shadow: 0 4px 0 #a61e1e; }
-        button.resolve-btn { background: linear-gradient(to bottom, #28a745, #218838); color: white; box-shadow: 0 4px 0 #1e7e34; }
-        button.delete-btn { background: linear-gradient(to bottom, #adb5bd, #6c757d); color: white; box-shadow: 0 4px 0 #5a6268; font-size: 0.9rem; padding: 10px; margin-top: 8px; font-weight: 700; text-transform: uppercase; }
+        /* Universal Button Style */
+        button { width: 100%; padding: 16px; background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; border-radius: 12px; color: var(--primary-blue); font-weight: 900; font-size: 1.1rem; cursor: pointer; margin-top: 15px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 0 var(--gold-dark), 0 10px 15px rgba(0,0,0,0.2); transition: all 0.15s; position: relative; top: 0; }
+        button:active { transform: translateY(6px); box-shadow: 0 0 0 var(--gold-dark), inset 0 2px 10px rgba(0,0,0,0.2); }
+
+        button.secondary { background: linear-gradient(to bottom, #ffffff, #f0f0f0); color: var(--primary-blue); box-shadow: 0 6px 0 #ccc, 0 10px 15px rgba(0,0,0,0.1); border: 1px solid #ddd; }
+        button.secondary:active { box-shadow: 0 0 0 #ccc; }
+
+        button.danger { background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; box-shadow: 0 6px 0 #9b1c1c, 0 10px 15px rgba(0,0,0,0.2); }
+        button.danger:active { box-shadow: 0 0 0 #9b1c1c; }
+
+        button.resolve-btn { background: linear-gradient(to bottom, #51cf66, #2b8a3e); color: white; box-shadow: 0 6px 0 #1e6b2e, 0 10px 15px rgba(0,0,0,0.2); }
+        button.resolve-btn:active { box-shadow: 0 0 0 #1e6b2e; }
+
+        button.delete-btn { background: linear-gradient(to bottom, #adb5bd, #6c757d); color: white; box-shadow: 0 6px 0 #5a6268; font-size: 0.9rem; padding: 12px; margin-top: 10px; font-weight: 700; text-transform: uppercase; }
         button.delete-btn:active { box-shadow: 0 0 0 #5a6268; }
-        button.refresh-btn { background: linear-gradient(to bottom, #17a2b8, #138496); color: white; box-shadow: 0 4px 0 #117a8b; width: auto; padding: 10px 20px; font-size: 0.9rem; margin-left: 10px; vertical-align: middle; display: inline-block; }
-        button.refresh-btn:active { box-shadow: 0 0 0 #117a8b; }
 
-        .card { background: #f9f9f9; border-left: 5px solid var(--accent-gold); padding: 15px; margin-bottom: 15px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* 3D GOLD REFRESH BUTTON FOR USER */
+        button.refresh-gold { 
+            background: linear-gradient(to bottom, #ffe033, #e6c200); 
+            color: var(--primary-blue); 
+            box-shadow: 0 6px 0 #b39700, 0 10px 15px rgba(0,0,0,0.2); 
+            font-size: 1rem; 
+            padding: 14px 30px; 
+            width: auto; 
+            display: inline-block; 
+            margin: 20px auto; 
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        button.refresh-gold:active { transform: translateY(6px); box-shadow: 0 0 0 #b39700; }
+
+        .card { background: #fff; border-left: 8px solid var(--accent-gold); padding: 20px; margin-bottom: 20px; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border: 1px solid #f0f0f0; transition: transform 0.2s; }
+        .card:hover { transform: translateY(-3px); }
         
-        .dispute-alert-card { background: #fff5f5; border: 2px solid var(--alert-red); border-left: 8px solid var(--alert-red); padding: 15px; margin-bottom: 20px; border-radius: 8px; animation: pulse 2s infinite; }
+        .dispute-alert-card { background: #fff5f5; border: 2px solid var(--alert-red); border-left: 8px solid var(--alert-red); padding: 20px; margin-bottom: 25px; border-radius: 12px; box-shadow: 0 8px 25px rgba(220, 53, 69, 0.15); animation: pulse 2s infinite; }
         @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(220, 53, 69, 0); } 100% { box-shadow: 0 0 0 0 rgba(220, 53, 69, 0); } }
-        .dispute-header { color: var(--alert-red); font-weight: 900; font-size: 1.1rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        .dispute-reason-box { background: #fff; border: 1px dashed #dc3545; padding: 10px; margin: 10px 0; font-style: italic; color: #555; font-size: 0.9rem; border-radius: 5px; }
+        .dispute-header { color: var(--alert-red); font-weight: 900; font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; }
+        .dispute-reason-box { background: #fff; border: 1px dashed #dc3545; padding: 15px; margin: 15px 0; font-style: italic; color: #555; font-size: 0.95rem; border-radius: 8px; }
 
-        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; color: white; background: #ccc; font-weight: bold; }
-        .status-funded { background: #2ecc71; } .status-completed { background: #3498db; } .status-disputed { background: #dc3545; } .status-pending_payment { background: #f39c12; } .status-delivered { background: #9b59b6; }
+        .status-badge { display: inline-block; padding: 8px 14px; border-radius: 20px; font-size: 0.75rem; color: white; font-weight: 900; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); letter-spacing: 1px; }
+        .status-funded { background: #2b8a3e; } .status-completed { background: #1864ab; } .status-disputed { background: #c92a2a; } .status-pending_payment { background: #e67700; } .status-delivered { background: #be4bdb; }
         
-        .admin-panel { border: 2px dashed var(--primary-blue); padding: 10px; margin-top: 20px; background: #f0f4ff; }
+        .admin-panel { border: 3px dashed var(--primary-blue); padding: 25px; margin-top: 30px; background: #f8f9fa; border-radius: 20px; box-shadow: inset 0 0 20px rgba(0,0,0,0.05); }
         .hidden { display: none; }
         .center-text { text-align: center; }
-        #loading-msg { text-align: center; color: #666; margin-top: 10px; display: none; font-weight: bold; }
-        .error-msg { color: red; text-align: center; font-size: 0.85rem; margin-top: 10px; background: transparent; padding: 5px; border: none; word-wrap: break-word; min-height: 20px; }
+        #loading-msg { text-align: center; color: #666; margin-top: 15px; display: none; font-weight: bold; }
+        .error-msg { color: var(--alert-red); text-align: center; font-size: 0.9rem; margin-top: 15px; font-weight: bold; min-height: 20px; }
         
-        .momo-number { font-size: 1.4rem; font-weight: 900; color: var(--primary-blue); background: #fff3cd; padding: 10px; border-radius: 8px; border: 2px dashed var(--accent-gold); display: block; margin: 10px 0; letter-spacing: 1px; }
-        .success-box { background: #d4edda; color: #155724; padding: 15px; border-radius: 8px; border: 1px solid #c3e6cb; margin-top: 10px; text-align: center; font-weight: bold; font-size: 0.95rem; animation: popIn 0.5s ease; }
-        .waiting-box { background: #fff3cd; color: #856404; padding: 15px; border-radius: 8px; border: 1px solid #ffeeba; margin-top: 10px; text-align: center; font-weight: bold; font-size: 0.95rem; animation: popIn 0.5s ease; }
+        .momo-number { font-size: 1.8rem; font-weight: 900; color: var(--primary-blue); background: #fff9db; padding: 20px; border-radius: 12px; border: 3px dashed var(--accent-gold); display: block; margin: 20px 0; letter-spacing: 2px; box-shadow: inset 0 2px 10px rgba(0,0,0,0.05); }
+        .success-box { background: #d3f9d8; color: #2b8a3e; padding: 25px; border-radius: 12px; border: 2px solid #b2f2bb; margin-top: 20px; text-align: center; font-weight: bold; font-size: 1.1rem; line-height: 1.6; box-shadow: 0 8px 20px rgba(0,0,0,0.1); animation: popIn 0.5s ease; }
+        .waiting-box { background: #fff9db; color: #e67700; padding: 20px; border-radius: 12px; border: 2px solid #ffe066; margin-top: 20px; text-align: center; font-weight: bold; font-size: 1rem; line-height: 1.5; box-shadow: 0 8px 20px rgba(0,0,0,0.1); animation: popIn 0.5s ease; }
         @keyframes popIn { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
-        .title-3d { color: var(--primary-blue); font-size: 1.8rem; font-weight: 900; text-shadow: 1px 1px 0 #ccc, 2px 2px 0 #ccc, 3px 3px 0 #ccc, 4px 4px 0 #999, 5px 5px 5px rgba(0,0,0,0.4); margin-bottom: 20px; display: block; }
+        .title-3d { color: var(--primary-blue); font-size: 2.2rem; font-weight: 900; text-shadow: 1px 1px 0 #ddd, 2px 2px 0 #ccc, 3px 3px 0 #bbb, 4px 4px 5px rgba(0,0,0,0.3); margin-bottom: 30px; display: block; text-align: center; }
 
         .fixed-logout-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 440px; z-index: 1000; }
-        .fixed-logout-btn { width: 100%; padding: 18px; background: linear-gradient(to bottom, #ffe033, #e6c200); color: var(--primary-blue); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border: none; border-radius: 50px; box-shadow: 0 8px 0 #b39700, 0 15px 25px rgba(0,0,0,0.3); font-size: 1.1rem; cursor: pointer; transition: all 0.2s; margin-top: 0; }
-        .fixed-logout-btn:active { transform: translateY(8px); box-shadow: 0 0 0 #b39700, inset 0 2px 10px rgba(0,0,0,0.2); }
+        .fixed-logout-btn { width: 100%; padding: 18px; background: linear-gradient(to bottom, #ff6b6b, #c92a2a); color: white; font-weight: 900; text-transform: uppercase; letter-spacing: 2px; border: none; border-radius: 50px; box-shadow: 0 10px 25px rgba(201, 42, 42, 0.4); font-size: 1rem; cursor: pointer; transition: all 0.2s; margin-top: 0; }
+        .fixed-logout-btn:active { transform: translateY(4px); box-shadow: 0 5px 15px rgba(201, 42, 42, 0.3); }
         
-        .timestamp { font-size: 0.75rem; color: #888; text-align: right; margin-top: 5px; font-style: italic; }
+        .timestamp { font-size: 0.8rem; color: #888; text-align: right; margin-top: 10px; font-style: italic; border-top: 1px solid #eee; padding-top: 8px; }
     </style>
 </head>
 <body>
 <div class="container">
-    <header>
-        <h1>KS1 Escrow Pay</h1>
+    
+    <!-- LANDING HEADER (Only for Login/Register) -->
+    <div id="landing-header" class="landing-header">
+        <h1 class="brand-title">KS1 Escrow Pay</h1>
         <div class="tagline">Pay Securely. Trade Confidently.</div>
         <div class="brand-sub">Non-custodial • Alkebulan (AFRICA)-first • Nonprofit-powered</div>
-    </header>
+    </div>
+
+    <!-- DASHBOARD HEADER (Only for Inside App) -->
+    <div id="dash-header" class="dash-header hidden">
+        <h2 class="dash-title">DASHBOARD</h2>
+    </div>
 
     <div id="auth-section" class="section active">
-        <span class="title-3d center-text">Secure Access</span>
+        <span class="title-3d">Secure Access</span>
         <input type="tel" id="auth-phone" placeholder="Phone Number (e.g., 055...)" />
         <input type="password" id="auth-pass" placeholder="Password" />
         <button onclick="handleLogin()" id="login-btn">Login</button>
-        <button class="secondary" style="background: linear-gradient(to bottom, #ffe033, #e6c200); border: none; color: var(--primary-blue); box-shadow: 0 4px 0 #b39700;" onclick="handleRegister()" id="reg-btn">Create Account</button>
+        <button class="secondary" onclick="handleRegister()" id="reg-btn">Create Account</button>
         <p id="loading-msg">Processing...</p>
         <p id="auth-msg" class="error-msg"></p>
     </div>
 
     <div id="dashboard-section" class="section">
-        <div style="display:flex; justify-content:center; align-items:center; margin: 20px 0; flex-wrap: wrap;">
-            <h3 style="color:var(--primary-blue); margin:0; font-size:1.5rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">My Transactions</h3>
-            <!-- NEW REFRESH BUTTON FOR USER -->
-            <button class="refresh-btn" onclick="loadTransactions()">🔄 Refresh</button>
-        </div>
+        <!-- Removed extra refresh button from here -->
+        <button class="refresh-gold" onclick="loadTransactions()">🔄 Refresh Transactions</button>
         
         <button onclick="showSection('create-section')">+ Create Private Connection</button>
-        <div id="global-status-msg" style="margin-top:15px;"></div>
+        <div id="global-status-msg" style="margin-top:20px;"></div>
         <div id="tx-list" style="margin-top:25px;"></div>
 
         <div class="admin-panel hidden" id="admin-controls">
             <h4 style="color:var(--primary-blue); margin-top:0; font-size:1.4rem; text-align:center; font-weight:900; text-transform:uppercase;">👑 Admin Command Center</h4>
             <div id="dispute-alert-container" class="hidden"></div>
             <button onclick="loadAdminData()">🔄 Refresh Data</button>
-            <div id="admin-data" style="margin-top:15px;"></div>
+            <div id="admin-data" style="margin-top:20px;"></div>
             <p id="admin-error" class="error-msg"></p>
         </div>
         <div class="fixed-logout-container">
@@ -114,14 +182,14 @@
     <div id="payment-section" class="section">
         <h3 class="center-text" style="color:var(--primary-blue)">Payment Instructions</h3>
         <div class="card" style="text-align:center;">
-            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.2rem; font-weight:bold;"></span></p>
-            <hr style="border: 0; border-top: 1px solid #ddd; margin: 15px 0;">
-            <p style="margin:5px 0; font-weight:bold;">Pay To: KS1 Escrow System Wallet</p>
+            <p><strong>Transaction ID:</strong><br><span id="pay-tx-id" style="color:var(--primary-blue); font-size:1.5rem; font-weight:900;"></span></p>
+            <hr style="border: 0; border-top: 2px solid #eee; margin: 20px 0;">
+            <p style="margin:10px 0; font-weight:bold; color:#555;">Pay To: KS1 Escrow System Wallet</p>
             <span class="momo-number">0240254680</span>
-            <p><strong>Reference:</strong> <span id="pay-ref"></span></p>
-            <p style="font-size:0.9rem; color:#666; margin-top:10px;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
+            <p><strong>Reference:</strong> <span id="pay-ref" style="font-weight:bold; color:var(--primary-blue);"></span></p>
+            <p style="font-size:0.9rem; color:#777; margin-top:15px;">Use MTN, TELECEL, or AIRTELTOGO Mobile Money.</p>
         </div>
-        <label style="font-weight:bold; color:var(--primary-blue)">Confirm Payment:</label>
+        <label style="font-weight:bold; color:var(--primary-blue); display:block; margin-top:15px; font-size:1.1rem;">Confirm Payment:</label>
         <input type="text" id="momo-ref" placeholder="Enter MoMo Reference ID" />
         <button onclick="confirmPayment()">I Have Paid</button>
         <button class="secondary" onclick="showSection('dashboard-section')">Back</button>
@@ -136,6 +204,17 @@
     function showSection(id) {
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
         document.getElementById(id).classList.add('active');
+        
+        // Toggle Headers
+        const landingHeader = document.getElementById('landing-header');
+        const dashHeader = document.getElementById('dash-header');
+        if (id === 'auth-section') {
+            landingHeader.classList.remove('hidden');
+            dashHeader.classList.add('hidden');
+        } else {
+            landingHeader.classList.add('hidden');
+            dashHeader.classList.remove('hidden');
+        }
         clearErrors();
     }
     function clearErrors() {
@@ -213,33 +292,28 @@
     }
     async function loadTransactions() {
         if(currentUser.isAdmin) return;
-        // Show loading state on button if needed, but for now just reload
+        const btn = document.querySelector('.refresh-gold');
+        if(btn) { const original = btn.innerText; btn.innerText = "Refreshing..."; btn.disabled = true; }
         try {
             const res = await fetch(`${API_URL}/transactions/${currentUser.id}`, { method: 'GET', mode: 'cors' });
             const txs = await res.json();
             renderTxList(txs);
-        } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; }
+        } catch (e) { document.getElementById('tx-list').innerHTML = "<p class='error-msg'>Error loading</p>"; } 
+        finally { if(btn) { btn.innerText = "🔄 Refresh Transactions"; btn.disabled = false; } }
     }
     function renderTxList(txs) {
         const list = document.getElementById('tx-list');
         list.innerHTML = '';
-        if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888;">No transactions yet.</p>'; return; }
+        if(txs.length === 0) { list.innerHTML = '<p style="text-align:center; color:#888; margin-top:30px;">No transactions yet.</p>'; return; }
         txs.forEach(tx => {
             const card = document.createElement('div');
             card.className = 'card';
             let actions = '';
-            
-            // Format Timestamp
-            const dateObj = new Date(tx.created_at);
-            const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            const dayStr = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
-
-            if(tx.status === 'funded') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
-            if(tx.status === 'pending_payment') actions += `<button style="padding:8px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
+            if(tx.status === 'funded') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="actionConfirm('${tx._id}')">Confirm Delivery</button>`;
+            if(tx.status === 'pending_payment') actions += `<button style="padding:12px; font-size:0.9rem;" onclick="resumePayment('${tx.transaction_id}', ${tx.amount})">Pay Now</button>`;
             if(['funded', 'delivered', 'pending_payment'].includes(tx.status)) {
-                actions += `<button class="danger" style="padding:8px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
+                actions += `<button class="danger" style="padding:12px; font-size:0.9rem;" onclick="actionDispute('${tx._id}')">⚠️ Open Dispute</button>`;
             }
-            
             let statusBox = '';
             if(tx.status === 'completed') {
                 statusBox = `<div class="success-box">✅ Trade Completed Successfully!<br>Funds released to seller.<br><br><em>Thank You For Trusting Us</em></div>`;
@@ -248,16 +322,20 @@
             } else if (tx.status === 'disputed') {
                 statusBox = `<div class="waiting-box" style="background:#fff5f5; color:#dc3545; border-color:#dc3545;">🚨 DISPUTE OPENED<br>Admin has been notified.</div>`;
             }
+            
+            const dateObj = new Date(tx.created_at);
+            const dateStr = dateObj.toLocaleDateString() + ' ' + dateObj.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const dayStr = dateObj.toLocaleDateString('en-US', { weekday: 'long' });
 
             card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <strong>${tx.transaction_id}</strong>
-                    <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ').toUpperCase()}</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <strong style="font-size:1.1rem; color:var(--primary-blue);">${tx.transaction_id}</strong>
+                    <span class="status-badge status-${tx.status}">${tx.status.replace('_', ' ')}</span>
                 </div>
-                <p style="margin:5px 0;">Seller: ${tx.seller_phone} | Amount: GHS ${tx.amount}</p>
-                <p style="font-size:0.9rem; color:#555; margin:5px 0;">${tx.description}</p>
+                <p style="margin:5px 0; color:#555;">Seller: ${tx.seller_phone} | <strong>GHS ${tx.amount}</strong></p>
+                <p style="font-size:0.9rem; color:#777; margin:8px 0; font-style:italic;">"${tx.description}"</p>
                 <div class="timestamp">📅 ${dayStr}, ${dateStr}</div>
-                <div style="margin-top:10px; display:flex; gap:5px; flex-wrap:wrap;">${actions}</div>
+                <div style="margin-top:15px; display:flex; gap:8px; flex-wrap:wrap;">${actions}</div>
                 ${statusBox}
             `;
             list.appendChild(card);
@@ -307,20 +385,16 @@
                 disputedTx.forEach(t => {
                     const buyerDisplay = t.buyer_phone ? t.buyer_phone : `${t.buyer_id} (ID)`;
                     const reasonDisplay = t.dispute_reason ? t.dispute_reason : "No reason provided";
-                    
                     alertsHtml += `
                         <div class="dispute-alert-card">
                             <p><strong>ID:</strong> ${t.transaction_id} | <strong>Amount:</strong> GHS ${t.amount}</p>
                             <p><strong>Seller:</strong> ${t.seller_phone}</p>
                             <p><strong>Buyer:</strong> ${buyerDisplay}</p>
-                            <div class="dispute-reason-box">
-                                <strong>⚠️ Reason for Dispute:</strong><br>
-                                "${reasonDisplay}"
-                            </div>
-                            <p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">Call both parties to resolve based on the reason above.</p>
+                            <div class="dispute-reason-box"><strong>⚠️ Reason for Dispute:</strong><br>"${reasonDisplay}"</div>
+                            <p style="color:#dc3545; font-weight:bold; font-size:0.9rem;">Call both parties to resolve.</p>
                             <div style="display:flex; gap:5px; margin-top:10px; flex-wrap:wrap;">
-                                <button class="resolve-btn" style="padding:8px; font-size:0.8rem; flex:1;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
-                                <button class="danger" style="padding:8px; font-size:0.8rem; flex:1;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
+                                <button class="resolve-btn" style="padding:12px; font-size:0.8rem; flex:1;" onclick="adminRelease('${t.transaction_id}')">✅ Release to Seller</button>
+                                <button class="danger" style="padding:12px; font-size:0.8rem; flex:1;" onclick="adminRefund('${t.transaction_id}')">💰 Refund Buyer</button>
                             </div>
                         </div>
                     `;
@@ -329,7 +403,7 @@
             } else {
                 disputeContainer.classList.add('hidden');
             }
-            container.innerHTML += '<h4>Pending Verifications</h4>';
+            container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; font-weight:800; text-transform:uppercase;">Pending Verifications</h4>';
             const pendingPayments = data.payments.filter(p => !p.verified);
             if(pendingPayments.length === 0) container.innerHTML += '<p style="color:green; font-weight:bold;">✅ No pending payments. All clear!</p>';
             else {
@@ -337,14 +411,14 @@
                     container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${p.transaction_id}<br><strong>Ref:</strong> ${p.momo_reference}</p><button onclick="adminVerify('${p.transaction_id}')">Verify Payment</button><button class="delete-btn" onclick="adminDeletePayment('${p.transaction_id}')">🗑️ Delete Payment</button></div>`;
                 });
             }
-            container.innerHTML += '<h4 style="margin-top:20px;">Ready to Release (Delivered)</h4>';
+            container.innerHTML += '<h4 style="margin-bottom:15px; color:#555; font-weight:800; text-transform:uppercase; margin-top:25px;">Ready to Release</h4>';
             const readyToRelease = data.transactions.filter(t => t.status === 'delivered');
-            if(readyToRelease.length === 0) container.innerHTML += '<p>No transactions ready.</p>';
+            if(readyToRelease.length === 0) container.innerHTML += '<p style="color:#888;">No transactions ready.</p>';
             readyToRelease.forEach(t => {
                 container.innerHTML += `<div class="card"><p><strong>Tx:</strong> ${t.transaction_id}<br><strong>Amt:</strong> GHS ${t.amount}</p><button onclick="adminRelease('${t.transaction_id}')">Release Funds</button></div>`;
             });
             const totalComm = data.commissions.reduce((sum, c) => sum + c.amount, 0);
-            container.innerHTML += `<div class="card" style="background:#fff3cd; margin-top:15px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
+            container.innerHTML += `<div class="card" style="background:#fff9db; border-left-color:#e67700; margin-top:25px;"><strong>Total Commission:</strong> GHS ${totalComm.toFixed(2)}</div>`;
         } catch (e) { container.innerHTML = ""; errorEl.innerText = "Error: " + e.message; }
     }
     async function adminVerify(txId) { try { await fetch(`${API_URL}/admin/verify`, { method: 'PUT', mode: 'cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ transaction_id: txId }) }); loadAdminData(); alert("Payment Verified."); } catch(e) { alert("Error"); } }
